@@ -1,23 +1,50 @@
-function drawRectangles(params) {
-  params.forEach((param) => {
-    ctx.fillStyle = param[4];
-    console.log(param.slice(0, 4));
-    ctx.fillRect(...param.slice(0, 4));
-  });
+import interact from 'https://cdn.interactjs.io/v1.10.11/interactjs/index.js'
+
+// target elements with the "draggable" class
+interact('.draggable')
+  .draggable({
+    // enable inertial throwing
+    inertia: false,
+    // keep the element within the area of it's parent
+    modifiers: [
+      interact.modifiers.restrictRect({
+        restriction: 'parent',
+        endOnly: true
+      })
+    ],
+    // enable autoScroll
+    autoScroll: true,
+
+    listeners: {
+      // call this function on every dragmove event
+      move: dragMoveListener,
+
+      // call this function on every dragend event
+      end (event) {
+        var textEl = event.target.querySelector('p')
+
+        textEl && (textEl.textContent =
+          'moved a distance of ' +
+          (Math.sqrt(Math.pow(event.pageX - event.x0, 2) +
+                     Math.pow(event.pageY - event.y0, 2) | 0))
+            .toFixed(2) + 'px')
+      }
+    }
+  })
+
+function dragMoveListener (event) {
+  var target = event.target
+  // keep the dragged position in the data-x/data-y attributes
+  var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
+  var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+
+  // translate the element
+  target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
+
+  // update the posiion attributes
+  target.setAttribute('data-x', x)
+  target.setAttribute('data-y', y)
 }
 
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth - 100;
-canvas.height = window.innerHeight - 50;
-
-test_rectangles = [
-  [50, 30, 100, 50, "black"],
-  [100, 100, 70, 40, "red"],
-  [300, 200, 60, 100, "blue"],
-  [800, 250, 200, 150, "orange"],
-  [400, 120, 40, 80, "green"],
-];
-
-drawRectangles(test_rectangles);
+// this function is used later in the resizing and gesture demos
+window.dragMoveListener = dragMoveListener
