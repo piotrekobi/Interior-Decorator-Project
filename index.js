@@ -40,20 +40,25 @@ interact('.drop_target')
           + ' was dropped into '
           + event.target.id)
     */
-    
+
     var rect = event.relatedTarget.getBoundingClientRect();
     if (event.target.id == "drag_zone" && event.target.id != event.relatedTarget.parentNode.id)
     {
-      // TO DO: find how to get height of the element, and subtract from y
-      console.log(event.relatedTarget.style.height)
-      event.relatedTarget.style.transform = 'translate('+ rect.left +'px, '+ rect.top +'px)'
-      event.relatedTarget.setAttribute('data-x', rect.left)
-      event.relatedTarget.setAttribute('data-y', rect.top - event.relatedTarget.style.height)
-      event.relatedTarget.style.transform = 'translate('+ rect.left +'px, '+ rect.top +'px)'
+      event.relatedTarget.style.transform = 'translate('+ 0 +'px, '+ 0 +'px)'
+      event.relatedTarget.setAttribute('data-x', 0)
+      event.relatedTarget.setAttribute('data-y', 0)
       $('#' + event.relatedTarget.id).appendTo($('#' + event.target.id))
+      var rect2 = event.relatedTarget.getBoundingClientRect();
+      var x = rect.left - rect2.left
+      var y = rect.top - rect2.top
+      event.relatedTarget.style.transform = 'translate('+ x +'px, '+ y +'px)'
+      event.relatedTarget.setAttribute('data-x', x)
+      event.relatedTarget.setAttribute('data-y', y)
     }
     if (event.target.id != "drag_zone" && event.target.id != event.relatedTarget.parentNode.id)
     {
+      var offset = rect.bottom - rect.top
+      compensateLoss(event.relatedTarget.parentNode.children, event.relatedTarget.id, offset)
       event.relatedTarget.setAttribute('data-x', 0)
       event.relatedTarget.setAttribute('data-y', 0)
       event.relatedTarget.style.transform = 'translate(0px, 0px)'
@@ -77,4 +82,25 @@ function dragMoveListener (event) {
   // update the posiion attributes
   target.setAttribute('data-x', x)
   target.setAttribute('data-y', y)
+}
+
+function compensateLoss(collection, removedId, offset)
+{
+  var after = false
+  for (var i = 0; i < collection.length; i++) {
+    if (collection[i].id == removedId)
+    {
+      after = true
+    }
+    if (after == true)
+    {
+      var x = collection[i].getAttribute('data-x')
+      var y = collection[i].getAttribute('data-y')
+      y = y + offset
+      console.log(y)
+      collection[i].style.transform = 'translate('+ x +'px, '+ y +'px)'
+      collection[i].setAttribute('data-y', y)
+      collection[i].setAttribute('data-x', x)
+    }
+  }
 }
