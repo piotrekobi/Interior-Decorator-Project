@@ -11,6 +11,12 @@
     <script src="{% static 'app/js/index.js' %}" type="module"></script>
   </head>
   <body>
+    <div id="menu_zone">
+      <ul>
+        <li><a href="{% url 'app:example_rw' %}">Przykład - odczyt/zapis</a></li>
+        <li><a href="{% url 'app:example_communication' %}">Przykład - komunikacja ze skryptem w Pythonie</a></li>
+      </ul>
+    </div>
     <div id="drag_zone" class="drop_target">
       <div id="drag-1" class="draggable">
         <p> You can drag one element </p>
