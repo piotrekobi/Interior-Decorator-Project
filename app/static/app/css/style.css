@@ -1,68 +1,72 @@
-#drag-1, #drag-2 {
-  width: 25%;
-  height: 20%
-  min-height: 6.5em;
-  margin: 1rem 0 0 1rem;
-  background-color: #29e;
+.rectangle-style {
+  width: 100px;
+  height: 180px;
+  margin: 10px 0 0 10px;
+  background-color: gray;
   color: white;
-  border-radius: 0.75em;
-  padding: 4%;
+  padding: 10px;
   touch-action: none;
   user-select: none;
-  transform: translate(0px, 0px);
+  /*transform: translate(0px, 0px);*/
+  border-style: solid;
+  border-color: black;
 }
 
 body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
+.menu-style {
+  background-color: lightgray;
+  display: inline-block;
+  width: 100%;
+  flex: 0 1 100px;
+  border-bottom: black solid 2px;
+}
+
+.drag_zone-style {
   background-size: 30px 30px;
   background-image: linear-gradient(to right, grey 1px, transparent 1px),
     linear-gradient(to bottom, grey 1px, transparent 1px);
+  background-color: transparent;
+  display:inline-block;
+  width: 100%;
+  flex: 1 1 75vh;
 }
 
-#menu_zone {
-  background-color: yellowgreen;
+.spawn_zone-style {
+  background-color: gray;
   display: inline-block;
   width: 100%;
-  height: 10vh;
+  min-height: 100px;
+  flex: 0 10 auto;
+  border-top: 4px solid black;
 }
 
-#drag_zone {
-  background-color: red;
-  display: inline-block;
-  width: 100%;
-  height: 65vh;
-}
-
-#spawn_zone {
-  background-color: blue;
-  display: inline-block;
-  width: 100%;
-  height: 25vh;
-}
-
-#menu_zone ul{
+.menu_list-style{
   float: left;
   width: 100%;
   padding: 0;
   margin: 0;
   list-style: none;
 }
-
-#menu_zone li{
+.button-style{
   display: block;
   float: left;
   text-align: center;
-  font-size: 1.2em;
+  font-size: 16;
   
-  height: 5vh;
+  height: 80px;
   text-decoration: none;
   color: black;
   background-color: whitesmoke;
-  padding: 10px 15px;
-  margin: 0px 1px 1px 0px;
+  padding: 0 10px;
+  margin: 8px 10px 10px 10px;
   border: 1px solid navy;
-  border-radius: 3px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
   box-shadow: 0px 2px 3px gray;
   -moz-box-shadow: 0px 2px 3px gray;
   -webkit-box-shadow: 0px 2px 3px gray;

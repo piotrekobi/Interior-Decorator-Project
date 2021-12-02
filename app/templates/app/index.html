@@ -11,21 +11,21 @@
     <script src="{% static 'app/js/index.js' %}" type="module"></script>
   </head>
   <body>
-    <div id="menu_zone">
-      <ul>
-        <li><a href="{% url 'app:example_rw' %}">Przykład - odczyt/zapis</a></li>
-        <li><a href="{% url 'app:example_communication' %}">Przykład - komunikacja ze skryptem w Pythonie</a></li>
+    <div id="menu_zone" class="menu-style">
+      <ul class="menu_list-style">
+        <li class="button-style"><a href="{% url 'app:example_rw' %}">Przykład - odczyt/zapis</a></li>
+        <li class="button-style"><a href="{% url 'app:example_communication' %}">Przykład - komunikacja ze skryptem w Pythonie</a></li>
       </ul>
     </div>
-    <div id="drag_zone" class="drop_target">
-      <div id="drag-1" class="draggable">
+    <div id="drag_zone" class="drop_target drag_zone-style">
+      <div id="drag-1" class="draggable rectangle-style">
         <p> You can drag one element </p>
       </div>
-      <div id="drag-2" class="draggable">
+      <div id="drag-2" class="draggable rectangle-style">
         <p> with each pointer </p>
       </div>
     </div>
-    <div id="spawn_zone" class="drop_target">
+    <div id="spawn_zone" class="drop_target spawn_zone-style">
 
     </div>
   </body>
