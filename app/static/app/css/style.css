@@ -1,10 +1,10 @@
 .rectangle-style {
+  display: inline-block;
   width: 100px;
   height: 180px;
   margin: 10px 0 0 10px;
   background-color: gray;
   color: white;
-  padding: 10px;
   touch-action: none;
   user-select: none;
   /*transform: translate(0px, 0px);*/
@@ -40,7 +40,6 @@ body {
 
 .spawn_zone-style {
   background-color: gray;
-  display: inline-block;
   width: 100%;
   min-height: 100px;
   flex: 0 10 auto;
