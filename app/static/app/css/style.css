@@ -24,7 +24,7 @@ body {
   background-color: lightgray;
   display: inline-block;
   width: 100%;
-  flex: 0 1 100px;
+  flex: 0 1 50px;
   border-bottom: black solid 2px;
 }
 
@@ -33,7 +33,7 @@ body {
   background-image: linear-gradient(to right, grey 1px, transparent 1px),
     linear-gradient(to bottom, grey 1px, transparent 1px);
   background-color: transparent;
-  display:inline-block;
+  display: inline-block;
   width: 100%;
   flex: 1 1 75vh;
 }
@@ -47,20 +47,21 @@ body {
   border-top: 4px solid black;
 }
 
-.menu_list-style{
-  float: left;
+.menu_list-style {
+  display: flex;
+  justify-content: center;
   width: 100%;
   padding: 0;
   margin: 0;
   list-style: none;
 }
-.button-style{
-  display: block;
+.button-style {
+  display: list-item;
   float: left;
   text-align: center;
   font-size: 16;
-  
-  height: 80px;
+  height: 30px;
+  width: 160px;
   text-decoration: none;
   color: black;
   background-color: whitesmoke;
