@@ -14,9 +14,11 @@
   <body>
     <div id="menu_zone" class="menu-style">
       <ul class="menu_list-style">
+        <li class="button-style" onclick="addRectangle('100px', '100px', 'gray')">
+          <img src="{% static 'app/resources/rectangle.png' %}">
+        </li>
         <li class="button-style"><a href="{% url 'app:example_rw' %}">Przykład - odczyt/zapis</a></li>
         <li class="button-style"><a href="{% url 'app:example_communication' %}">Przykład - komunikacja ze skryptem w Pythonie</a></li>
-        <button onclick="addRectangle('100px', '100px', 'gray')"> Add rectangle</button>
       </ul>
     </div>
     <div id="drag_zone" class="drop_target drag_zone-style">
