@@ -10,11 +10,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="{% static 'app/js/draggable.js' %}" type="module"></script>
     <script src="{% static 'app/js/rectangle.js' %}"></script>
+    <script src="{% static 'app/js/wall.js' %}"></script>
+
+
   </head>
   <body>
     <div id="menu_zone" class="menu-style">
       <ul class="menu_list-style">
-        <li class="button-style">Ściany</a></li>
+        <li class="button-style" onclick="drawWall([
+        [400, 50],
+        [1200, 50],
+        [1200, 500],
+        [400, 500],
+      ])">Ściany</a></li>
         <li class="button-style" onclick="addRectangle('100px', '100px', 'gray')">
           Prostokąty
         </li>
@@ -24,7 +32,11 @@
         <li class="button-style">Zapisz projekt</a></li>
       </ul>
     </div>
+
     <div id="drag_zone" class="drop_target drag_zone-style">
+        <script src="{% static 'app/js/create_canvas.js' %}"></script>
+    
+
       <div id="drag-1" class="draggable rectangle-style">
         <p> You can drag one element </p>
       </div>
