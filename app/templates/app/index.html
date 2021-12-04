@@ -20,8 +20,11 @@
         </li>
         <li class="button-style">Zakreśl obszar</a></li>
         <li class="button-style">Rozmieść</a></li>
-        <li class="button-style">Wczytaj projekt</a></li>
-        <li class="button-style">Zapisz projekt</a></li>
+        <li class="button-style" onclick="document.getElementById('upload').click()">
+          <input type="file" id="upload" style="display: none" onchange="loadRectangles(this.files[0])"/>
+          <a> Wczytaj projekt</a>
+        </li>
+        <li class="button-style" onclick="saveRectangles()">Zapisz projekt</a></li>
       </ul>
     </div>
     <div id="drag_zone" class="drop_target drag_zone-style"></div>

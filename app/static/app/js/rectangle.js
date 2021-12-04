@@ -10,3 +10,66 @@ function addRectangle(width, height, color, spawn_zone_id) {
     div.style.background = color;
     spawn_zone.appendChild(div);
 };
+
+function saveRectangles() {
+    var rectangles = document.querySelectorAll('[id^="rectangle"]');
+
+    var rectlist = jQuery.map(
+        rectangles,
+        function(element) {
+            return {
+                id: element.id,
+                parent: element.parentElement.id,
+                width: element.style.width,
+                height: element.style.height,
+                color: element.style.background,
+                offset: $(element).offset()
+            };
+        });
+
+    var data = JSON.stringify(rectlist);
+
+    var file = new Blob([data], {type: "text/plain"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(file);
+    a.download = "save";
+    document.body.appendChild(a);
+
+    a.click();
+    setTimeout(function() {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);  
+        }, 0); 
+}
+
+function loadRectangles(file) {
+
+    var fileread = new FileReader();
+    fileread.onload = function(e) {
+        var rectangles = document.querySelectorAll('[id^="rectangle"]');
+        rectangles.forEach(function(element) {
+            element.parentNode.removeChild(element);
+        })
+
+        var content = e.target.result;
+        var objectlist = JSON.parse(content); // parse json 
+        objectlist.forEach(
+            function(element) {
+                var div = document.createElement("div");
+                var parent = document.getElementById(element.parent);
+
+                div.className = "draggable rectangle-style ";
+                div.id = element.id;
+                parent.appendChild(div);
+
+                div.style.width = element.width;    
+                div.style.height = element.height;
+                div.style.background = element.color;
+                $(div).offset(element.offset);
+            }
+        )
+    };
+    fileread.readAsText(file);
+}
+
+
