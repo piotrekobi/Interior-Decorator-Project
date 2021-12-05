@@ -1,11 +1,16 @@
 stages:
   - deploy
+
+services:
+   - name: docker:dind
+     alias: thedockerhost
     
 deploy:
   image: docker:latest
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay
+    DOCKER_HOST: tcp://thedockerhost:2375/
   services:
     - docker:dind
   script:
