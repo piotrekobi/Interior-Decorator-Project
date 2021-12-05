@@ -1,0 +1,19 @@
+stages:
+  - deploy
+    
+deploy:
+  image: docker:latest
+  stage: deploy
+  variables:
+    DOCKER_DRIVER: overlay
+  services:
+    - docker:dind
+  script:
+    - docker build -t wnetrza.azurecr.io/wnetrza:latest .
+    - echo "$DOCKER_PASSWD" | docker login $DOCKER_REPOSITORY --username $DOCKER_USER --password-stdin
+    - docker push wnetrza.azurecr.io/wnetrza:latest
+  only:
+    - backend
+  environment:
+    name: app-service
+    url: https://wnetrza.azurewebsites.net
