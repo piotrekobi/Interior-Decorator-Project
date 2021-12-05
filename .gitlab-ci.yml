@@ -11,6 +11,7 @@ deploy:
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_HOST: tcp://thedockerhost:2375/
+    DOCKER_TLS_CERTDIR: ""
   services:
     - docker:dind
   script:
