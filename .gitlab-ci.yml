@@ -1,9 +1,5 @@
 stages:
   - deploy
-
-services:
-   - name: docker:15-dind
-     alias: thedockerhost
     
 deploy:
   image: docker:latest
@@ -11,24 +7,15 @@ deploy:
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_HOST: tcp://thedockerhost:2375/
-    DOCKER_TLS_CERTDIR: ""
   services:
-    - docker:dind
+    - name: docker:dind
+      alias: thedockerhost
   script:
-    - docker run --privileged --name some-docker -d \
-        --network some-network --network-alias docker \
-        -e DOCKER_TLS_CERTDIR=/certs \
-        -v some-docker-certs-ca:/certs/ca \
-        -v some-docker-certs-client:/certs/client \
-    - docker run --rm --network some-network \
-        -e DOCKER_TLS_CERTDIR=/certs \
-        -v some-docker-certs-client:/certs/client:ro \
-        docker:latest version
     - docker build -t wnetrza.azurecr.io/wnetrza:latest .
     - echo "$DOCKER_PASSWD" | docker login $DOCKER_REPOSITORY --username $DOCKER_USER --password-stdin
     - docker push wnetrza.azurecr.io/wnetrza:latest
   only:
-    - backend
+    - master
   environment:
     name: app-service
     url: https://wnetrza.azurewebsites.net
