@@ -2,7 +2,7 @@ stages:
   - deploy
 
 services:
-   - name: docker:dind
+   - name: docker:19-dind
      alias: thedockerhost
     
 deploy:
