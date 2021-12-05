@@ -9,7 +9,7 @@ deploy:
   services:
     - docker:dind
   script:
-    - docker build -t wnetrza.azurecr.io/wnetrza:latest .
+    - sudo docker build -t wnetrza.azurecr.io/wnetrza:latest .
     - echo "$DOCKER_PASSWD" | docker login $DOCKER_REPOSITORY --username $DOCKER_USER --password-stdin
     - docker push wnetrza.azurecr.io/wnetrza:latest
   only:
