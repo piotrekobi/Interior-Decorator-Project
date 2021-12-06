@@ -27,7 +27,8 @@
           Prostokąty
         </li>
         <li class="button-style">Zakreśl obszar</a></li>
-        <li class="button-style">Rozmieść</a></li>
+        {% csrf_token %}
+        <li class="button-style" onclick="sendRectangles()"> Rozmieść</a></li>
         <li class="button-style" onclick="document.getElementById('upload').click()">
           <input type="file" id="upload" style="display: none" onchange="loadRectangles(this.files[0])"/>
           <a> Wczytaj projekt</a>

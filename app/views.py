@@ -1,27 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from app.optimizer.Optimizer import place_rectangles
+import json
 
 
 def index(request):
-    return render(request, 'app/index.html')
-
-
-def example_rw(request):
-    return render(request, 'app/example_rw.html')
-
-
-def example_communication(request):
+    rectangle_data = ""
     if request.method == 'POST':
-        first_number = int(request.POST.get('first_number'))
-        second_number = int(request.POST.get('second_number'))
-        if request.POST.get('submit') == '+':
-            page = HttpResponse(first_number+second_number)
-        if request.POST.get('submit') == '-':
-            page = HttpResponse(first_number-second_number)
-        if request.POST.get('submit') == '*':
-            page = HttpResponse(first_number*second_number)
-        if request.POST.get('submit') == '/':
-            page = HttpResponse(first_number/second_number)
-
-        return page
-    return render(request, 'app/example_communication.html')
+        data = json.loads(request.body)
+        print(data)
+        print()
+        # rectangle_data = place_rectangles(data)
+    return render(request, 'app/index.html',  {'data': rectangle_data})
