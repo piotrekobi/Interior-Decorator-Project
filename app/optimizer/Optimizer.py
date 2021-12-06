@@ -1,9 +1,9 @@
 from itertools import combinations
 import scipy.optimize as opt
 import numpy as np
-from Geometry import Point, Rectangle, Polygon
 import json
 
+from app.optimizer.Geometry import Point, Rectangle, Polygon
 from app.optimizer.Constants import *
 
 
@@ -69,16 +69,16 @@ class Optimizer:
 
 
 def place_rectangles(json_data):
-    data = json.loads(json_data)
     rectangles = {}
     fixed_rectangles = {}
-    for rect_data in data:
+    for rect_data in json_data:
+        print(rect_data)
         rect = Rectangle(
-            rect_data['width'],
-            rect_data['height'],
+            float(rect_data['width'][:-2]),
+            float(rect_data['height'][:-2]),
             Point(
-                rect_data['offset']['left'], 
-                rect_data['offset']['top'])
+                float(rect_data['offset']['left']), 
+                float(rect_data['offset']['top']))
         )
         if rect_data['parent'] == 'spawn_zone':
             rectangles[rect_data['id']] = rect
@@ -86,8 +86,8 @@ def place_rectangles(json_data):
             fixed_rectangles[rect_data['id']] = rect
 
     opt = Optimizer(
-        list(fixed_rectangles) + WALL_RECTANGLES,
-        list(rectangles),
+        list(fixed_rectangles.values()) + WALL_RECTANGLES,
+        list(rectangles.values()),
         PREFERRED_SPACING,
         WALL['min_x'],
         WALL['min_y'],
@@ -95,5 +95,5 @@ def place_rectangles(json_data):
         WALL['max_y']
     )
 
-    res = opt.optimize()
+    # res = opt.optimize()
     
