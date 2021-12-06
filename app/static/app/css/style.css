@@ -44,7 +44,7 @@ body {
   background-color: gray;
   width: 100%;
   min-height: 100px;
-  flex: 0 10 auto;
+  flex: 0 10 25vh;
   border-top: 4px solid black;
   white-space: nowrap;
   overflow-x: scroll;

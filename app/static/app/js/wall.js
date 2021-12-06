@@ -1,4 +1,5 @@
 function drawWall(points) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   points.forEach((point, index, arr) => {
     ctx.beginPath();
     ctx.lineWidth = 2;
