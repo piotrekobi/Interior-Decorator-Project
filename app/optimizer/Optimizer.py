@@ -1,9 +1,7 @@
 from itertools import combinations
 import scipy.optimize as opt
-import numpy as np
-import json
 
-from app.optimizer.Geometry import Point, Rectangle, Polygon
+from app.optimizer.Geometry import Point, Rectangle
 from app.optimizer.Constants import *
 
 
@@ -45,12 +43,30 @@ class Optimizer:
                 else:
                     error += (self.spacing - d) * self.scale
 
+        # for rect in rectangles:
+        #     left = rect.center.x - rect.width/2
+        #     right = rect.center.x - rect.width/2
+        #     top = rect.center.y + rect.height/2
+        #     bottom = rect.center.y - rect.height/2
+
+        #     dleft = left - self.min_x
+        #     dright = self.max_x - right
+        #     dbottom = bottom - self.min_y
+        #     dtop = self.max_y - top
+
+        #     d = min(dleft, dright, dbottom, dtop)   
+        #     if d > self.spacing:
+        #         error += d - self.spacing
+        #     else:
+        #         error += (self.spacing - d) * self.scale
+            
+
         return error
 
     def optimize(self):
         my_bounds = opt.Bounds(
-            [b for _ in range(len(self.optimized)) for b in [self.min_x, self.min_y]],
-            [b for _ in range(len(self.optimized)) for b in [self.max_x, self.max_y]],
+            [b for r in self.optimized for b in [self.min_x+r.width/2, self.min_y+r.height/2]],
+            [b for r in self.optimized for b in [self.max_x-r.width/2, self.max_y-r.height/2]],
         )
 
         res = opt.differential_evolution(
@@ -66,13 +82,14 @@ class Optimizer:
         )
         return res.x
 
+        
+
 
 
 def place_rectangles(json_data):
-    rectangles = {}
-    fixed_rectangles = {}
+    rectangles = []
+    fixed_rectangles = []
     for rect_data in json_data:
-        print(rect_data)
         rect = Rectangle(
             float(rect_data['width'][:-2]),
             float(rect_data['height'][:-2]),
@@ -80,14 +97,22 @@ def place_rectangles(json_data):
                 float(rect_data['offset']['left']), 
                 float(rect_data['offset']['top']))
         )
+        rect.center.x += rect.width/2
+        rect.center.y += rect.height/2
+
         if rect_data['parent'] == 'spawn_zone':
-            rectangles[rect_data['id']] = rect
+            rectangles.append(rect)
         else:
-            fixed_rectangles[rect_data['id']] = rect
+            fixed_rectangles.append(rect)
+
+    if len(rectangles) == 0:
+        return json_data
+
+
 
     opt = Optimizer(
-        list(fixed_rectangles.values()) + WALL_RECTANGLES,
-        list(rectangles.values()),
+        fixed_rectangles + WALL_RECTANGLES,
+        rectangles,
         PREFERRED_SPACING,
         WALL['min_x'],
         WALL['min_y'],
@@ -95,5 +120,21 @@ def place_rectangles(json_data):
         WALL['max_y']
     )
 
-    # res = opt.optimize()
+    res = opt.optimize()
+
+    print(res)
+
+    i = 0
+
+    for rect_data in json_data:
+        if rect_data['parent'] == 'spawn_zone':
+            x, y = res[2*i], res[2*i+1]
+            rect_data['offset']['left'] = x - float(rect_data['width'][:-2])/2
+            rect_data['offset']['top'] = y - float(rect_data['height'][:-2])/2
+            # print(rect_data['offset']['left'])
+            # print(rect_data['offset']['top'])
+            i = i + 1
+            rect_data['parent'] = "drag_zone"
+    return json_data
+
     

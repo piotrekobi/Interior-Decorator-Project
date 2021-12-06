@@ -8,7 +8,6 @@ def index(request):
     rectangle_data = ""
     if request.method == 'POST':
         data = json.loads(request.body)
-        print(data)
-        print()
-        # rectangle_data = place_rectangles(data)
-    return render(request, 'app/index.html',  {'data': rectangle_data})
+        rectangle_data = place_rectangles(data)
+    print(rectangle_data)
+    return render(request, 'app/index.html', {'data': rectangle_data})

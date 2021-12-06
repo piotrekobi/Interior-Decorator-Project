@@ -25,7 +25,10 @@ function saveRectangles() {
                 width: element.style.width,
                 height: element.style.height,
                 color: element.style.background,
-                offset: $(element).offset()
+                offset: {
+                    top: ($(element).offset().top - $(element.parentElement).offset().top),
+                    left: ($(element).offset().left - $(element.parentElement).offset().left)
+                }
             };
         });
 
@@ -46,39 +49,48 @@ function saveRectangles() {
 
 //testable
 function loadRectangles(file) {
-
     var fileread = new FileReader();
     fileread.onload = function(e) {
-        var rectangles = document.querySelectorAll('[id^="rectangle"]');
-        rectangles.forEach(function(element) {
-            element.parentNode.removeChild(element);
-        })
-
         var content = e.target.result;
-        var objectlist = JSON.parse(content); // parse json 
-        objectlist.forEach(
-            function(element) {
-                var div = document.createElement("div");
-                var parent = document.getElementById(element.parent);
-
-                div.className = "draggable rectangle-style ";
-                div.id = element.id;
-                parent.appendChild(div);
-
-                div.style.width = element.width;    
-                div.style.height = element.height;
-                div.style.background = element.color;
-                $(div).offset(element.offset);
-            }
-        )
+        drawRectangles(content)
     };
     fileread.readAsText(file);
 }
 
+function drawRectangles(content) {
+    if (content == ""){
+        return
+    }
+    var rectangles = document.querySelectorAll('[id^="rectangle"]');
+    rectangles.forEach(function(element) {
+        element.parentNode.removeChild(element);
+    })
+
+
+    var objectlist = JSON.parse(content.replace(/'/g,'"')); // parse json 
+    objectlist.forEach(
+        function(element) {
+            var div = document.createElement("div");
+            var parent = document.getElementById(element.parent);
+
+            div.className = "draggable rectangle-style ";
+            div.id = element.id;
+            parent.appendChild(div);
+
+            div.style.width = element.width;    
+            div.style.height = element.height;
+            div.style.background = element.color;
+            $(div).offset({
+                left: element.offset.left + $(parent).offset().left,
+                top: element.offset.top + $(parent).offset().top});
+                
+        }
+    )
+}   
+
 
 function sendRectangles() {
     var rectangles = document.querySelectorAll('[id^="rectangle"]');
-
     
     function getCookie(name) {
         let cookieValue = null;
@@ -107,7 +119,10 @@ function sendRectangles() {
                 width: element.style.width,
                 height: element.style.height,
                 color: element.style.background,
-                offset: $(element).offset()
+                offset: {
+                    top: ($(element).offset().top - $(element.parentElement).offset().top),
+                    left: ($(element).offset().left - $(element.parentElement).offset().left)
+                }
             };
         });
 
@@ -119,9 +134,10 @@ function sendRectangles() {
         type: "POST",
         data: jsondata,
         contentType: 'application/json',
-        success:function(response){},
-        complete:function(){},
-        error:function (xhr, textStatus, thrownError){},
+        synch: 'true',
+        success: function(data){
+            document.write(data);
+        },
         headers: {
             'X-CSRFToken': csrftoken
         }
