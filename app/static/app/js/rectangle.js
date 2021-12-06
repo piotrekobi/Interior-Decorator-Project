@@ -16,19 +16,8 @@ function saveRectangles() {
 
     var rectlist = jQuery.map(
         rectangles,
-        function(element) {
-            return {
-                id: element.id,
-                parent: element.parentElement.id,
-                width: element.style.width,
-                height: element.style.height,
-                color: element.style.background,
-                offset: {
-                    top: ($(element).offset().top - $(element.parentElement).offset().top),
-                    left: ($(element).offset().left - $(element.parentElement).offset().left)
-                }
-            };
-        });
+        objectifyRectangle
+    );
 
     var data = JSON.stringify(rectlist);
 
@@ -65,24 +54,7 @@ function drawRectangles(content) {
 
 
     var objectlist = JSON.parse(content.replace(/'/g,'"')); // parse json 
-    objectlist.forEach(
-        function(element) {
-            var div = document.createElement("div");
-            var parent = document.getElementById(element.parent);
-
-            div.className = "draggable rectangle-style ";
-            div.id = element.id;
-            parent.appendChild(div);
-
-            div.style.width = element.width;    
-            div.style.height = element.height;
-            div.style.background = element.color;
-            $(div).offset({
-                left: element.offset.left + $(parent).offset().left,
-                top: element.offset.top + $(parent).offset().top});
-                
-        }
-    )
+    objectlist.forEach(deobjectifyRectangle)
 }   
 
 
@@ -95,7 +67,6 @@ function sendRectangles() {
             const cookies = document.cookie.split(';');
             for (let i = 0; i < cookies.length; i++) {
                 const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
                 if (cookie.substring(0, name.length + 1) === (name + '=')) {
                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                     break;
@@ -109,19 +80,8 @@ function sendRectangles() {
  
     var rectlist = jQuery.map(
         rectangles,
-        function(element) {
-            return {
-                id: element.id,
-                parent: element.parentElement.id,
-                width: element.style.width,
-                height: element.style.height,
-                color: element.style.background,
-                offset: {
-                    top: ($(element).offset().top - $(element.parentElement).offset().top),
-                    left: ($(element).offset().left - $(element.parentElement).offset().left)
-                }
-            };
-        });
+        objectifyRectangle
+        );
 
 
     var jsondata = JSON.stringify(rectlist);
@@ -139,6 +99,38 @@ function sendRectangles() {
             'X-CSRFToken': csrftoken
         }
     });
+}
+
+
+function objectifyRectangle(element){
+    return {
+        id: element.id,
+        parent: element.parentElement.id,
+        width: element.style.width,
+        height: element.style.height,
+        color: element.style.background,
+        offset: {
+            top: ($(element).offset().top - $(element.parentElement).offset().top),
+            left: ($(element).offset().left - $(element.parentElement).offset().left)
+        }
+    }
+}
+
+function deobjectifyRectangle(element)
+{
+    var div = document.createElement("div");
+    var parent = document.getElementById(element.parent);
+
+    div.className = "draggable rectangle-style ";
+    div.id = element.id;
+    parent.appendChild(div);
+
+    div.style.width = element.width;    
+    div.style.height = element.height;
+    div.style.background = element.color;
+    $(div).offset({
+        left: element.offset.left + $(parent).offset().left,
+        top: element.offset.top + $(parent).offset().top});
 }
 
 
