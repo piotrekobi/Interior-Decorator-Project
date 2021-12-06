@@ -1,2 +1,2 @@
-django
-whitenoise
+django>=3.2.9
+whitenoise>=5.3.0
