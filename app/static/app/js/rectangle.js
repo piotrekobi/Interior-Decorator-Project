@@ -76,3 +76,57 @@ function loadRectangles(file) {
 }
 
 
+function sendRectangles() {
+    var rectangles = document.querySelectorAll('[id^="rectangle"]');
+
+    
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+ 
+    var rectlist = jQuery.map(
+        rectangles,
+        function(element) {
+            return {
+                id: element.id,
+                parent: element.parentElement.id,
+                width: element.style.width,
+                height: element.style.height,
+                color: element.style.background,
+                offset: $(element).offset()
+            };
+        });
+
+
+    var jsondata = JSON.stringify(rectlist);
+
+    $.ajax({
+        url:'/',
+        type: "POST",
+        data: jsondata,
+        contentType: 'application/json',
+        success:function(response){},
+        complete:function(){},
+        error:function (xhr, textStatus, thrownError){},
+        headers: {
+            'X-CSRFToken': csrftoken
+        }
+    });
+}
+
+
+
