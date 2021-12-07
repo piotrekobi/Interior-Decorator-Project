@@ -124,5 +124,9 @@ function compensateLoss(collection, removedId, offset)
     {
       after = true
     }
+    if (collection[i].id == removedId)
+    {
+      after = true
+    }
   }
 }
