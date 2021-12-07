@@ -75,7 +75,8 @@ interact('.drop_target')
     if (event.target.id != "drag_zone" && event.target.id != event.relatedTarget.parentNode.id)
     {
       var offset = $('#' + event.relatedTarget.id).outerWidth(true)
-      //compensateLoss(event.relatedTarget.parentNode.children, event.relatedTarget.id, offset)
+
+      compensateLoss(event.relatedTarget.parentNode.children, event.relatedTarget.id, offset)
       event.relatedTarget.setAttribute('data-x', 0)
       event.relatedTarget.setAttribute('data-y', 0)
       event.relatedTarget.style.transform = 'translate(0px, 0px)'
@@ -114,6 +115,10 @@ function compensateLoss(collection, removedId, offset)
       collection[i].setAttribute('data-y', y)
       collection[i].setAttribute('data-x', x)
       //collection[i].setAttribute('style', 'transform: translate('+ x +'px, '+ y +'px)')
+    }
+    if (collection[i].id == removedId)
+    {
+      after = true
     }
     if (collection[i].id == removedId)
     {
