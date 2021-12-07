@@ -29,7 +29,24 @@ interact('.draggable')
                      Math.pow(event.pageY - event.y0, 2) | 0))
             .toFixed(2) + 'px')
       }*/
+    },
+    onstart(event) {
+      let target = event.target;
+      //let position = target.getBoundingClientRect();
+      target.style.position = "fixed";
+      if (target.parentNode.id == "drag_zone") {
+        var offset = $('#' + event.target.id).outerWidth(true);
+        compensateLoss(event.target.parentNode.children, event.target.id, offset);
+      }
+  },
+  onend(event) {
+    let target = event.target;
+    target.style.position = "relative";
+    if (target.parentNode.id == "drag_zone") {
+      var offset = - $('#' + event.target.id).outerWidth(true);
+      compensateLoss(event.target.parentNode.children, event.target.id, offset);
     }
+  }
   })
 
 interact('.drop_target')
@@ -57,8 +74,8 @@ interact('.drop_target')
     }
     if (event.target.id != "drag_zone" && event.target.id != event.relatedTarget.parentNode.id)
     {
-      var offset = rect.bottom - rect.top
-      compensateLoss(event.relatedTarget.parentNode.children, event.relatedTarget.id, offset)
+      var offset = $('#' + event.relatedTarget.id).outerWidth(true)
+      //compensateLoss(event.relatedTarget.parentNode.children, event.relatedTarget.id, offset)
       event.relatedTarget.setAttribute('data-x', 0)
       event.relatedTarget.setAttribute('data-y', 0)
       event.relatedTarget.style.transform = 'translate(0px, 0px)'
@@ -79,7 +96,7 @@ function dragMoveListener (event) {
   // translate the element
   target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
 
-  // update the posiion attributes
+  // update the position attributes
   target.setAttribute('data-x', x)
   target.setAttribute('data-y', y)
 }
@@ -88,19 +105,19 @@ function compensateLoss(collection, removedId, offset)
 {
   var after = false
   for (var i = 0; i < collection.length; i++) {
-    if (collection[i].id == removedId)
-    {
-      after = true
-    }
     if (after == true)
     {
-      var x = collection[i].getAttribute('data-x')
-      var y = collection[i].getAttribute('data-y')
-      y = y + offset
-      console.log(y)
+      var x = collection[i].getAttribute('data-x') || 0
+      var y = collection[i].getAttribute('data-y') || 0
+      x = parseFloat(x) + offset
       collection[i].style.transform = 'translate('+ x +'px, '+ y +'px)'
       collection[i].setAttribute('data-y', y)
       collection[i].setAttribute('data-x', x)
+      //collection[i].setAttribute('style', 'transform: translate('+ x +'px, '+ y +'px)')
+    }
+    if (collection[i].id == removedId)
+    {
+      after = true
     }
   }
 }
