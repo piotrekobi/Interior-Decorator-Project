@@ -37,6 +37,7 @@ body {
   display: inline-block;
   width: 100%;
   flex: 1 1 75vh;
+  white-space: nowrap;
 }
 
 .spawn_zone-style {
@@ -45,6 +46,8 @@ body {
   min-height: 100px;
   flex: 0 10 auto;
   border-top: 4px solid black;
+  white-space: nowrap;
+  overflow-x: scroll;
 }
 
 .menu_list-style {

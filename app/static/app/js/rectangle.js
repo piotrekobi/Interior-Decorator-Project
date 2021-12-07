@@ -1,3 +1,4 @@
+// maybe testable
 function addRectangle(width, height, color, spawn_zone_id) {
     var div = document.createElement("div");
     var spawn_zone = document.getElementById(spawn_zone_id);
@@ -11,6 +12,7 @@ function addRectangle(width, height, color, spawn_zone_id) {
     spawn_zone.appendChild(div);
 };
 
+//testable
 function saveRectangles() {
     var rectangles = document.querySelectorAll('[id^="rectangle"]');
 
@@ -42,6 +44,7 @@ function saveRectangles() {
         }, 0); 
 }
 
+//testable
 function loadRectangles(file) {
 
     var fileread = new FileReader();
