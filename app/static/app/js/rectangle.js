@@ -52,9 +52,10 @@ function drawRectangles(content) {
         element.parentNode.removeChild(element);
     })
 
+    var objectlist = JSON.parse(content); // parse json 
 
-    var objectlist = JSON.parse(content.replace(/'/g,'"')); // parse json 
     objectlist.forEach(deobjectifyRectangle)
+
 }   
 
 
@@ -93,7 +94,7 @@ function sendRectangles() {
         contentType: 'application/json',
         synch: 'true',
         success: function(data){
-            document.write(data);
+            drawRectangles(data);
         },
         headers: {
             'X-CSRFToken': csrftoken
