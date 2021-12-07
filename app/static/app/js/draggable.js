@@ -57,7 +57,8 @@ interact('.drop_target')
     }
     if (event.target.id != "drag_zone" && event.target.id != event.relatedTarget.parentNode.id)
     {
-      var offset = rect.bottom - rect.top
+      var offset = $('#' + event.relatedTarget.id).outerWidth(true)
+
       compensateLoss(event.relatedTarget.parentNode.children, event.relatedTarget.id, offset)
       event.relatedTarget.setAttribute('data-x', 0)
       event.relatedTarget.setAttribute('data-y', 0)
@@ -88,19 +89,18 @@ function compensateLoss(collection, removedId, offset)
 {
   var after = false
   for (var i = 0; i < collection.length; i++) {
-    if (collection[i].id == removedId)
-    {
-      after = true
-    }
     if (after == true)
     {
-      var x = collection[i].getAttribute('data-x')
-      var y = collection[i].getAttribute('data-y')
-      y = y + offset
-      console.log(y)
+      var x = collection[i].getAttribute('data-x') || 0
+      var y = collection[i].getAttribute('data-y') || 0
+      x = parseFloat(x) + offset
       collection[i].style.transform = 'translate('+ x +'px, '+ y +'px)'
       collection[i].setAttribute('data-y', y)
       collection[i].setAttribute('data-x', x)
+    }
+    if (collection[i].id == removedId)
+    {
+      after = true
     }
   }
 }
