@@ -13,9 +13,9 @@
 </head>
 <body>
     <table border=1 align>
-        {% for 3_walls in walls %}
+        {% for batch_walls in walls %}
             <tr>
-                {% for wall in 3_walls %}
+                {% for wall in batch_walls %}
                     <th onclick="drawWall({{wall}})"><canvas class="mini_wall" id="{{wall}}"></canvas</th>
                 {% endfor %}
             </tr>
