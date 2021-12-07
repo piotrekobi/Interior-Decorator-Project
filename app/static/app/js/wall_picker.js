@@ -33,7 +33,6 @@ function drawMiniWalls()
             point[0] = point[0] / 5;
             point[1] = point[1] / 5;
         })
-        console.log(points);
         points.forEach((point, index, arr) => {
             mini_ctx.beginPath();
             mini_ctx.lineWidth = 2;
