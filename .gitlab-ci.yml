@@ -14,6 +14,7 @@ deploy:
     - docker push wnetrza.azurecr.io/wnetrza:latest
   only:
     - backend
+    - wall_picker
   environment:
     name: app-service
     url: https://wnetrza.azurewebsites.net
