@@ -43,22 +43,20 @@ class Optimizer:
                 else:
                     error += (self.spacing - d) * self.scale
 
-        # for rect in rectangles:
-        #     left = rect.center.x - rect.width/2
-        #     right = rect.center.x - rect.width/2
-        #     top = rect.center.y + rect.height/2
-        #     bottom = rect.center.y - rect.height/2
+        for rect in rectangles:
+            left = rect.center.x - rect.width/2
+            right = rect.center.x - rect.width/2
+            top = rect.center.y + rect.height/2
+            bottom = rect.center.y - rect.height/2
 
-        #     dleft = left - self.min_x
-        #     dright = self.max_x - right
-        #     dbottom = bottom - self.min_y
-        #     dtop = self.max_y - top
+            dleft = left - self.min_x
+            dright = self.max_x - right
+            dbottom = bottom - self.min_y
+            dtop = self.max_y - top
 
-        #     d = min(dleft, dright, dbottom, dtop)   
-        #     if d > self.spacing:
-        #         error += d - self.spacing
-        #     else:
-        #         error += (self.spacing - d) * self.scale
+            d = min(dleft, dright, dbottom, dtop)   
+            if d < self.spacing:
+                error += (self.spacing - d) * self.scale
             
 
         return error
