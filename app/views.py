@@ -25,3 +25,15 @@ def example_communication(request):
 
         return page
     return render(request, 'app/example_communication.html')
+
+
+def get_walls(request):
+    walls = [[[[400, 50], [1200, 50], [1200, 500], [400, 500], ],
+              [[400, 50], [800, 50], [1200, 275], [1200, 500], [400, 500], ],
+              [[400, 50], [1200, 50], [1200, 500], [400, 500], ]],
+             [[[400, 50], [1200, 50], [1200, 500], [400, 500], ],
+              [[400, 50], [1200, 50], [1200, 500], [400, 500], ],
+              [[400, 50], [1200, 50], [1200, 500], [400, 500], ]]]
+
+    context = {'walls': walls}
+    return render(request, 'app/wall_picker.html', context)
