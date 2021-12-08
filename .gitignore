@@ -1,4 +1,6 @@
 .vscode
 app/__pycache__/
-app/migrations/__pycache__/__init__.cpython-39.pyc
+app/migrations/__pycache__/*
 wnetrza/__pycache__/
+app/local_data/__pycache__
+db.sqlite3
