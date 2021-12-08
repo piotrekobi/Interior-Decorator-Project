@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from app.local_db.communication import get_walls_batched
+from app.local_data.walls import get_walls_batched
 
 
 def index(request):
@@ -10,5 +10,5 @@ def index(request):
 
 def get_walls(request):
     walls = get_walls_batched(3)
-    context = {'walls': walls}
+    context = {"walls": walls}
     return render(request, 'app/wall_picker.html', context)
