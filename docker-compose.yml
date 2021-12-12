@@ -12,6 +12,7 @@ services:
       - "8000:8000"
     networks:
       - db-net
+    image: wnetrza.azurecr.io/frontend:latest
 
   frontend:
     restart: always
@@ -27,6 +28,7 @@ services:
       - backend
     networks:
       - db-net
+    image: wnetrza.azurecr.io/backend:latest
 
 networks:
   db-net:
