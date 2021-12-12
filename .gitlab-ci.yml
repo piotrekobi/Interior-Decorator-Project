@@ -1,0 +1,19 @@
+stages:
+  - deploy
+    
+deploy:
+  image: docker:latest
+  stage: deploy
+  variables:
+    DOCKER_DRIVER: overlay
+  services:
+    - docker:dind
+  script:
+    - docker-compose build
+    - echo "$DOCKER_PASSWD" | docker-compose login $DOCKER_REPOSITORY --username $DOCKER_USER --password-stdin
+    - docker push
+  only:
+    - frontend_backend
+  environment:
+    name: app-service
+    url: https://wnetrza.azurewebsites.net
