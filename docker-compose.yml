@@ -9,7 +9,7 @@ services:
       context: ./backend/
       dockerfile: Dockerfile
     ports:
-      - "8000:8000"
+      - 8000:8000
     networks:
       - db-net
     
@@ -17,13 +17,13 @@ services:
 
   frontend:
     restart: always
-    command : npm start --port 80
+    command : npm start
     container_name: frontend
     build:
       context: ./frontend/
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - 80:3000
     stdin_open: true
     depends_on:
       - backend
