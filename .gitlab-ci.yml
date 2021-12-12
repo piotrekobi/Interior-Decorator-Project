@@ -9,6 +9,7 @@ deploy:
   services:
     - docker:dind
   script:
+    - apk add --no-cache docker-compose
     - docker-compose build
     - echo "$DOCKER_PASSWD" | docker-compose login $DOCKER_REPOSITORY --username $DOCKER_USER --password-stdin
     - docker push
