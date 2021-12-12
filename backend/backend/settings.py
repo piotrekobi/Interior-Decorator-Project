@@ -25,7 +25,7 @@ SECRET_KEY = 'gv)apn%c16cz+nln3jtd1!1bev^6=cnrpc(wmk74^oq6jvldn='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
