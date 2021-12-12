@@ -13,11 +13,11 @@ services:
     networks:
       - db-net
     
-    image: wnetrza.azurecr.io/frontend:latest
+    image: wnetrza.azurecr.io/backend:latest
 
   frontend:
     restart: always
-    command : npm start
+    command : npm start --port 80
     container_name: frontend
     build:
       context: ./frontend/
@@ -30,7 +30,7 @@ services:
     networks:
       - db-net
     
-    image: wnetrza.azurecr.io/backend:latest
+    image: wnetrza.azurecr.io/frontend:latest
 
 networks:
   db-net:
