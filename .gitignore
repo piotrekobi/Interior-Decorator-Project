@@ -1,6 +1,3 @@
-.vscode
-app/__pycache__/
-app/migrations/__pycache__/*
-wnetrza/__pycache__/
-app/local_data/__pycache__
-db.sqlite3
+./backend/backend/__pycache__/*
+./backend/interiors/__pycache__/*
+./backend/interiors/migrations/__pycache__/*
