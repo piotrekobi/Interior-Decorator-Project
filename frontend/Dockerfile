@@ -3,5 +3,7 @@ WORKDIR /frontend
 
 COPY package.json package-lock.json /frontend/
 RUN npm install 
+RUN npm install -g serve
 COPY . /frontend
-EXPOSE 3000
+EXPOSE 80
+RUN npm run build
