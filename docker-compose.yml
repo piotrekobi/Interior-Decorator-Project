@@ -4,7 +4,7 @@ services:
   backend:
     restart: always
     container_name: backend
-    command : bash -c "python manage.py runserver localhost:8000"
+    command : bash -c "python manage.py runserver 0.0.0.0:8000"
     build:
       context: ./backend/
       dockerfile: Dockerfile
@@ -12,6 +12,7 @@ services:
       - "8000:8000"
     networks:
       - db-net
+    build: ./
     image: wnetrza.azurecr.io/frontend:latest
 
   frontend:
@@ -28,6 +29,7 @@ services:
       - backend
     networks:
       - db-net
+    build: ./
     image: wnetrza.azurecr.io/backend:latest
 
 networks:
