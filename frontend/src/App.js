@@ -4,18 +4,18 @@ import { Component } from 'react';
 import MenuZone from './components/MenuZone';
 import DragZone from './components/DragZone';
 import SpawnZone from './components/SpawnZone';
+import WallPicker from './components/WallPicker';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
-      <main>
+      <body>
         <MenuZone/>
         <DragZone/>
         <SpawnZone/>
-      </main>
+
+        <WallPicker />
+      </body>
     );
   }
 }
