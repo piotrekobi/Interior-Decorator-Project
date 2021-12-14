@@ -1,0 +1,13 @@
+.dragZone {
+    background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+    background-image: 
+        linear-gradient(to right, gray 1px, transparent 1px),
+        linear-gradient(to bottom, gray 1px, transparent 1px),
+        linear-gradient(to right, lightgray 1px, transparent 1px),
+        linear-gradient(to bottom, lightgray 1px, transparent 1px);
+    background-color: transparent;
+    display: inline-block;
+    width: 100%;
+    flex: 1 1 75vh;
+    white-space: nowrap;
+}
