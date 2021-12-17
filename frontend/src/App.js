@@ -1,20 +1,20 @@
-import logo from './logo.svg';
 import './App.css';
-import { Component } from 'react';
+import { Component, createRef } from 'react';
 import MenuZone from './components/MenuZone';
 import DragZone from './components/DragZone';
 import SpawnZone from './components/SpawnZone';
-import WallPicker from './components/WallPicker';
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.mainCanvas = createRef();
+  }
   render() {
     return (
       <body>
-        <MenuZone/>
-        <DragZone/>
+        <MenuZone mainCanvas={this.mainCanvas}/>
+        <DragZone mainCanvas={this.mainCanvas}/>
         <SpawnZone/>
-
-        <WallPicker />
       </body>
     );
   }

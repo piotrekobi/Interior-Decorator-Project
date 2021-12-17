@@ -1,5 +1,4 @@
 import { Component, createRef } from "react";
-import ReactDOM from 'react-dom'
 import styles from"./MenuZone.module.css";
 import WallPicker from "./WallPicker";
 
@@ -18,7 +17,8 @@ export default class MenuZone extends Component {
             <div className={styles.menu}>
                 <ul className={styles.list}>
                     <li className={styles.button} onClick={this.showWallPicker}>Ściany</li>
-                    <WallPicker ref={this.wallPicker}/>
+                    <WallPicker ref={this.wallPicker} mainCanvas={this.props.mainCanvas}/>
+
                     <li className={styles.button}>Prostokąty</li>
                     <li className={styles.button}>Zakreśl obszar</li>
                     <li className={styles.button}>Rozmieść</li>
