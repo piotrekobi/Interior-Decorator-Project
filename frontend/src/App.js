@@ -9,6 +9,7 @@ class App extends Component {
   constructor(props){
     super(props);
     this.dragZone = createRef();
+    this.spawnZone = createRef();
     this.wallPicker = createRef();
   }
 
@@ -20,12 +21,17 @@ class App extends Component {
     this.wallPicker.current.toggleModal();
   }
 
+  handleRectanglesClick = () => {
+    this.spawnZone.current.addRectangle('100px', '100px', 'gray');
+  }
+
   render() {
     return (
       <body>
-        <MenuZone onWallsClick={this.handleWallsClick}/>
+        <MenuZone onWallsClick={this.handleWallsClick}
+                  onRectanglesClick={this.handleRectanglesClick}/>
         <DragZone ref={this.dragZone}/>
-        <SpawnZone/>
+        <SpawnZone ref={this.spawnZone}/>
 
         <WallPicker ref={this.wallPicker} onWallSelection={this.handleWallSelection}/>
       </body>

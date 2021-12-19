@@ -7,7 +7,7 @@ export default class MenuZone extends Component {
             <div className={styles.menu}>
                 <ul className={styles.list}>
                     <li className={styles.button} onClick={this.props.onWallsClick}>Ściany</li>
-                    <li className={styles.button}>Prostokąty</li>
+                    <li className={styles.button} onClick={this.props.onRectanglesClick}>Prostokąty</li>
                     <li className={styles.button}>Zakreśl obszar</li>
                     <li className={styles.button}>Rozmieść</li>
                     <li className={styles.button}>Wczytaj projekt</li>
