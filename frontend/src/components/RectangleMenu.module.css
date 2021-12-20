@@ -1,0 +1,48 @@
+.addButton {
+  float: left;
+  text-align: center;
+  font-size: 16;
+  width: 260px;
+  color: black;
+  background-color: whitesmoke;
+  margin: 15px 10px 0px 10px;
+  border: 1px solid navy;
+  box-shadow: 0px 2px 3px gray;
+  -moz-box-shadow: 0px 2px 3px gray;
+  -webkit-box-shadow: 0px 2px 3px gray;
+}
+
+.label {
+  display: inline-block;
+}
+.addButton:hover {
+  background-color: white;
+}
+
+.uploadButton {
+  float: left;
+  text-align: center;
+  font-size: 16;
+  color: black;
+  background-color: rgb(215, 236, 243);
+  margin-top: 2px;
+  width: 122px;
+
+  border: 1px solid navy;
+}
+
+.uploadButton:hover {
+  background-color: rgb(227, 240, 245);
+}
+
+.colorPicker {
+  position: absolute;
+  left: 82px;
+  top: 55px;
+  width: 58px;
+}
+
+.textBox {
+  margin: 5px;
+  width: 50px;
+}
