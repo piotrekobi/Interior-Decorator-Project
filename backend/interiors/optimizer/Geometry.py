@@ -37,25 +37,25 @@ class Rectangle:
     def __init__(self, width, height, center):
         self.halfwidth = width / 2
         self.halfheight = height / 2
-        self.width = width / 2
-        self.height = height / 2
+        self.width = width
+        self.height = height
         self.center = center
 
     @property
     def points(self):
         return [
-            Point(self.center.x + self.__halfwidth, self.center.y + self.__halfheigt),
-            Point(self.center.x + self.__halfwidth, self.center.y - self.__halfheigt),
-            Point(self.center.x - self.__halfwidth, self.center.y - self.__halfheigt),
-            Point(self.center.x - self.__halfwidth, self.center.y + self.__halfheigt),
+            Point(self.center.x + self.halfwidth, self.center.y + self.halfheight),
+            Point(self.center.x + self.halfwidth, self.center.y - self.halfheight),
+            Point(self.center.x - self.halfwidth, self.center.y - self.halfheight),
+            Point(self.center.x - self.halfwidth, self.center.y + self.halfheight),
         ]
 
     def overlaps(self, other):
         return self.spacebetween(other) < 0
 
     def spacebetween(self, other):
-        d1 = abs(self.center.x - other.center.x) - self.__halfwidth - other.__halfwidth
-        d2 = abs(self.center.y - other.center.y) - self.__halfheigt - other.__halfheigt
+        d1 = abs(self.center.x - other.center.x) - self.halfwidth - other.halfwidth
+        d2 = abs(self.center.y - other.center.y) - self.halfheight - other.halfheight
         return max(d1, d2)
 
 

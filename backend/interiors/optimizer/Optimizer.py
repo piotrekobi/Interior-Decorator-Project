@@ -17,7 +17,6 @@ class Optimizer:
 
         rectangles = self.fixed + self.optimized
         for rect1, rect2 in combinations(rectangles, 2):
-
             d = rect1.spacebetween(rect2)
             if d > self.spacing:
                 gap_big_error += d - self.spacing
@@ -37,17 +36,19 @@ class Optimizer:
         gap_small_error = 0
         for rect in self.optimized:
             # Punishment for being too close to vertical/horizontal wall boundaries
-            left = rect.center.x - rect.width / 2
-            right = rect.center.x + rect.width / 2
-            top = rect.center.y + rect.height / 2
-            bottom = rect.center.y - rect.height / 2
+            left = rect.center.x - rect.halfwidth
+            right = rect.center.x + rect.halfwidth
+            top = rect.center.y + rect.halfheight
+            bottom = rect.center.y - rect.halfheight
 
             dleft = left - self.min_x
             dright = self.max_x - right
             dbottom = bottom - self.min_y
             dtop = self.max_y - top
 
-            d = min(dleft, dright, dbottom, dtop, self.spacing)
+            d = min(dleft, dright, dbottom, dtop)
+            if d < 0:
+                print("ERROR")
             if d < self.spacing:
                 gap_small_error += self.spacing - d
 
@@ -82,12 +83,12 @@ class Optimizer:
             [
                 b
                 for r in self.optimized
-                for b in [self.min_x + r.width / 2, self.min_y + r.height / 2]
+                for b in [self.min_x + r.halfwidth, self.min_y + r.halfheight]
             ],
             [
                 b
                 for r in self.optimized
-                for b in [self.max_x - r.width / 2, self.max_y - r.height / 2]
+                for b in [self.max_x - r.halfwidth, self.max_y - r.halfheight]
             ],
         )
 
