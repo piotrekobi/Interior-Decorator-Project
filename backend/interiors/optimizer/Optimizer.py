@@ -47,8 +47,6 @@ class Optimizer:
             dtop = self.max_y - top
 
             d = min(dleft, dright, dbottom, dtop)
-            if d < 0:
-                print("ERROR")
             if d < self.spacing:
                 gap_small_error += self.spacing - d
 
