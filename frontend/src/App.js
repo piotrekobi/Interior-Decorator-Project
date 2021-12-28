@@ -4,6 +4,7 @@ import MenuZone from './components/MenuZone';
 import DragZone from './components/DragZone';
 import SpawnZone from './components/SpawnZone';
 import WallPicker from './components/WallPicker';
+import Rectangle from './components/Rectangle';
 
 class App extends Component {
   constructor(props){
@@ -22,7 +23,9 @@ class App extends Component {
   }
 
   handleRectanglesClick = () => {
-    this.spawnZone.current.addRectangle('100px', '100px', 'gray');
+    var rectangle = <Rectangle style={{width:'100px', height:'100px', color:'gray'}}/>
+    this.spawnZone.current.addChild(rectangle);
+    // this.spawnZone.current.addRectangle('100px', '100px', 'gray');
   }
 
   render() {

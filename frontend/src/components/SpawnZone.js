@@ -7,7 +7,7 @@ export default class SpawnZone extends Component{
         super(props);
         this.spawnZoneDiv = createRef();
         this.state = {
-            rectangles: []
+            children: []
         }
     }
 
@@ -99,17 +99,18 @@ export default class SpawnZone extends Component{
         target.setAttribute('data-y', y)
       }
 
-    addRectangle = (width, height, color) => {
-        var rectangle = createElement(  "div",
-                                        {className: styles.rectangle + " draggable",
-                                         style: {width: width, height: height, background: color}});
-        this.setState({rectangles: this.state.rectangles.concat([rectangle])});
+    addChild = (child) => {
+
+        // var rectangle = createElement(  "div",
+        //                                 {className: styles.rectangle + " draggable",
+        //                                  style: {width: width, height: height, background: color}});
+        this.setState({children: this.state.children.concat([child])});
     }
 
     render() {
         return(
             <div ref={this.spawnZoneDiv} className={styles.spawnZone}>
-                {this.state.rectangles}
+                {this.state.children}
             </div>
         )
     }
