@@ -5,6 +5,8 @@ import DragZone from './components/DragZone';
 import SpawnZone from './components/SpawnZone';
 import WallPicker from './components/WallPicker';
 import Rectangle from './components/Rectangle';
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 class App extends Component {
   constructor(props){
@@ -23,21 +25,22 @@ class App extends Component {
   }
 
   handleRectanglesClick = () => {
-    var rectangle = <Rectangle style={{width:'100px', height:'100px', color:'gray'}}/>
+    var rectangle = <Rectangle id={1} style={{width:'100px', height:'100px', background:'gray'}}/>
     this.spawnZone.current.addChild(rectangle);
-    // this.spawnZone.current.addRectangle('100px', '100px', 'gray');
   }
 
   render() {
     return (
-      <body>
-        <MenuZone onWallsClick={this.handleWallsClick}
-                  onRectanglesClick={this.handleRectanglesClick}/>
-        <DragZone ref={this.dragZone}/>
-        <SpawnZone ref={this.spawnZone}/>
+      <DndProvider backend={HTML5Backend}>
+        <body>
+          <MenuZone onWallsClick={this.handleWallsClick}
+                    onRectanglesClick={this.handleRectanglesClick}/>
+          <DragZone ref={this.dragZone}/>
+          <SpawnZone ref={this.spawnZone}/>
 
-        <WallPicker ref={this.wallPicker} onWallSelection={this.handleWallSelection}/>
-      </body>
+          <WallPicker ref={this.wallPicker} onWallSelection={this.handleWallSelection}/>
+        </body>
+      </DndProvider>
     );
   }
 }

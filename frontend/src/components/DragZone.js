@@ -9,7 +9,7 @@ export default class DragZone extends Component{
 
     componentDidMount() {
         this.mainCanvas.current.width = window.innerWidth;
-        this.mainCanvas.current.height = window.innerHeight - 175;
+        this.mainCanvas.current.height = window.innerHeight - 500;
         this.mainCanvas.current.style.position = "absolute";
     }
 
