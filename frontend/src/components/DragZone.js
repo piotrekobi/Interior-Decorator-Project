@@ -5,11 +5,12 @@ export default class DragZone extends Component{
     constructor(props){
         super(props);
         this.mainCanvas = createRef();
+        this.divRef = createRef();
     }
 
     componentDidMount() {
-        this.mainCanvas.current.width = window.innerWidth;
-        this.mainCanvas.current.height = window.innerHeight - 500;
+        this.mainCanvas.current.width = this.divRef.current.clientWidth;
+        this.mainCanvas.current.height = this.divRef.current.clientHeight;
         this.mainCanvas.current.style.position = "absolute";
     }
 
@@ -35,7 +36,7 @@ export default class DragZone extends Component{
 
     render() {
         return (
-            <div className={styles.dragZone}>
+            <div className={styles.dragZone} ref={this.divRef}>
                 <canvas ref={this.mainCanvas}></canvas>
             </div>
         )
