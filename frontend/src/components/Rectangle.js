@@ -1,30 +1,41 @@
 import { Component, createRef } from "react";
 import styles from  "./Rectangle.module.css"
 import { DragSource} from "react-dnd"
-
-const Types = {
-    RECTANGLE: 'rectangle'
-}
+import { Types } from "./Types"
 
 const rectSource = {
     beginDrag(props, monitor, component) {
-        const item = { id: props.id }
+        const item = { id: props.id}
         return item
     },
 
     endDrag(props, monitor, component) {
         if(!monitor.didDrop())
         {
-            var position = monitor.getSourceClientOffset();
-            component.setState({left: position.x, top: position.y});
+            // var position = monitor.getSourceClientOffset();
+            // component.setState({
+            //     ...component.state,
+            //     left: position.x,
+            //     top: position.y});
+            return
+        }
+        else
+        {
+            var dropresult = monitor.getDropResult();
+            var parentString = dropresult.parentString;
+            var position = dropresult.position;
+
+            component.setState({
+                ...component.state,
+                left: position.x,
+                top: position.y,
+                parentString: parentString});
             return
         }
     }
 }
+
   
-/**
- * Specifies which props to inject into your component.
- */
 function collect(connect, monitor) {
     return {
         connectDragSource: connect.dragSource(),
@@ -42,7 +53,8 @@ class Rectangle extends Component{
     componentDidMount() {
         this.setState({
             left: this.divRef.current.getBoundingClientRect().left,
-            top: this.divRef.current.getBoundingClientRect().top 
+            top: this.divRef.current.getBoundingClientRect().top,
+            parentString: "spawn_zone"
         });
     }
 
@@ -56,7 +68,9 @@ class Rectangle extends Component{
                      position: "absolute",
                      left: this.state.left+"px",
                      top: this.state.top+"px"}
-                     }/>
+                     }>
+                        {this.state.parentString}
+                    </div>
                 )
             )
         }
@@ -64,7 +78,8 @@ class Rectangle extends Component{
         {
             return(
                 this.props.connectDragSource(
-                    <div ref={this.divRef} className={styles.rectangle} style={this.props.style}/>
+                    <div ref={this.divRef} className={styles.rectangle} style={this.props.style}>
+                    </div>
                 )
             )
         }

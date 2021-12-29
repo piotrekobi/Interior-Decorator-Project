@@ -1,14 +1,29 @@
 import { Component, createRef } from "react";
 import styles from "./DragZone.module.css"
+import { DropTarget } from 'react-dnd'
+import { Types } from './Types.js'
 
-export default class DragZone extends Component{
-    constructor(props){
+const dragZoneTarget = {
+    drop(props, monitor, component) {
+        return {
+            position: monitor.getSourceClientOffset(),
+            parentString: "drag_zone"
+        };
+    }
+}
+
+
+function collect(connect, monitor) {
+    return {
+        connectDropTarget: connect.dropTarget(),
+    }
+}
+
+class DragZone extends Component {
+    constructor(props) {
         super(props);
         this.mainCanvas = createRef();
         this.divRef = createRef();
-        this.state = {
-            children: []
-        }
     }
 
     componentDidMount() {
@@ -24,9 +39,9 @@ export default class DragZone extends Component{
         ctx.beginPath();
 
         var prevKey;
-        for (var key in vertices){
+        for (var key in vertices) {
             ctx.moveTo(vertices[key]['x'], vertices[key]['y']);
-            if (prevKey != null){
+            if (prevKey != null) {
                 ctx.lineTo(vertices[prevKey]['x'], vertices[prevKey]['y']);
             }
             ctx.stroke();
@@ -37,17 +52,19 @@ export default class DragZone extends Component{
         ctx.stroke();
     }
 
-    addChild = (child) => {
-        this.setState({children: this.state.children.concat([child])});
-    }
 
 
     render() {
-        return (
+        return this.props.connectDropTarget(
             <div className={styles.dragZone} ref={this.divRef}>
                 <canvas ref={this.mainCanvas}></canvas>
-                {this.state.children}
             </div>
         )
     }
 }
+
+export default DropTarget(
+    Types.RECTANGLE,
+    dragZoneTarget,
+    collect
+)(DragZone)
