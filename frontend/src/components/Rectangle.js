@@ -27,8 +27,8 @@ const rectSource = {
 
             component.setState({
                 ...component.state,
-                left: position.x,
-                top: position.y,
+                left: position.x - component.margin.left,
+                top: position.y - component.margin.top,
                 parentString: parentString});
             return
         }
@@ -56,6 +56,10 @@ class Rectangle extends Component{
             // top: this.divRef.current.getBoundingClientRect().top,
             parentString: "spawn_zone"
         });
+        this.margin = {
+            left: window.getComputedStyle(this.divRef.current).getPropertyValue("margin-left").slice(0,-2),
+            top: window.getComputedStyle(this.divRef.current).getPropertyValue("margin-left").slice(0, -2)
+        }
     }
 
     render() {
