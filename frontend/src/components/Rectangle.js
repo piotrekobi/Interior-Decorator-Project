@@ -52,8 +52,8 @@ class Rectangle extends Component{
 
     componentDidMount() {
         this.setState({
-            left: this.divRef.current.getBoundingClientRect().left,
-            top: this.divRef.current.getBoundingClientRect().top,
+            // left: this.divRef.current.getBoundingClientRect().left,
+            // top: this.divRef.current.getBoundingClientRect().top,
             parentString: "spawn_zone"
         });
     }
