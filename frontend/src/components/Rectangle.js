@@ -27,8 +27,8 @@ const rectSource = {
 
             component.setState({
                 ...component.state,
-                left: position.x - component.margin.left,
-                top: position.y - component.margin.top,
+                left: position.x,
+                top: position.y, 
                 parentString: parentString});
             return
         }
@@ -47,15 +47,15 @@ class Rectangle extends Component{
     constructor(props) {
         super(props);
         this.divRef = createRef();
-        this.state = {};
+        this.state = {
+            parentString: "spawn_zone",
+            width: this.props.width,
+            height: this.props.height,
+            color: this.props.color
+        };
     }
 
     componentDidMount() {
-        this.setState({
-            // left: this.divRef.current.getBoundingClientRect().left,
-            // top: this.divRef.current.getBoundingClientRect().top,
-            parentString: "spawn_zone"
-        });
         this.margin = {
             left: window.getComputedStyle(this.divRef.current).getPropertyValue("margin-left").slice(0,-2),
             top: window.getComputedStyle(this.divRef.current).getPropertyValue("margin-left").slice(0, -2)
@@ -70,8 +70,8 @@ class Rectangle extends Component{
                     <div ref={this.divRef} className={styles.rectangle} style={{
                      ...this.props.style,
                      position: "absolute",
-                     left: this.state.left+"px",
-                     top: this.state.top+"px"}
+                     left: (this.state.left - this.margin.left) + "px",
+                     top: (this.state.top - this.margin.top) + "px"}
                      }>
                         {this.state.parentString}
                     </div>
