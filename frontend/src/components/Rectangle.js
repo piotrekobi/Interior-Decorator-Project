@@ -63,7 +63,7 @@ class Rectangle extends Component{
     }
 
     render() {
-        if((typeof this.state.left != "undefined") && (typeof this.state.top != "undefined"))
+        if((typeof this.state.left != "undefined") && (typeof this.state.top != "undefined") && (this.state.parentString != "spawn_zone"))
         {
             return(
                 this.props.connectDragSource(
@@ -83,6 +83,7 @@ class Rectangle extends Component{
             return(
                 this.props.connectDragSource(
                     <div ref={this.divRef} className={styles.rectangle} style={this.props.style}>
+                        {this.state.parentString}
                     </div>
                 )
             )
