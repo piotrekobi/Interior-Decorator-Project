@@ -11,10 +11,6 @@ export default class SpawnZone extends Component{
     }
 
     addChild = (child) => {
-
-        // var rectangle = createElement(  "div",
-        //                                 {className: styles.rectangle + " draggable",
-        //                                  style: {width: width, height: height, background: color}});
         this.setState({children: this.state.children.concat([child])});
     }
 

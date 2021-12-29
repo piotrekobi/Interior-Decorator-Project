@@ -6,6 +6,9 @@ export default class DragZone extends Component{
         super(props);
         this.mainCanvas = createRef();
         this.divRef = createRef();
+        this.state = {
+            children: []
+        }
     }
 
     componentDidMount() {
@@ -34,10 +37,16 @@ export default class DragZone extends Component{
         ctx.stroke();
     }
 
+    addChild = (child) => {
+        this.setState({children: this.state.children.concat([child])});
+    }
+
+
     render() {
         return (
             <div className={styles.dragZone} ref={this.divRef}>
                 <canvas ref={this.mainCanvas}></canvas>
+                {this.state.children}
             </div>
         )
     }

@@ -7,19 +7,19 @@ const Types = {
 }
 
 const rectSource = {
-    isDragging(props, monitor) {
-        // If your component gets unmounted while dragged
-        // (like a card in Kanban board dragged between lists)
-        // you can implement something like this to keep its
-        // appearance dragged:
-        return monitor.getItem().id === props.id
-    },
-  
     beginDrag(props, monitor, component) {
-        // Return the data describing the dragged item
         const item = { id: props.id }
         return item
     },
+
+    endDrag(props, monitor, component) {
+        if(!monitor.didDrop())
+        {
+            var position = monitor.getSourceClientOffset();
+            component.setState({left: position.x, top: position.y});
+            return
+        }
+    }
 }
   
 /**
@@ -27,11 +27,7 @@ const rectSource = {
  */
 function collect(connect, monitor) {
     return {
-        // Call this function inside render()
-        // to let React DnD handle the drag events:
         connectDragSource: connect.dragSource(),
-        // You can ask the monitor about the current drag state:
-        isDragging: monitor.isDragging()
     }
 }
 
@@ -40,6 +36,7 @@ class Rectangle extends Component{
     constructor(props) {
         super(props);
         this.divRef = createRef();
+        this.state = {};
     }
 
     componentDidMount() {
@@ -50,13 +47,27 @@ class Rectangle extends Component{
     }
 
     render() {
-        return(
-            this.props.connectDragSource(
-                <div ref={this.divRef} className={styles.rectangle} style={this.props.style}>
-                    {this.props.isDragging && ' (I am being dragged now)'}
-                </div>
+        if((typeof this.state.left != "undefined") && (typeof this.state.top != "undefined"))
+        {
+            return(
+                this.props.connectDragSource(
+                    <div ref={this.divRef} className={styles.rectangle} style={{
+                     ...this.props.style,
+                     position: "absolute",
+                     left: this.state.left+"px",
+                     top: this.state.top+"px"}
+                     }/>
+                )
             )
-        )
+        }
+        else
+        {
+            return(
+                this.props.connectDragSource(
+                    <div ref={this.divRef} className={styles.rectangle} style={this.props.style}/>
+                )
+            )
+        }
     }
 }
 
