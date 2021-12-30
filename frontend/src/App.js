@@ -18,7 +18,7 @@ class App extends Component {
     }
 
     handleWallSelection = (specs) => {
-        this.dragZone.current.drawWall(specs);
+        this.dragZone.current.decoratedRef.current.drawWall(specs);
     }
 
     handleWallsClick = () => {
