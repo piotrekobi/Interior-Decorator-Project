@@ -4,12 +4,12 @@ services:
   backend:
     restart: always
     container_name: backend
-    command : python manage.py runserver 0.0.0.0:8000
+    command : python manage.py runserver 0.0.0.0:80
     build:
       context: ./backend/
       dockerfile: Dockerfile
     ports:
-      - 8000:8000
+      - 80:80
     networks:
       - db-net
     
