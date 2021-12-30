@@ -2,6 +2,8 @@ import { Component, createRef } from "react";
 import styles from  "./SpawnZone.module.css"
 import { DropTarget } from 'react-dnd'
 import { Types } from './Types.js'
+import Rectangle from './Rectangle';
+import { v4 as uuidv4 } from 'uuid';
 
 const spawnZoneTarget = {
     drop(props, monitor, component) {
@@ -27,7 +29,10 @@ class SpawnZone extends Component{
         }
     }
 
-    addChild = (child) => {
+    addChild = (width, height, color) => {
+        var child = (<Rectangle id={uuidv4()} style={{  width: width, 
+                                                            height: height, 
+                                                            background: color }}/>)
         this.setState({children: this.state.children.concat([child])});
     }
 

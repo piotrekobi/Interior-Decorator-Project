@@ -4,10 +4,9 @@ import MenuZone from './components/MenuZone';
 import DragZone from './components/DragZone';
 import SpawnZone from './components/SpawnZone';
 import WallPicker from './components/WallPicker';
-import Rectangle from './components/Rectangle';
+import RectangleMenu from './components/RectangleMenu';
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { v4 as uuidv4 } from 'uuid';
 
 class App extends Component {
     constructor(props) {
@@ -15,10 +14,11 @@ class App extends Component {
         this.dragZone = createRef();
         this.spawnZone = createRef();
         this.wallPicker = createRef();
+        this.rectangleMenu = createRef();
     }
 
     handleWallSelection = (specs) => {
-        this.dragZone.current.decoratedRef.current.drawWall(specs);
+        this.dragZone.current.getDecoratedComponentInstance().drawWall(specs);
     }
 
     handleWallsClick = () => {
@@ -27,9 +27,15 @@ class App extends Component {
 
     handleRectanglesClick = () => {
 
-        var rectangle = (<Rectangle id={uuidv4()} style={{ width: '100px', height: '100px', background: 'gray' }}/>)
-        this.spawnZone.current.getDecoratedComponentInstance().addChild(rectangle);
+        //var rectangle = (<Rectangle id={uuidv4()} style={{ width: '100px', height: '100px', background: 'gray' }}/>)
+        //this.spawnZone.current.getDecoratedComponentInstance().addChild(rectangle);
+        this.rectangleMenu.current.toggleModal();
     }
+
+    handleAddRectangleClick = (width, height, color) => {
+        this.spawnZone.current.getDecoratedComponentInstance().addChild(width, height, color);
+    };
+  
 
     render() {
         return (
@@ -40,7 +46,13 @@ class App extends Component {
                     <DragZone ref={this.dragZone} />
                     <SpawnZone ref={this.spawnZone} />
 
-                    <WallPicker ref={this.wallPicker} onWallSelection={this.handleWallSelection} />
+                    <WallPicker ref={this.wallPicker} 
+                        onWallSelection={this.handleWallSelection} 
+                    />
+                    <RectangleMenu ref={this.rectangleMenu}
+                        onAddRectangleClick={this.handleAddRectangleClick}
+                    />
+
                 </body>
             </DndProvider>
         );
