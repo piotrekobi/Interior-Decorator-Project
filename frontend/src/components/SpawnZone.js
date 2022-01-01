@@ -4,6 +4,7 @@ import { DropTarget } from 'react-dnd'
 import { Types } from './Types.js'
 import Rectangle from './Rectangle';
 import { v4 as uuidv4 } from 'uuid';
+import jQuery from "jquery";
 
 const spawnZoneTarget = {
     drop(props, monitor, component) {
@@ -30,10 +31,12 @@ class SpawnZone extends Component{
     }
 
     addChild = (width, height, color) => {
-        var child = (<Rectangle id={uuidv4()} style={{  width: width, 
-                                                            height: height, 
-                                                            background: color }}/>)
+        var ref = createRef();
+        var child = (<Rectangle id={uuidv4()} ref={ref} style={{  width: width, 
+                                                                    height: height, 
+                                                                    background: color }}/>)
         this.setState({children: this.state.children.concat([child])});
+        return ref;
     }
 
     removeChildByID = (id) => {
@@ -46,6 +49,51 @@ class SpawnZone extends Component{
             )
         });
     }
+
+    getRectangles = () => {
+        var rectangles = this.state.children;
+        console.log(rectangles);
+        var rectlist = jQuery.map(
+            rectangles,
+            this.objectifyRectangle
+            );
+        return rectlist;
+    }
+
+    setRectangles = (data) => {
+        this.setState({children: []})
+        data[0].forEach((rectangle) => {
+            console.log(rectangle);
+            var ref = this.addChild(rectangle['width'], rectangle['height'], rectangle['color']);
+            ref.current.getDecoratedComponentInstance().setState({  left: rectangle['offset']['left'],
+                                                                    top: rectangle['offset']['left'],
+                                                                    parentString: rectangle['parent']});
+        })
+    }
+
+    objectifyRectangle = (element) => {
+        var element_x = element.ref.current.getDecoratedComponentInstance().state.left || 0;
+        var element_y = element.ref.current.getDecoratedComponentInstance().state.top || 0;
+
+        //var element_margin_x = $(element).outerWidth(true) - parseFloat(element.style.width);
+        //var element_margin_y = $(element).outerHeight(true) - parseFloat(element.style.height);
+    
+        let offset = {
+            left: (element_x /*+ element_margin_x*/),
+            top: (element_y /*+ element_margin_y*/)
+        }
+    
+        return {
+            id: element.id,
+            parent: element.ref.current.getDecoratedComponentInstance().state.parentString,
+            width: element.props.style.width,
+            height: element.props.style.height,
+            color: element.props.style.background,
+            offset: offset
+        }
+    }
+    
+    
 
     render() {
         return this.props.connectDropTarget(

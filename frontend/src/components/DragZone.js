@@ -32,6 +32,15 @@ class DragZone extends Component {
         this.mainCanvas.current.style.position = "absolute";
     }
 
+    setWall = (wallJSON) => {
+        this.wallJSON = wallJSON;
+        this.drawWall(wallJSON);
+    }
+
+    getWall = () => {
+        return this.wallJSON;
+    }
+
     drawWall = (specs) => {
         var vertices = specs.vertices;
         var ctx = this.mainCanvas.current.getContext("2d");
@@ -50,10 +59,6 @@ class DragZone extends Component {
         ctx.moveTo(vertices[0]['x'], vertices[0]['y']);
         ctx.lineTo(vertices[prevKey]['x'], vertices[prevKey]['y']);
         ctx.stroke();
-    }
-
-    getData = () => {
-        return "data";
     }
 
     render() {

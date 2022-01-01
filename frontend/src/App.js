@@ -18,7 +18,7 @@ class App extends Component {
     }
 
     handleWallSelection = (specs) => {
-        this.dragZone.current.getDecoratedComponentInstance().drawWall(specs);
+        this.dragZone.current.getDecoratedComponentInstance().setWall(specs);
     }
 
     handleWallsClick = () => {
@@ -37,8 +37,20 @@ class App extends Component {
     };
 
     handleOrderClick = () => {
-        var data = this.dragZone.current.getDecoratedComponentInstance().getData();
-        console.log(data);
+        var rectangle_json = this.spawnZone.current.getDecoratedComponentInstance().getRectangles();
+        var wall_json = this.dragZone.current.getDecoratedComponentInstance().getWall();
+        var preferred_spacing = 30; // EXAMPLE - TODO
+        
+        fetch("http://127.0.0.1:8000/optimizer/", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify([{rectangle_json, wall_json, preferred_spacing}])
+        })
+            .then(response => response.json())
+            .then(data => this.spawnZone.current.getDecoratedComponentInstance().setRectangles(data));
     }
   
 

@@ -107,10 +107,11 @@ class Optimizer:
     def parseJSON(self, rectangle_json, wall_json, preferred_spacing):
         rectangles = []
         fixed_rectangles = []
-        for rect_data in rectangle_json:
+        
+        for rect_data in rectangle_json[0]:
             rect = Rectangle(
-                float(rect_data["width"][:-2]),
-                float(rect_data["height"][:-2]),
+                float(rect_data["width"]),
+                float(rect_data["height"]),
                 Point(
                     float(rect_data["offset"]["left"]),
                     float(rect_data["offset"]["top"]),
@@ -151,11 +152,11 @@ class Optimizer:
 
 def updateJSON(rectangle_json, res):
     i = 0
-    for rect_data in rectangle_json:
+    for rect_data in rectangle_json[0]:
         if rect_data["parent"] == "spawn_zone":
             x, y = res[2 * i], res[2 * i + 1]
-            rect_data["offset"]["left"] = x - float(rect_data["width"][:-2]) / 2
-            rect_data["offset"]["top"] = y - float(rect_data["height"][:-2]) / 2
+            rect_data["offset"]["left"] = x - float(rect_data["width"]) / 2
+            rect_data["offset"]["top"] = y - float(rect_data["height"]) / 2
             rect_data["parent"] = "drag_zone"
             i = i + 1
 
