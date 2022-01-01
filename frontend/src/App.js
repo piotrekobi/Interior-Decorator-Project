@@ -7,14 +7,18 @@ import WallPicker from './components/WallPicker';
 import RectangleMenu from './components/RectangleMenu';
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import Connector from './Connector';
 
 class App extends Component {
     constructor(props) {
         super(props);
+        this.menuZone = createRef();
         this.dragZone = createRef();
         this.spawnZone = createRef();
         this.wallPicker = createRef();
         this.rectangleMenu = createRef();
+
+        this.connector = new Connector(["http://127.0.0.1:8000/optimizer/", "http://api-wnetrza.azurewebsites.net/optimizer/"]);
     }
 
     handleWallSelection = (specs) => {
@@ -37,20 +41,14 @@ class App extends Component {
     };
 
     handleOrderClick = () => {
-        var rectangle_json = this.spawnZone.current.getDecoratedComponentInstance().getRectangles();
+        const offsetHeight = this.menuZone.current.getHeight();
+
+        var rectangle_json = this.spawnZone.current.getDecoratedComponentInstance().getRectangles(offsetHeight);
         var wall_json = this.dragZone.current.getDecoratedComponentInstance().getWall();
         var preferred_spacing = 30; // EXAMPLE - TODO
-        
-        fetch("http://127.0.0.1:8000/optimizer/", {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify([{rectangle_json, wall_json, preferred_spacing}])
-        })
-            .then(response => response.json())
-            .then(data => this.spawnZone.current.getDecoratedComponentInstance().setRectangles(data));
+
+        this.connector.optimizeRectangles(rectangle_json, wall_json, preferred_spacing)
+            .then(result => this.spawnZone.current.getDecoratedComponentInstance().setRectangles(result, offsetHeight));
     }
   
 
@@ -58,17 +56,19 @@ class App extends Component {
         return (
             <DndProvider backend={HTML5Backend}>
                 <body>
-                    <MenuZone onWallsClick={this.handleWallsClick}
-                        onRectanglesClick={this.handleRectanglesClick} 
-                        onOrderClick={this.handleOrderClick}/>
-                    <DragZone ref={this.dragZone} />
-                    <SpawnZone ref={this.spawnZone} />
-
-                    <WallPicker ref={this.wallPicker} 
-                        onWallSelection={this.handleWallSelection} 
+                    <MenuZone ref = {this.menuZone}
+                        onWallsClick = {this.handleWallsClick}
+                        onRectanglesClick = {this.handleRectanglesClick} 
+                        onOrderClick = {this.handleOrderClick}
                     />
-                    <RectangleMenu ref={this.rectangleMenu}
-                        onAddRectangleClick={this.handleAddRectangleClick}
+                    <DragZone ref = {this.dragZone} />
+                    <SpawnZone ref = {this.spawnZone} />
+
+                    <WallPicker ref = {this.wallPicker} 
+                        onWallSelection = {this.handleWallSelection} 
+                    />
+                    <RectangleMenu ref = {this.rectangleMenu}
+                        onAddRectangleClick = {this.handleAddRectangleClick}
                     />
 
                 </body>

@@ -40,7 +40,14 @@
     "right": 1200,
     "topleft": [],
     "topright": [],
-    "holes": []
+    "holes": [
+      {
+        "centerx": 675,
+        "centery": 350,
+        "width": 150,
+        "height": 300
+      }
+    ]
   },
   {
     "vertices": [
@@ -130,6 +137,7 @@
         "width": 150,
         "height": 300
       }
+      
     ]
   }
 ]

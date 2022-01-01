@@ -50,28 +50,23 @@ class SpawnZone extends Component{
         });
     }
 
-    getRectangles = () => {
+    getRectangles = (offsetHeight) => {
         var rectangles = this.state.children;
-        console.log(rectangles);
-        var rectlist = jQuery.map(
-            rectangles,
-            this.objectifyRectangle
-            );
+        var rectlist = rectangles.map((rectangle) => this.objectifyRectangle(rectangle, offsetHeight));
         return rectlist;
     }
 
-    setRectangles = (data) => {
+    setRectangles = (data, offsetHeight) => {
         this.setState({children: []})
         data[0].forEach((rectangle) => {
-            console.log(rectangle);
             var ref = this.addChild(rectangle['width'], rectangle['height'], rectangle['color']);
             ref.current.getDecoratedComponentInstance().setState({  left: rectangle['offset']['left'],
-                                                                    top: rectangle['offset']['left'],
+                                                                    top: rectangle['offset']['top'] + offsetHeight,
                                                                     parentString: rectangle['parent']});
         })
     }
 
-    objectifyRectangle = (element) => {
+    objectifyRectangle = (element, offsetHeight) => {
         var element_x = element.ref.current.getDecoratedComponentInstance().state.left || 0;
         var element_y = element.ref.current.getDecoratedComponentInstance().state.top || 0;
 
@@ -80,7 +75,7 @@ class SpawnZone extends Component{
     
         let offset = {
             left: (element_x /*+ element_margin_x*/),
-            top: (element_y /*+ element_margin_y*/)
+            top: (element_y - offsetHeight /*+ element_margin_y*/)
         }
     
         return {
