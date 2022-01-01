@@ -18,7 +18,7 @@ class App extends Component {
         this.wallPicker = createRef();
         this.rectangleMenu = createRef();
 
-        this.connector = new Connector(["http://127.0.0.1:8000/optimizer/", "http://api-wnetrza.azurewebsites.net/optimizer/"]);
+        this.connector = new Connector(["http://127.0.0.1:8000/optimizer/", "httpS://api-wnetrza.azurewebsites.net/optimizer/"]);
     }
 
     handleWallSelection = (specs) => {
