@@ -35,6 +35,11 @@ class App extends Component {
     handleAddRectangleClick = (width, height, color) => {
         this.spawnZone.current.getDecoratedComponentInstance().addChild(width, height, color);
     };
+
+    handleOrderClick = () => {
+        var data = this.dragZone.current.getDecoratedComponentInstance().getData();
+        console.log(data);
+    }
   
 
     render() {
@@ -42,7 +47,8 @@ class App extends Component {
             <DndProvider backend={HTML5Backend}>
                 <body>
                     <MenuZone onWallsClick={this.handleWallsClick}
-                        onRectanglesClick={this.handleRectanglesClick} />
+                        onRectanglesClick={this.handleRectanglesClick} 
+                        onOrderClick={this.handleOrderClick}/>
                     <DragZone ref={this.dragZone} />
                     <SpawnZone ref={this.spawnZone} />
 

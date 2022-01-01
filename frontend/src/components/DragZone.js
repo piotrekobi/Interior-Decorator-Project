@@ -52,7 +52,9 @@ class DragZone extends Component {
         ctx.stroke();
     }
 
-
+    getData = () => {
+        return "data";
+    }
 
     render() {
         return this.props.connectDropTarget(

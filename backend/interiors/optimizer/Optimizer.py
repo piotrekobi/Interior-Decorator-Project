@@ -1,9 +1,9 @@
 from itertools import combinations
 import scipy.optimize as opt
-from backend.interiors.optimizer.Geometry import Wall
+from interiors.optimizer.Geometry import Wall
 
-from backend.interiors.optimizer.Geometry import Point, Rectangle
-from backend.interiors.optimizer.Constants import *
+from interiors.optimizer.Geometry import Point, Rectangle
+from interiors.optimizer.Constants import *
 
 
 class Optimizer:
