@@ -1,80 +1,150 @@
-import './App.css';
-import { Component, createRef } from 'react';
-import MenuZone from './components/MenuZone';
-import DragZone from './components/DragZone';
-import SpawnZone from './components/SpawnZone';
-import WallPicker from './components/WallPicker';
-import RectangleMenu from './components/RectangleMenu';
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import Connector from './Connector';
+import "./App.css";
+import { Component, createRef } from "react";
+import MenuZone from "./components/MenuZone";
+import DragZone from "./components/DragZone";
+import SpawnZone from "./components/SpawnZone";
+import WallPicker from "./components/WallPicker";
+import RectangleMenu from "./components/RectangleMenu";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import Connector from "./Connector";
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.menuZone = createRef();
-        this.dragZone = createRef();
-        this.spawnZone = createRef();
-        this.wallPicker = createRef();
-        this.rectangleMenu = createRef();
+  constructor(props) {
+    super(props);
+    this.menuZone = createRef();
+    this.dragZone = createRef();
+    this.spawnZone = createRef();
+    this.wallPicker = createRef();
+    this.rectangleMenu = createRef();
+    this.dofileDownload = createRef();
+    this.fileDownloadUrl = createRef();
+    this.uploadInput = createRef();
 
-        this.connector = new Connector(["http://127.0.0.1:8000/optimizer/", "httpS://api-wnetrza.azurewebsites.net/optimizer/"]);
-    }
+    this.connector = new Connector([
+      "http://127.0.0.1:8000/optimizer/",
+      "httpS://api-wnetrza.azurewebsites.net/optimizer/",
+    ]);
+  }
 
-    handleWallSelection = (specs) => {
-        this.dragZone.current.getDecoratedComponentInstance().setWall(specs);
-    }
+  handleWallSelection = (specs) => {
+    this.dragZone.current.getDecoratedComponentInstance().setWall(specs);
+  };
 
-    handleWallsClick = () => {
-        this.wallPicker.current.toggleModal();
-    }
+  handleWallsClick = () => {
+    this.wallPicker.current.toggleModal();
+  };
 
-    handleRectanglesClick = () => {
+  handleSaveClick = () => {
+    const offsetHeight = this.menuZone.current.getHeight();
+    var rectangle_json = this.spawnZone.current
+      .getDecoratedComponentInstance()
+      .getRectangles(offsetHeight);
+    console.log(rectangle_json);
 
-        //var rectangle = (<Rectangle id={uuidv4()} style={{ width: '100px', height: '100px', background: 'gray' }}/>)
-        //this.spawnZone.current.getDecoratedComponentInstance().addChild(rectangle);
-        this.rectangleMenu.current.toggleModal();
-    }
+    var data = JSON.stringify(rectangle_json);
 
-    handleAddRectangleClick = (width, height, color) => {
-        this.spawnZone.current.getDecoratedComponentInstance().addChild(width, height, color);
+    var file = new Blob([data], { type: "application/json" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(file);
+    a.download = "project";
+    document.body.appendChild(a);
+
+    a.click();
+    setTimeout(function () {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(a.href);
+    }, 0);
+  };
+
+  handleLoadClick = () => {
+    this.uploadInput.current.value = null;
+    this.uploadInput.current.click();
+  };
+
+  loadRectangles = (callback) => {
+    var fileread = new FileReader();
+    const offsetHeight = this.menuZone.current.getHeight();
+
+    callback = (content) => {
+      console.log(content);
+      this.spawnZone.current
+        .getDecoratedComponentInstance()
+        .setRectangles(JSON.parse(content), offsetHeight);
     };
 
-    handleOrderClick = () => {
-        const offsetHeight = this.menuZone.current.getHeight();
+    fileread.onload = function (e) {
+      var content = e.target.result;
+      callback(content);
+    };
+    fileread.readAsText(this.uploadInput.current.files[0]);
+  };
 
-        var rectangle_json = this.spawnZone.current.getDecoratedComponentInstance().getRectangles(offsetHeight);
-        var wall_json = this.dragZone.current.getDecoratedComponentInstance().getWall();
-        var preferred_spacing = 30; // EXAMPLE - TODO
+  handleRectanglesClick = () => {
+    //var rectangle = (<Rectangle id={uuidv4()} style={{ width: '100px', height: '100px', background: 'gray' }}/>)
+    //this.spawnZone.current.getDecoratedComponentInstance().addChild(rectangle);
+    this.rectangleMenu.current.toggleModal();
+  };
 
-        this.connector.optimizeRectangles(rectangle_json, wall_json, preferred_spacing)
-            .then(result => this.spawnZone.current.getDecoratedComponentInstance().setRectangles(result, offsetHeight));
-    }
-  
+  handleAddRectangleClick = (width, height, color) => {
+    this.spawnZone.current
+      .getDecoratedComponentInstance()
+      .addChild(width, height, color);
+  };
 
-    render() {
-        return (
-            <DndProvider backend={HTML5Backend}>
-                <body>
-                    <MenuZone ref = {this.menuZone}
-                        onWallsClick = {this.handleWallsClick}
-                        onRectanglesClick = {this.handleRectanglesClick} 
-                        onOrderClick = {this.handleOrderClick}
-                    />
-                    <DragZone ref = {this.dragZone} />
-                    <SpawnZone ref = {this.spawnZone} />
+  handleOrderClick = () => {
+    const offsetHeight = this.menuZone.current.getHeight();
 
-                    <WallPicker ref = {this.wallPicker} 
-                        onWallSelection = {this.handleWallSelection} 
-                    />
-                    <RectangleMenu ref = {this.rectangleMenu}
-                        onAddRectangleClick = {this.handleAddRectangleClick}
-                    />
+    var rectangle_json = this.spawnZone.current
+      .getDecoratedComponentInstance()
+      .getRectangles(offsetHeight);
+    var wall_json = this.dragZone.current
+      .getDecoratedComponentInstance()
+      .getWall();
+    var preferred_spacing = 30; // EXAMPLE - TODO
 
-                </body>
-            </DndProvider>
-        );
-    }
+    this.connector
+      .optimizeRectangles(rectangle_json, wall_json, preferred_spacing)
+      .then((result) =>
+        this.spawnZone.current
+          .getDecoratedComponentInstance()
+          .setRectangles(result[0], offsetHeight)
+      );
+  };
+
+  render() {
+    return (
+      <DndProvider backend={HTML5Backend}>
+        <body>
+          <MenuZone
+            ref={this.menuZone}
+            onWallsClick={this.handleWallsClick}
+            onRectanglesClick={this.handleRectanglesClick}
+            onOrderClick={this.handleOrderClick}
+            onSaveClick={this.handleSaveClick}
+            onLoadClick={this.handleLoadClick}
+          />
+          <DragZone ref={this.dragZone} />
+          <SpawnZone ref={this.spawnZone} />
+
+          <WallPicker
+            ref={this.wallPicker}
+            onWallSelection={this.handleWallSelection}
+          />
+          <RectangleMenu
+            ref={this.rectangleMenu}
+            onAddRectangleClick={this.handleAddRectangleClick}
+          />
+          <input
+            type="file"
+            ref={this.uploadInput}
+            style={{ display: "none" }}
+            onChange={this.loadRectangles}
+          />
+        </body>
+      </DndProvider>
+    );
+  }
 }
 
 export default App;
