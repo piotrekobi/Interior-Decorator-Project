@@ -27,6 +27,42 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'time': {
+            'format': '{levelname} {asctime} {message}',
+            'style': '{',
+        }
+    },
+    'handlers': {
+        'debug_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
+        'requests_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'requests.log',
+            'formatter': 'time',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['debug_file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'requests': {
+            'handlers' : ['requests_file'],
+            'level': 'INFO',
+            'propagate': False,
+        }
+    },
+}
+
 
 # Application definition
 
