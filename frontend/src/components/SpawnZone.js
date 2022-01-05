@@ -58,7 +58,7 @@ class SpawnZone extends Component{
 
     setRectangles = (data, offsetHeight) => {
         this.setState({children: []})
-        data[0].forEach((rectangle) => {
+        data.forEach((rectangle) => {
             var ref = this.addChild(rectangle['width'], rectangle['height'], rectangle['color']);
             ref.current.getDecoratedComponentInstance().setState({  left: rectangle['offset']['left'],
                                                                     top: rectangle['offset']['top'] + offsetHeight,
