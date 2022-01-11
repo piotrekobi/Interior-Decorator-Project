@@ -41,15 +41,6 @@ class Rectangle:
         self.height = height
         self.center = center
 
-    @property
-    def points(self):
-        return [
-            Point(self.center.x + self.halfwidth, self.center.y + self.halfheight),
-            Point(self.center.x + self.halfwidth, self.center.y - self.halfheight),
-            Point(self.center.x - self.halfwidth, self.center.y - self.halfheight),
-            Point(self.center.x - self.halfwidth, self.center.y + self.halfheight),
-        ]
-
     def overlaps(self, other):
         return self.spacebetween(other) < 0
 
