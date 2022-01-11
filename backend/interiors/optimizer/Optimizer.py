@@ -1,4 +1,5 @@
 from itertools import combinations
+from math import sqrt
 import scipy.optimize as opt
 from interiors.optimizer.Geometry import Wall
 
@@ -38,19 +39,26 @@ class Optimizer:
             # Punishment for being too close to vertical/horizontal wall boundaries
             left = rect.center.x - rect.halfwidth
             right = rect.center.x + rect.halfwidth
-            top = rect.center.y + rect.halfheight
-            bottom = rect.center.y - rect.halfheight
+            top = rect.center.y - rect.halfheight
+            bottom = rect.center.y + rect.halfheight
 
             dleft = left - self.min_x
             dright = self.max_x - right
-            dbottom = bottom - self.min_y
-            dtop = self.max_y - top
+            dbottom = self.max_y - bottom
+            dtop = top - self.min_y
 
             d = min(dleft, dright, dbottom, dtop)
             if d < self.spacing:
                 gap_small_error += self.spacing - d
 
-            # TODO: Add Punishment for being too close to diagonal wall boundaries
+            # Punishment for being too close to diagonal wall boundaries
+            dtopleft = self.spacing if not self.topleft else self.topleftparams[0]*left + self.topleftparams[1]*top + self.topleftparams[2]
+            dtopright = self.spacing if not self.topright else self.toprightparams[0]*right + self.toprightparams[1]*top + self.toprightparams[2]
+            d = min(dtopleft, dtopright)
+            if d < 0:
+                overlap_error += 1 - d
+            elif d < self.spacing:
+                gap_small_error += self.spacing - d
 
             # Punishment for being too close to wall holes or overlapping them
             for hole in self.wall:
@@ -99,8 +107,9 @@ class Optimizer:
             recombination=RECOMBINATION,
             strategy=STRATEGY,
             mutation=MUTATION,
-            disp=True,
+            disp=False,
             workers=4,
+            updating="deferred"
         )
         return res.x
 
@@ -132,8 +141,35 @@ class Optimizer:
         self.optimized = rectangles
         self.wall = wall.holes
 
-        self.topleft = wall.topleft
-        self.topright = wall.topright
+        if len(wall.topleft) == 2:
+            xa, xb, ya, yb = wall.topleft[0].x, wall.topleft[1].x, wall.topleft[0].y, wall.topleft[1].y
+            a = ya - yb
+            b = xb - xa
+            c = xa*yb - xb*ya
+            a2b2 = sqrt(a*a + b*b)
+            a /= a2b2
+            b /= a2b2
+            c /= a2b2
+
+            self.topleft = True
+            self.topleftparams = [a, b, c]
+        else:
+            self.topleft = False
+        
+        if len(wall.topright) == 2:
+            xa, xb, ya, yb = wall.topright[0].x, wall.topright[1].x, wall.topright[0].y, wall.topright[1].y
+            a = ya - yb
+            b = xb - xa
+            c = xa*yb - xb*ya
+            a2b2 = sqrt(a*a + b*b)
+            a /= a2b2
+            b /= a2b2
+            c /= a2b2
+            
+            self.topright = True
+            self.toprightparams = [a, b, c]
+        else:
+            self.topright = False
 
         self.spacing = abs(preferred_spacing)
 
