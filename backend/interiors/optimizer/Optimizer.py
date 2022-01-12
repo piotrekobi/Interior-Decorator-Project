@@ -1,8 +1,10 @@
 from itertools import combinations
+import json
 from math import sqrt
+import numpy as np
 import scipy.optimize as opt
+import matplotlib.path as mpltPath
 from interiors.optimizer.Geometry import Wall
-
 from interiors.optimizer.Geometry import Point, Rectangle
 from interiors.optimizer.Constants import *
 
@@ -73,6 +75,13 @@ class Optimizer:
             + overlap_error * self.overlap_punishment_factor
         )
 
+    def rect2poly(self):
+        error = 0
+        for rect in self.optimized:
+            if not self.poly.contains_point((rect.center.x, rect.center.y)):
+                error += rect.center.dist(self.polycentroid)
+        return error*self.poly_scale
+
     def obj_func(self, x):
         error = 0
 
@@ -81,6 +90,7 @@ class Optimizer:
 
         error += self.rect2rect()
         error += self.rect2wall()
+        error += self.rect2poly()
 
         return error
 
@@ -107,16 +117,23 @@ class Optimizer:
             recombination=RECOMBINATION,
             strategy=STRATEGY,
             mutation=MUTATION,
-            disp=False,
+            disp=True,
             workers=4,
             updating="deferred"
         )
+
+        for i, rect in enumerate(self.optimized):
+            rect.center = Point(res.x[2 * i], res.x[2 * i + 1])
+
+        print(self.rect2rect(), self.rect2wall(), self.rect2poly())
+
         return res.x
 
-    def parseJSON(self, rectangle_json, wall_json, preferred_spacing):
+    def parseJSON(self, rectangle_json, wall_json, preferred_spacing, poly_json):
         rectangles = []
         fixed_rectangles = []
         
+        # parse rectangles
         for rect_data in rectangle_json[0]:
             rect = Rectangle(
                 float(rect_data["width"]),
@@ -134,12 +151,14 @@ class Optimizer:
             else:
                 fixed_rectangles.append(rect)
 
+        # parse polygon
+        self.poly = mpltPath.Path(np.array([[i["x"], i["y"]] for i in poly_json["vertices"]]))
+        self.polycentroid = np.mean(self.poly.vertices, axis=0)
+        self.polycentroid = Point(self.polycentroid[0], self.polycentroid[1])
+
+        # parse wall
         wall = Wall()
         wall.parseJSON(wall_json)
-
-        self.fixed = fixed_rectangles
-        self.optimized = rectangles
-        self.wall = wall.holes
 
         if len(wall.topleft) == 2:
             xa, xb, ya, yb = wall.topleft[0].x, wall.topleft[1].x, wall.topleft[0].y, wall.topleft[1].y
@@ -171,6 +190,12 @@ class Optimizer:
         else:
             self.topright = False
 
+        self.wall = wall.holes
+
+        # set attributes
+        self.fixed = fixed_rectangles
+        self.optimized = rectangles
+
         self.spacing = abs(preferred_spacing)
 
         self.min_y = wall.top
@@ -180,7 +205,9 @@ class Optimizer:
 
         width = self.max_x - self.min_x
         height = self.max_y - self.min_y
-        self.scale = max(width, height)
+        self.scale = max(width, height)/self.spacing
+
+        self.poly_scale = self.scale
         self.overlap_punishment_factor = (
             len(self.fixed + self.optimized) ** 2 * self.scale
         )
@@ -197,9 +224,9 @@ def updateJSON(rectangle_json, res):
             i = i + 1
 
 
-def place_rectangles(rectangle_json, wall_json, preferred_spacing):
+def place_rectangles(rectangle_json, wall_json, preferred_spacing, poly_json):
     opt = Optimizer()
-    opt.parseJSON(rectangle_json, wall_json, preferred_spacing)
+    opt.parseJSON(rectangle_json, wall_json, preferred_spacing, poly_json)
 
     if len(opt.optimized) == 0:
         return rectangle_json
