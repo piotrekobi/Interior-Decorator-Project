@@ -69,13 +69,13 @@ class GeometryTestCase(SimpleTestCase):
         self.assertEqual(wall.right, 1050)
         self.assertEqual(wall.bottom, 500)
 
-        self.assertEqual(len(wall.topleft), 0)
-
-        self.assertEqual(len(wall.topright), 2)
-        self.assertEqual(wall.topright[0].x, 400)
-        self.assertEqual(wall.topright[0].y, 275)
-        self.assertEqual(wall.topright[1].x, 800)
-        self.assertEqual(wall.topright[1].y, 50)
+        self.assertTrue(wall.topright)
+        self.assertFalse(wall.topleft)
+        l = [0.5625, 1, -500]
+        a2b2 = sqrt(l[0] ** 2 + l[1] ** 2)
+        l = [i / a2b2 for i in l]
+        for i, j in zip(wall.toprightparams, l):
+            self.assertAlmostEqual(i, j)
 
         self.assertEqual(len(wall.holes), 1)
         self.assertEqual(type(wall.holes[0]), type(Rectangle(0, 0, Point(0, 0))))

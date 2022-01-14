@@ -148,10 +148,10 @@ class Optimizer:
                 d = rect.spacebetween(hole)
                 if d < 0:
                     return False
-
+        # No overlapping
         return True
 
-    def iter_counter(self, xk, convergence):
+    def iter_counter(self, xk=None, convergence=None):
         self.counter += 1
         if self.counter % 10 == 0:
             # Do stuff
@@ -186,37 +186,11 @@ class Optimizer:
             updating="deferred",
         )
 
-        for i, rect in enumerate(self.optimized):
-            rect.center = Point(res.x[2 * i], res.x[2 * i + 1])
-
-        print(self.rect2rect(), self.rect2wall(), self.rect2poly())
-
         return res.x
 
     def parseJSON(self, rectangle_json, wall_json, preferred_spacing, poly_json):
-        rectangles = []
-        fixed_rectangles = []
-
         # parse rectangles
-        for rect_data in rectangle_json[0]:
-            rect = Rectangle(
-                float(rect_data["width"]),
-                float(rect_data["height"]),
-                Point(
-                    float(rect_data["offset"]["left"]),
-                    float(rect_data["offset"]["top"]),
-                ),
-            )
-            rect.center.x += rect.width / 2
-            rect.center.y += rect.height / 2
-
-            if rect_data["parent"] == "spawn_zone":
-                rectangles.append(rect)
-            else:
-                fixed_rectangles.append(rect)
-
-        self.fixed = fixed_rectangles
-        self.optimized = rectangles
+        self.optimized, self.fixed = parseRectangles(rectangle_json)
 
         # parse polygon
         self.poly = mpltPath.Path(
@@ -228,66 +202,52 @@ class Optimizer:
         # parse wall
         wall = Wall()
         wall.parseJSON(wall_json)
-
-        # calculate equation for line
-        if len(wall.topleft) == 2:
-            xa, xb, ya, yb = (
-                wall.topleft[0].x,
-                wall.topleft[1].x,
-                wall.topleft[0].y,
-                wall.topleft[1].y,
-            )
-            a = ya - yb
-            b = xb - xa
-            c = xa * yb - xb * ya
-            a2b2 = sqrt(a * a + b * b)
-            a /= a2b2
-            b /= a2b2
-            c /= a2b2
-
-            self.topleft = True
-            self.topleftparams = [a, b, c]
-        else:
-            self.topleft = False
-
-        if len(wall.topright) == 2:
-            xa, xb, ya, yb = (
-                wall.topright[0].x,
-                wall.topright[1].x,
-                wall.topright[0].y,
-                wall.topright[1].y,
-            )
-            a = ya - yb
-            b = xb - xa
-            c = xa * yb - xb * ya
-            a2b2 = sqrt(a * a + b * b)
-            a /= a2b2
-            b /= a2b2
-            c /= a2b2
-
-            self.topright = True
-            self.toprightparams = [a, b, c]
-        else:
-            self.topright = False
-
-        self.wall = wall.holes
-
-        # set attributes
-        self.spacing = abs(preferred_spacing)
-
+        self.topleft = wall.topleft
+        if self.topleft:
+            self.topleftparams = wall.topleftparams
+        self.topright = wall.topright
+        if self.topright:
+            self.toprightparams = wall.toprightparams
         self.min_y = wall.top
         self.min_x = wall.left
         self.max_y = wall.bottom
         self.max_x = wall.right
+        self.wall = wall.holes
 
+        # set remaining attributes
+        self.spacing = abs(preferred_spacing)
         width = self.max_x - self.min_x
         height = self.max_y - self.min_y
         self.scale = max(width, height) / self.spacing
-
         self.poly_scale = self.scale
         self.overlap_punishment_factor = (
             len(self.fixed + self.optimized) ** 2 * self.scale
         )
+
+def parseRectangles(rectangle_json):
+    rectangles = []
+    fixed_rectangles = []
+
+    # parse rectangles
+    for rect_data in rectangle_json[0]:
+        rect = Rectangle(
+            float(rect_data["width"]),
+            float(rect_data["height"]),
+            Point(
+                float(rect_data["offset"]["left"]),
+                float(rect_data["offset"]["top"]),
+            ),
+        )
+        rect.center.x += rect.width / 2
+        rect.center.y += rect.height / 2
+
+        if rect_data["parent"] == "spawn_zone":
+            rectangles.append(rect)
+        else:
+            fixed_rectangles.append(rect)
+
+    return rectangles, fixed_rectangles
+
 
 
 def updateJSON(rectangle_json, res):

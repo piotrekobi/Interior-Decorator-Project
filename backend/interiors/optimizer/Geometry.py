@@ -46,6 +46,49 @@ class Wall:
             for i in data["holes"]
         ]
 
+        # calculate line equations
+        if len(self.topleft) == 2:
+            xa, xb, ya, yb = (
+                self.topleft[0].x,
+                self.topleft[1].x,
+                self.topleft[0].y,
+                self.topleft[1].y,
+            )
+            a = ya - yb
+            b = xb - xa
+            c = xa * yb - xb * ya
+            a2b2 = sqrt(a * a + b * b)
+            a /= a2b2
+            b /= a2b2
+            c /= a2b2
+
+            self.topleft = True
+            self.topleftparams = [a, b, c]
+        else:
+            self.topleft = False
+
+        if len(self.topright) == 2:
+            xa, xb, ya, yb = (
+                self.topright[0].x,
+                self.topright[1].x,
+                self.topright[0].y,
+                self.topright[1].y,
+            )
+            a = ya - yb
+            b = xb - xa
+            c = xa * yb - xb * ya
+            a2b2 = sqrt(a * a + b * b)
+            a /= a2b2
+            b /= a2b2
+            c /= a2b2
+
+            self.topright = True
+            self.toprightparams = [a, b, c]
+        else:
+            self.topright = False
+
+
+
 
 # class Segment:
 #     def __init__(self, point1, point2):
