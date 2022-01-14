@@ -53,8 +53,20 @@ class Optimizer:
                 gap_small_error += self.spacing - d
 
             # Punishment for being too close to diagonal wall boundaries
-            dtopleft = self.spacing if not self.topleft else self.topleftparams[0]*left + self.topleftparams[1]*top + self.topleftparams[2]
-            dtopright = self.spacing if not self.topright else self.toprightparams[0]*right + self.toprightparams[1]*top + self.toprightparams[2]
+            dtopleft = (
+                self.spacing
+                if not self.topleft
+                else self.topleftparams[0] * left
+                + self.topleftparams[1] * top
+                + self.topleftparams[2]
+            )
+            dtopright = (
+                self.spacing
+                if not self.topright
+                else self.toprightparams[0] * right
+                + self.toprightparams[1] * top
+                + self.toprightparams[2]
+            )
             d = min(dtopleft, dtopright)
             if d < 0:
                 overlap_error += 1 - d
@@ -79,7 +91,7 @@ class Optimizer:
         for rect in self.optimized:
             if not self.poly.contains_point((rect.center.x, rect.center.y)):
                 error += rect.center.dist(self.polycentroid)
-        return error*self.poly_scale
+        return error * self.poly_scale
 
     def obj_func(self, x):
         error = 0
@@ -111,8 +123,20 @@ class Optimizer:
             top = rect.center.y - rect.halfheight
             bottom = rect.center.y + rect.halfheight
 
-            dtopleft = self.spacing if not self.topleft else self.topleftparams[0]*left + self.topleftparams[1]*top + self.topleftparams[2]
-            dtopright = self.spacing if not self.topright else self.toprightparams[0]*right + self.toprightparams[1]*top + self.toprightparams[2]
+            dtopleft = (
+                self.spacing
+                if not self.topleft
+                else self.topleftparams[0] * left
+                + self.topleftparams[1] * top
+                + self.topleftparams[2]
+            )
+            dtopright = (
+                self.spacing
+                if not self.topright
+                else self.toprightparams[0] * right
+                + self.toprightparams[1] * top
+                + self.toprightparams[2]
+            )
             d = min(dtopleft, dtopright)
             if d < 0:
                 return False
@@ -122,9 +146,8 @@ class Optimizer:
                 d = rect.spacebetween(hole)
                 if d < 0:
                     return False
-        
+
         return True
-                  
 
     def optimize(self):
         my_bounds = opt.Bounds(
@@ -151,7 +174,7 @@ class Optimizer:
             mutation=MUTATION,
             disp=True,
             workers=4,
-            updating="deferred"
+            updating="deferred",
         )
 
         for i, rect in enumerate(self.optimized):
@@ -164,7 +187,7 @@ class Optimizer:
     def parseJSON(self, rectangle_json, wall_json, preferred_spacing, poly_json):
         rectangles = []
         fixed_rectangles = []
-        
+
         # parse rectangles
         for rect_data in rectangle_json[0]:
             rect = Rectangle(
@@ -184,7 +207,9 @@ class Optimizer:
                 fixed_rectangles.append(rect)
 
         # parse polygon
-        self.poly = mpltPath.Path(np.array([[i["x"], i["y"]] for i in poly_json["vertices"]]))
+        self.poly = mpltPath.Path(
+            np.array([[i["x"], i["y"]] for i in poly_json["vertices"]])
+        )
         self.polycentroid = np.mean(self.poly.vertices, axis=0)
         self.polycentroid = Point(self.polycentroid[0], self.polycentroid[1])
 
@@ -193,11 +218,16 @@ class Optimizer:
         wall.parseJSON(wall_json)
 
         if len(wall.topleft) == 2:
-            xa, xb, ya, yb = wall.topleft[0].x, wall.topleft[1].x, wall.topleft[0].y, wall.topleft[1].y
+            xa, xb, ya, yb = (
+                wall.topleft[0].x,
+                wall.topleft[1].x,
+                wall.topleft[0].y,
+                wall.topleft[1].y,
+            )
             a = ya - yb
             b = xb - xa
-            c = xa*yb - xb*ya
-            a2b2 = sqrt(a*a + b*b)
+            c = xa * yb - xb * ya
+            a2b2 = sqrt(a * a + b * b)
             a /= a2b2
             b /= a2b2
             c /= a2b2
@@ -206,17 +236,22 @@ class Optimizer:
             self.topleftparams = [a, b, c]
         else:
             self.topleft = False
-        
+
         if len(wall.topright) == 2:
-            xa, xb, ya, yb = wall.topright[0].x, wall.topright[1].x, wall.topright[0].y, wall.topright[1].y
+            xa, xb, ya, yb = (
+                wall.topright[0].x,
+                wall.topright[1].x,
+                wall.topright[0].y,
+                wall.topright[1].y,
+            )
             a = ya - yb
             b = xb - xa
-            c = xa*yb - xb*ya
-            a2b2 = sqrt(a*a + b*b)
+            c = xa * yb - xb * ya
+            a2b2 = sqrt(a * a + b * b)
             a /= a2b2
             b /= a2b2
             c /= a2b2
-            
+
             self.topright = True
             self.toprightparams = [a, b, c]
         else:
@@ -237,7 +272,7 @@ class Optimizer:
 
         width = self.max_x - self.min_x
         height = self.max_y - self.min_y
-        self.scale = max(width, height)/self.spacing
+        self.scale = max(width, height) / self.spacing
 
         self.poly_scale = self.scale
         self.overlap_punishment_factor = (
