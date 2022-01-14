@@ -215,6 +215,9 @@ class Optimizer:
             else:
                 fixed_rectangles.append(rect)
 
+        self.fixed = fixed_rectangles
+        self.optimized = rectangles
+
         # parse polygon
         self.poly = mpltPath.Path(
             np.array([[i["x"], i["y"]] for i in poly_json["vertices"]])
@@ -270,9 +273,6 @@ class Optimizer:
         self.wall = wall.holes
 
         # set attributes
-        self.fixed = fixed_rectangles
-        self.optimized = rectangles
-
         self.spacing = abs(preferred_spacing)
 
         self.min_y = wall.top

@@ -10,28 +10,6 @@ class Point:
     def dist(self, other):
         return sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
 
-    def __sub__(self, other):
-        if isinstance(other, Point):
-            return Point(self.x - other.x, self.y - other.y)
-        else:
-            raise Exception(f"{other} is not an instance of class Point.")
-
-    def __add__(self, other):
-        if isinstance(other, Point):
-            return Point(self.x + other.x, self.y + other.y)
-        else:
-            raise Exception(f"{other} is not an instance of class Point.")
-
-    def crossProduct(self, other):
-        # Cross product of vectors starting at (0,0)
-        if isinstance(other, Point):
-            return self.x * other.y - self.y * other.x
-        else:
-            raise Exception(f"{other} is not an instance of class Point.")
-
-    def __neg__(self):
-        return Point(-self.x, -self.y)
-
 
 class Rectangle:
     def __init__(self, width, height, center):
