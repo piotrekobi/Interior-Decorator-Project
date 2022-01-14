@@ -1,5 +1,8 @@
 from django.test import SimpleTestCase
+from copy import deepcopy
 from interiors.optimizer.Geometry import *
+from interiors.optimizer.Optimizer import *
+
 
 class GeometryTestCase(SimpleTestCase):
     def setUp(self):
@@ -26,7 +29,7 @@ class GeometryTestCase(SimpleTestCase):
         self.assertEqual(r1.center.x, 0)
         self.assertEqual(r1.center.y, 0)
 
-        r2 = Rectangle(5, 15, Point(10 ,0))
+        r2 = Rectangle(5, 15, Point(10, 0))
         self.assertEqual(r2.halfheight, 7.5)
         self.assertEqual(r2.halfwidth, 2.5)
         self.assertEqual(r2.width, 5)
@@ -39,7 +42,7 @@ class GeometryTestCase(SimpleTestCase):
         self.assertFalse(r1.overlaps(r2))
         self.assertFalse(r2.overlaps(r1))
 
-        r3 = Rectangle(5, 15, Point(5,0))
+        r3 = Rectangle(5, 15, Point(5, 0))
         self.assertEqual(r1.spacebetween(r3), -2.5)
         self.assertEqual(r3.spacebetween(r1), -2.5)
         self.assertTrue(r1.overlaps(r3))
@@ -48,38 +51,16 @@ class GeometryTestCase(SimpleTestCase):
     def test_wall(self):
         data = {
             "vertices": [
-            {
-                "x": 50,
-                "y": 50
-            },
-            {
-                "x": 1050,
-                "y": 50
-            },
+                {"x": 50, "y": 50},
+                {"x": 1050, "y": 50},
             ],
             "top": 50,
             "bottom": 500,
             "left": 50,
             "right": 1050,
             "topleft": [],
-            "topright": [
-            {
-                "x": 400,
-                "y": 275
-            },
-            {
-                "x": 800,
-                "y": 50
-            }
-            ],
-            "holes": [
-            {
-                "centerx": 675,
-                "centery": 350,
-                "width": 150,
-                "height": 300
-            }
-            ]
+            "topright": [{"x": 400, "y": 275}, {"x": 800, "y": 50}],
+            "holes": [{"centerx": 675, "centery": 350, "width": 150, "height": 300}],
         }
         wall = Wall()
         wall.parseJSON(data)
@@ -102,5 +83,222 @@ class GeometryTestCase(SimpleTestCase):
         self.assertEqual(wall.holes[0].center.y, 350)
         self.assertEqual(wall.holes[0].width, 150)
         self.assertEqual(wall.holes[0].height, 300)
+
+
+class OptimizerTestCase(SimpleTestCase):
+    def test_parser(self):
+        rectangle_json = [
+            [
+                {
+                    "parent": "drag_zone",
+                    "width": 100,
+                    "height": 100,
+                    "color": "#000000",
+                    "offset": {"left": 100, "top": 100},
+                },
+                {
+                    "parent": "spawn_zone",
+                    "width": 100,
+                    "height": 100,
+                    "color": "#000000",
+                    "offset": {"left": 0, "top": -52},
+                },
+            ]
+        ]
+        wall_json = {
+            "vertices": [
+                {"x": 50, "y": 50},
+                {"x": 1050, "y": 50},
+                {"x": 1050, "y": 500},
+                {"x": 750, "y": 500},
+                {"x": 750, "y": 200},
+                {"x": 600, "y": 200},
+                {"x": 600, "y": 500},
+                {"x": 50, "y": 500},
+            ],
+            "top": 50,
+            "bottom": 500,
+            "left": 50,
+            "right": 1050,
+            "topleft": [],
+            "topright": [{"x": 400, "y": 275}, {"x": 800, "y": 50}],
+            "holes": [{"centerx": 675, "centery": 350, "width": 150, "height": 300}],
+        }
+        preferred_spacing = 30
+        poly_json = {
+            "vertices": [
+                {"x": 50, "y": 50},
+                {"x": 300, "y": 50},
+                {"x": 300, "y": 500},
+                {"x": 50, "y": 500},
+            ]
+        }
+
+        opt = Optimizer()
+        opt.parseJSON(rectangle_json, wall_json, preferred_spacing, poly_json)
+
+        self.assertEqual(len(opt.fixed), 1)
+        rect1 = opt.fixed[0]
+        self.assertEqual(rect1.width, 100)
+        self.assertEqual(rect1.height, 100)
+        self.assertEqual(rect1.center.x, 150)
+        self.assertEqual(rect1.center.y, 150)
+
+        self.assertEqual(len(opt.optimized), 1)
+        rect2 = opt.optimized[0]
+        self.assertEqual(rect2.width, 100)
+        self.assertEqual(rect2.height, 100)
+
+        vertices = np.array([[50, 50], [300, 50], [300, 500], [50, 500]])
+
+        self.assertTrue(np.all(opt.poly.vertices == vertices))
+        self.assertEqual(opt.polycentroid.x, 175)
+        self.assertEqual(opt.polycentroid.y, 275)
+
+        self.assertEqual(opt.topleft, False)
+        self.assertEqual(opt.topright, True)
+        l1 = opt.toprightparams
+        l2 = [0.5625, 1, -500]
+        a2b2 = sqrt(l2[0]**2 + l2[1]**2)
+        l2 = [i/a2b2 for i in l2]
+        for i,j in zip(l1, l2):
+            self.assertAlmostEqual(i, j)
+
+        self.assertEqual(opt.spacing, 30)
+
+        self.assertEqual(opt.min_y, 50)
+        self.assertEqual(opt.min_x, 50)
+        self.assertEqual(opt.max_y, 500)
+        self.assertEqual(opt.max_x, 1050)
+
+        self.assertEqual(opt.scale, 1000/30)
+        self.assertEqual(opt.poly_scale, opt.scale)
+        self.assertEqual(opt.overlap_punishment_factor, opt.scale*4)
+
+    def test_update(self):
+        rectangle_json = [
+            [
+                {
+                    "parent": "drag_zone",
+                    "width": 100,
+                    "height": 100,
+                    "color": "#000000",
+                    "offset": {"left": 100, "top": 100},
+                },
+                {
+                    "parent": "spawn_zone",
+                    "width": 50,
+                    "height": 60,
+                    "color": "#000000",
+                    "offset": {"left": 0, "top": -52},
+                },
+            ]
+        ]
+        res = [100, 20]
+        copy = deepcopy(rectangle_json)
+
+        updateJSON(rectangle_json, res)
+
+        copy[0][1]["offset"]["left"] = 100 - 50/2
+        copy[0][1]["offset"]["top"] = 20 - 60/2
+        copy[0][1]["parent"] = "drag_zone"
+
+        self.assertEqual(rectangle_json, copy)
+
+    def test_iter_counter(self):
+        opt = Optimizer()
+        self.assertEqual(opt.counter, 0)
+        for i in range(1,10):
+            opt.iter_counter(None, None)
+            self.assertEqual(opt.counter, i)
+
+    def test_rect2rect(self):
+        rectangle_json = [
+            [
+                {
+                    "parent": "drag_zone",
+                    "width": 100,
+                    "height": 100,
+                    "color": "#000000",
+                    "offset": {"left": 100, "top": 100},
+                },
+                {
+                    "parent": "spawn_zone",
+                    "width": 100,
+                    "height": 100,
+                    "color": "#000000",
+                    "offset": {"left": 0, "top": 0},
+                },
+            ]
+        ]
+        wall_json = {
+            "vertices": [
+                {"x": 50, "y": 50},
+                {"x": 1050, "y": 50},
+                {"x": 1050, "y": 500},
+                {"x": 750, "y": 500},
+                {"x": 750, "y": 200},
+                {"x": 600, "y": 200},
+                {"x": 600, "y": 500},
+                {"x": 50, "y": 500},
+            ],
+            "top": 50,
+            "bottom": 500,
+            "left": 50,
+            "right": 1050,
+            "topleft": [],
+            "topright": [{"x": 400, "y": 275}, {"x": 800, "y": 50}],
+            "holes": [{"centerx": 675, "centery": 350, "width": 150, "height": 300}],
+        }
+        preferred_spacing = 30
+        poly_json = {
+            "vertices": [
+                {"x": 50, "y": 50},
+                {"x": 300, "y": 50},
+                {"x": 300, "y": 500},
+                {"x": 50, "y": 500},
+            ]
+        }
+
+        opt = Optimizer()
+        opt.parseJSON(rectangle_json, wall_json, preferred_spacing, poly_json)
+        
+        x = [350, 150]
+        for i, rect in enumerate(opt.optimized):
+            rect.center = Point(x[2 * i], x[2 * i + 1])
+
+        self.assertEqual(opt.optimized[0].spacebetween(opt.fixed[0]), 100)
+
+        error = opt.rect2rect()
+        self.assertEqual(error, 100 - opt.spacing)
+
+        x = [230, 20]
+        for i, rect in enumerate(opt.optimized):
+            rect.center = Point(x[2 * i], x[2 * i + 1])
+
+        self.assertEqual(opt.optimized[0].spacebetween(opt.fixed[0]), 30)   
+
+        error = opt.rect2rect()
+        self.assertEqual(error, 0)
+
+        x = [150, 100]
+        for i, rect in enumerate(opt.optimized):
+            rect.center = Point(x[2 * i], x[2 * i + 1])
+
+        error = opt.rect2rect()
+        self.assertEqual(error, (1+50)*opt.overlap_punishment_factor)
+
+    
+        
+
+
+
+
+
+
+
+        
+
+
 
 
