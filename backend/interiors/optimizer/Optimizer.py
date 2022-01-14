@@ -1,5 +1,4 @@
 from itertools import combinations
-import json
 from math import sqrt
 import numpy as np
 import scipy.optimize as opt
@@ -93,6 +92,39 @@ class Optimizer:
         error += self.rect2poly()
 
         return error
+
+    def isvalid(self, x):
+        for i, rect in enumerate(self.optimized):
+            rect.center = Point(x[2 * i], x[2 * i + 1])
+
+        # Overlapping rectangles
+        rectangles = self.fixed + self.optimized
+        for rect1, rect2 in combinations(rectangles, 2):
+            d = rect1.spacebetween(rect2)
+            if d < 0:
+                return False
+
+        for rect in self.optimized:
+            # Outside diagonal wall boundaries
+            left = rect.center.x - rect.halfwidth
+            right = rect.center.x + rect.halfwidth
+            top = rect.center.y - rect.halfheight
+            bottom = rect.center.y + rect.halfheight
+
+            dtopleft = self.spacing if not self.topleft else self.topleftparams[0]*left + self.topleftparams[1]*top + self.topleftparams[2]
+            dtopright = self.spacing if not self.topright else self.toprightparams[0]*right + self.toprightparams[1]*top + self.toprightparams[2]
+            d = min(dtopleft, dtopright)
+            if d < 0:
+                return False
+
+            # Overlapping rectangular hole
+            for hole in self.wall:
+                d = rect.spacebetween(hole)
+                if d < 0:
+                    return False
+        
+        return True
+                  
 
     def optimize(self):
         my_bounds = opt.Bounds(
