@@ -10,9 +10,10 @@ from interiors.optimizer.Constants import *
 
 class Optimizer:
     def __init__(self):
-        pass
+        self.counter = 0
 
     def rect2rect(self):
+        # Punishment for distances between rectangles
         overlap_error = 0
         gap_small_error = 0
         gap_big_error = 0
@@ -87,6 +88,7 @@ class Optimizer:
         )
 
     def rect2poly(self):
+        # Punishment for rectangles outside preferred polygon
         error = 0
         for rect in self.optimized:
             if not self.poly.contains_point((rect.center.x, rect.center.y)):
@@ -149,6 +151,12 @@ class Optimizer:
 
         return True
 
+    def iter_counter(self, xk, convergence):
+        self.counter += 1
+        if self.counter % 10 == 0:
+            # Do stuff
+            pass
+
     def optimize(self):
         my_bounds = opt.Bounds(
             [
@@ -172,6 +180,7 @@ class Optimizer:
             recombination=RECOMBINATION,
             strategy=STRATEGY,
             mutation=MUTATION,
+            callback=self.iter_counter,
             disp=True,
             workers=4,
             updating="deferred",
@@ -217,6 +226,7 @@ class Optimizer:
         wall = Wall()
         wall.parseJSON(wall_json)
 
+        # calculate equation for line
         if len(wall.topleft) == 2:
             xa, xb, ya, yb = (
                 wall.topleft[0].x,
