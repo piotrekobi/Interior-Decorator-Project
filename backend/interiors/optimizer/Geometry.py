@@ -10,28 +10,6 @@ class Point:
     def dist(self, other):
         return sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
 
-    def __sub__(self, other):
-        if isinstance(other, Point):
-            return Point(self.x - other.x, self.y - other.y)
-        else:
-            raise Exception(f"{other} is not an instance of class Point.")
-
-    def __add__(self, other):
-        if isinstance(other, Point):
-            return Point(self.x + other.x, self.y + other.y)
-        else:
-            raise Exception(f"{other} is not an instance of class Point.")
-
-    def crossProduct(self, other):
-        # Cross product of vectors starting at (0,0)
-        if isinstance(other, Point):
-            return self.x * other.y - self.y * other.x
-        else:
-            raise Exception(f"{other} is not an instance of class Point.")
-
-    def __neg__(self):
-        return Point(-self.x, -self.y)
-
 
 class Rectangle:
     def __init__(self, width, height, center):
@@ -40,15 +18,6 @@ class Rectangle:
         self.width = width
         self.height = height
         self.center = center
-
-    @property
-    def points(self):
-        return [
-            Point(self.center.x + self.halfwidth, self.center.y + self.halfheight),
-            Point(self.center.x + self.halfwidth, self.center.y - self.halfheight),
-            Point(self.center.x - self.halfwidth, self.center.y - self.halfheight),
-            Point(self.center.x - self.halfwidth, self.center.y + self.halfheight),
-        ]
 
     def overlaps(self, other):
         return self.spacebetween(other) < 0
@@ -76,6 +45,49 @@ class Wall:
             Rectangle(i["width"], i["height"], Point(i["centerx"], i["centery"]))
             for i in data["holes"]
         ]
+
+        # calculate line equations
+        if len(self.topleft) == 2:
+            xa, xb, ya, yb = (
+                self.topleft[0].x,
+                self.topleft[1].x,
+                self.topleft[0].y,
+                self.topleft[1].y,
+            )
+            a = ya - yb
+            b = xb - xa
+            c = xa * yb - xb * ya
+            a2b2 = sqrt(a * a + b * b)
+            a /= a2b2
+            b /= a2b2
+            c /= a2b2
+
+            self.topleft = True
+            self.topleftparams = [a, b, c]
+        else:
+            self.topleft = False
+
+        if len(self.topright) == 2:
+            xa, xb, ya, yb = (
+                self.topright[0].x,
+                self.topright[1].x,
+                self.topright[0].y,
+                self.topright[1].y,
+            )
+            a = ya - yb
+            b = xb - xa
+            c = xa * yb - xb * ya
+            a2b2 = sqrt(a * a + b * b)
+            a /= a2b2
+            b /= a2b2
+            c /= a2b2
+
+            self.topright = True
+            self.toprightparams = [a, b, c]
+        else:
+            self.topright = False
+
+
 
 
 # class Segment:
