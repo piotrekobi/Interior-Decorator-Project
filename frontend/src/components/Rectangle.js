@@ -12,11 +12,6 @@ const rectSource = {
     endDrag(props, monitor, component) {
         if(!monitor.didDrop())
         {
-            // var position = monitor.getSourceClientOffset();
-            // component.setState({
-            //     ...component.state,
-            //     left: position.x,
-            //     top: position.y});
             return
         }
         else
@@ -72,9 +67,7 @@ class Rectangle extends Component{
                      position: "absolute",
                      left: (this.state.left - this.margin.left) + "px",
                      top: (this.state.top - this.margin.top) + "px"}
-                     }>
-                        {this.state.parentString}
-                    </div>
+                     }/>
                 )
             )
         }
@@ -82,9 +75,7 @@ class Rectangle extends Component{
         {
             return(
                 this.props.connectDragSource(
-                    <div ref={this.divRef} className={styles.rectangle} style={this.props.style}>
-                        {this.state.parentString}
-                    </div>
+                    <div ref={this.divRef} className={styles.rectangle} style={this.props.style}/>
                 )
             )
         }

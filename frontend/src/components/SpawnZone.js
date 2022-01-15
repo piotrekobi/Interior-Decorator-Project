@@ -8,10 +8,26 @@ import jQuery from "jquery";
 
 const spawnZoneTarget = {
     drop(props, monitor, component) {
-        return {
-            position: monitor.getSourceClientOffset(),
-            parentString: "spawn_zone"
-        };
+        var dropPos = monitor.getSourceClientOffset();
+        var pointerPos = monitor.getClientOffset();
+        var componentPos = component.spawnZoneDiv.current.getBoundingClientRect();
+        if (pointerPos.y < componentPos.y)
+        {
+            // Rectangle was dropped on another rectangle in drag_zone, but is handled inside spawn_zone, 
+            // because the target rectangle is a child of spawn_zone
+            return {
+                position: dropPos,
+                parentString: "drag_zone"
+            };
+        }
+        else
+        {
+            return {
+                position: dropPos,
+                parentString: "spawn_zone"
+            };
+        }
+
     }
 }
 
