@@ -2,16 +2,16 @@ stages:
   - test
   - deploy
 
-  before_script:
+before_script:
   - docker info
 
-  test-frontend:
-    image: node:latest
-    stage: test
-    script:
-      - cd frontend
-      - npm install
-      - npm test
+test-frontend:
+  image: node:latest
+  stage: test
+  script:
+    - cd frontend
+    - npm install
+    - npm test
 
 test-backend:
   image: python:latest
