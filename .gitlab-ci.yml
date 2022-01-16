@@ -2,9 +2,6 @@ stages:
   - test
   - deploy
 
-before_script:
-  - docker info
-
 test-frontend:
   image: node:latest
   stage: test
