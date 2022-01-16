@@ -6,12 +6,12 @@ stages:
   - docker info
 
   test-frontend:
-  image: node:latest
-  stage: test
-  script:
-    - cd frontend
-    - npm install
-    - npm test
+    image: node:latest
+    stage: test
+    script:
+      - cd frontend
+      - npm install
+      - npm test
 
 test-backend:
   image: python:latest
