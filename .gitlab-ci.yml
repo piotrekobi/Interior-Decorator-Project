@@ -1,24 +1,6 @@
 stages:
-  - build
   - test
   - deploy
-
-build:
-  image: docker:latest
-  stage: build
-  variables:
-    DOCKER_DRIVER: overlay
-  services:
-    - docker:dind
-  before_script:
-    - apk add --no-cache docker-compose
-  script:
-    - docker-compose build
-  only:
-    - frontend_backend
-  cache:
-    paths:
-      - /var/lib/docker/overlay
 
 test-frontend:
   image: node:latest
@@ -47,12 +29,10 @@ deploy:
     - apk add --no-cache docker-compose
     - echo "$DOCKER_PASSWD" | docker login $DOCKER_REPOSITORY --username $DOCKER_USER --password-stdin
   script:
+    - docker-compose build
     - docker-compose push
   only:
     - frontend_backend
   environment:
     name: app-service
     url: https://wnetrza.azurewebsites.net
-  cache:
-    paths:
-      - /var/lib/docker/overlay
