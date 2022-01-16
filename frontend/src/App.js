@@ -90,10 +90,10 @@ class App extends Component {
     this.rectangleMenu.current.toggleModal();
   };
 
-  handleAddRectangleClick = (width, height, color) => {
+  handleAddRectangleClick = (width, height, color, imageURL) => {
     this.spawnZone.current
       .getDecoratedComponentInstance()
-      .addChild(width, height, color);
+      .addChild(width, height, color, imageURL);
   };
 
   handleOrderClick = () => {
@@ -102,45 +102,53 @@ class App extends Component {
 
   handleOrderWithOptionsClick = (preferred_spacing) => {
     const offsetHeight = this.menuZone.current.getHeight();
-    const rectangle_json = this.spawnZone.current.getDecoratedComponentInstance().getRectangles(offsetHeight);
-    const wall_json = this.dragZone.current.getDecoratedComponentInstance().getWall();
+    const rectangle_json = this.spawnZone.current
+      .getDecoratedComponentInstance()
+      .getRectangles(offsetHeight);
+    const wall_json = this.dragZone.current
+      .getDecoratedComponentInstance()
+      .getWall();
 
-    this.optimizeRectangles(offsetHeight, rectangle_json, wall_json, preferred_spacing);
-  }
+    this.optimizeRectangles(
+      offsetHeight,
+      rectangle_json,
+      wall_json,
+      preferred_spacing
+    );
+  };
 
-  optimizeRectangles = (offsetHeight, rectangle_json, wall_json, preferred_spacing) => {
-    this.connector
-      .createTask()
-      .then(id => {
-        this.progressWindow.current.openModal();
-        this.connector
+  optimizeRectangles = (
+    offsetHeight,
+    rectangle_json,
+    wall_json,
+    preferred_spacing
+  ) => {
+    this.connector.createTask().then((id) => {
+      this.progressWindow.current.openModal();
+      this.connector
         .optimizeRectangles(rectangle_json, wall_json, preferred_spacing, id)
         .then((result) => {
           this.spawnZone.current
-          .getDecoratedComponentInstance()
-          .setRectangles(result[0], offsetHeight);
+            .getDecoratedComponentInstance()
+            .setRectangles(result[0], offsetHeight);
           this.progressWindow.current.closeModal();
-        }
-        );
-        this.updateOrderProgress(id);
-      }
-      );
-  }
+        });
+      this.updateOrderProgress(id);
+    });
+  };
 
   updateOrderProgress = (task_id) => {
     setTimeout(() => {
-      this.connector.getProgress(task_id)
-        .then((res) => {
-          this.progressWindow.current.setProgress(res);
-          if (res < 100) {
-            this.updateOrderProgress(task_id);
-          }
-          else {
-            this.connector.removeTask(task_id);
-          }
-        });
+      this.connector.getProgress(task_id).then((res) => {
+        this.progressWindow.current.setProgress(res);
+        if (res < 100) {
+          this.updateOrderProgress(task_id);
+        } else {
+          this.connector.removeTask(task_id);
+        }
+      });
     }, 500);
-  }
+  };
 
   render() {
     return (
@@ -171,9 +179,7 @@ class App extends Component {
             onOrderWithOptionsClick={this.handleOrderWithOptionsClick}
           />
 
-          <ProgressWindow
-            ref={this.progressWindow}
-          />
+          <ProgressWindow ref={this.progressWindow} />
 
           <input
             type="file"
