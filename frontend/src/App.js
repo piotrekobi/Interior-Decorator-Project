@@ -10,6 +10,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import Connector from "./Connector";
 import ArrangementMenu from "./components/ArrangementMenu";
 import ProgressWindow from "./components/ProgressWindow";
+import IncorrectOrderAlert from "./components/IncorrectOrderAlert";
 
 class App extends Component {
   constructor(props) {
@@ -21,6 +22,7 @@ class App extends Component {
     this.rectangleMenu = createRef();
     this.arrangementMenu = createRef();
     this.progressWindow = createRef();
+    this.incorrectOrderAlert = createRef();
     this.dofileDownload = createRef();
     this.fileDownloadUrl = createRef();
     this.uploadInput = createRef();
@@ -116,10 +118,14 @@ class App extends Component {
         this.connector
         .optimizeRectangles(rectangle_json, wall_json, preferred_spacing, id)
         .then((result) => {
-          this.spawnZone.current
-          .getDecoratedComponentInstance()
-          .setRectangles(result[0], offsetHeight);
           this.progressWindow.current.closeModal();
+          console.log(result[0]);
+          if (result[1]['is_valid']) {
+            this.spawnZone.current.getDecoratedComponentInstance().setRectangles(result[0], offsetHeight);
+          }
+          else {
+            this.incorrectOrderAlert.current.toggleModal(result);
+          }
         }
         );
         this.updateOrderProgress(id);
@@ -173,6 +179,10 @@ class App extends Component {
 
           <ProgressWindow
             ref={this.progressWindow}
+          />
+
+          <IncorrectOrderAlert
+            ref={this.incorrectOrderAlert}
           />
 
           <input

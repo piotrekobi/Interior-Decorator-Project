@@ -48,8 +48,10 @@ def optimizer(request):
                     }
                 ]
             }
-            rectangle_data = place_rectangles([data[0]['rectangle_json']], data[0]['wall_json'], data[0]['preferred_spacing'], poly_json, data[0]['task_id'])
+            rectangle_data, is_valid = place_rectangles([data[0]['rectangle_json']], data[0]['wall_json'], data[0]['preferred_spacing'], poly_json, data[0]['task_id'])
+            rectangle_data.append({"is_valid": is_valid})
             rectangle_data = json.dumps(rectangle_data)
+            
             logger.info(f"Outgoing rectangle placement:\n\t{rectangle_data}")
             return HttpResponse(rectangle_data)
         else:

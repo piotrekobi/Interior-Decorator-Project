@@ -270,7 +270,7 @@ def place_rectangles(rectangle_json, wall_json, preferred_spacing, poly_json, ta
         return rectangle_json
 
     res = opt.optimize()
-
+    is_valid = opt.isvalid(res)
     updateJSON(rectangle_json, res)
 
-    return rectangle_json
+    return rectangle_json, is_valid
