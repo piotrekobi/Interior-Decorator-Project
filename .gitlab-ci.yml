@@ -1,10 +1,10 @@
 stages:
-  - test-backend
+  - test
   - deploy
 
 test-backend:
   image: python:3.10
-  stage: test-backend
+  stage: test
   script:
     - cd backend
     - python -m pip install -r requirements.txt
