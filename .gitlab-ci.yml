@@ -16,6 +16,9 @@ build:
     - docker-compose build
   only:
     - frontend_backend
+  cache:
+    paths:
+      - /var/lib/docker/overlay
 
 test-frontend:
   image: node:latest
@@ -50,3 +53,6 @@ deploy:
   environment:
     name: app-service
     url: https://wnetrza.azurewebsites.net
+  cache:
+    paths:
+      - /var/lib/docker/overlay
