@@ -1,6 +1,19 @@
 stages:
+  - build
   - test
   - deploy
+
+build:
+  image: docker:latest
+  stage: build
+  variables:
+    DOCKER_DRIVER: overlay
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker-compose
+  script:
+    - docker-compose build
 
 test-frontend:
   image: node:latest
@@ -25,10 +38,9 @@ deploy:
     DOCKER_DRIVER: overlay
   services:
     - docker:dind
-  script:
-    - apk add --no-cache docker-compose
-    - docker-compose build
+  before_script:
     - echo "$DOCKER_PASSWD" | docker login $DOCKER_REPOSITORY --username $DOCKER_USER --password-stdin
+  script:
     - docker-compose push
   only:
     - frontend_backend
