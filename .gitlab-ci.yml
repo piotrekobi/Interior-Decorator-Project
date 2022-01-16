@@ -3,7 +3,7 @@ stages:
   - deploy
 
 test-backend:
-  stage: test
+  stage: test-backend
   script:
     - cd backend
     - python -m pip install -r requirements.txt
