@@ -134,7 +134,7 @@ class OptimizerTestCase(SimpleTestCase):
             ]
         }
 
-        opt = Optimizer()
+        opt = Optimizer(0)
         opt.parseJSON(rectangle_json, wall_json, preferred_spacing, poly_json)
 
         self.assertEqual(len(opt.fixed), 1)
@@ -206,7 +206,7 @@ class OptimizerTestCase(SimpleTestCase):
         self.assertEqual(rectangle_json, copy)
 
     def test_iter_counter(self):
-        opt = Optimizer()
+        opt = Optimizer(0)
         self.assertEqual(opt.counter, 0)
         for i in range(1, 10):
             opt.iter_counter(None, None)
@@ -260,7 +260,7 @@ class OptimizerTestCase(SimpleTestCase):
             ]
         }
 
-        opt = Optimizer()
+        opt = Optimizer(0)
         opt.parseJSON(rectangle_json, wall_json, preferred_spacing, poly_json)
 
         x = [350, 150]
@@ -329,7 +329,7 @@ class OptimizerTestCase(SimpleTestCase):
             ]
         }
 
-        opt = Optimizer()
+        opt = Optimizer(0)
         opt.parseJSON(rectangle_json, wall_json, preferred_spacing, poly_json)
 
         x = [150, 400]
@@ -404,7 +404,7 @@ class OptimizerTestCase(SimpleTestCase):
             ]
         }
 
-        opt = Optimizer()
+        opt = Optimizer(0)
         opt.parseJSON(rectangle_json, wall_json, preferred_spacing, poly_json)
 
         x = [100, 100]
@@ -469,7 +469,7 @@ class OptimizerTestCase(SimpleTestCase):
             ]
         }
 
-        opt = Optimizer()
+        opt = Optimizer(0)
         opt.parseJSON(rectangle_json, wall_json, preferred_spacing, poly_json)
 
         x = [350, 150]
@@ -520,7 +520,7 @@ class OptimizerTestCase(SimpleTestCase):
             ]
         }
 
-        place_rectangles(rectangle_json, wall_json, preferred_spacing, poly_json)
+        place_rectangles(rectangle_json, wall_json, preferred_spacing, poly_json, 0)
 
         self.assertAlmostEqual(rectangle_json[0][0]["offset"]["left"], 80)
         self.assertAlmostEqual(rectangle_json[0][0]["offset"]["top"], 180)

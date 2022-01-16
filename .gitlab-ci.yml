@@ -1,5 +1,13 @@
 stages:
+  - test-backend
   - deploy
+
+test-backend:
+  stage: test
+  script:
+    - cd backend
+    - python -m pip install -r requirements.txt
+    - python manage.py test
     
 deploy:
   image: docker:latest
