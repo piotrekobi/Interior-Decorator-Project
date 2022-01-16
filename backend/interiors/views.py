@@ -4,6 +4,7 @@ from interiors.optimizer.Optimizer import place_rectangles
 import json
 from django.views.decorators.csrf import csrf_exempt
 import logging
+from interiors.tasks.status import taskStatuses
 
 
 class NoRectangleData(Exception):
@@ -11,6 +12,11 @@ class NoRectangleData(Exception):
 
 def index(request):
     return HttpResponse("Wnętrza API")
+
+@csrf_exempt
+def createTask(request):
+    taskStatus = taskStatuses.createNewTaskStatus()
+    return HttpResponse(taskStatus)
 
 
 @csrf_exempt 
@@ -42,7 +48,7 @@ def optimizer(request):
                     }
                 ]
             }
-            rectangle_data = place_rectangles([data[0]['rectangle_json']], data[0]['wall_json'], data[0]['preferred_spacing'], poly_json)
+            rectangle_data = place_rectangles([data[0]['rectangle_json']], data[0]['wall_json'], data[0]['preferred_spacing'], poly_json, data[0]['task_id'])
             rectangle_data = json.dumps(rectangle_data)
             logger.info(f"Outgoing rectangle placement:\n\t{rectangle_data}")
             return HttpResponse(rectangle_data)
@@ -50,3 +56,15 @@ def optimizer(request):
             raise NoRectangleData
     except NoRectangleData:
         return HttpResponse("No rectangle data exception")
+
+@csrf_exempt
+def getProgress(request):
+    task_id = json.loads(request.body)[0]
+    progress = taskStatuses.getProgress(task_id)
+    return HttpResponse(progress)
+
+@csrf_exempt
+def removeTask(request):
+    task_id = json.loads(request.body)[0]
+    taskStatuses.removeTaskStatus(task_id)
+    return HttpResponse(0)

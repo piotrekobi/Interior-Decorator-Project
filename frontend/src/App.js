@@ -9,6 +9,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Connector from "./Connector";
 import ArrangementMenu from "./components/ArrangementMenu";
+import ProgressWindow from "./components/ProgressWindow";
 
 class App extends Component {
   constructor(props) {
@@ -19,13 +20,14 @@ class App extends Component {
     this.wallPicker = createRef();
     this.rectangleMenu = createRef();
     this.arrangementMenu = createRef();
+    this.progressWindow = createRef();
     this.dofileDownload = createRef();
     this.fileDownloadUrl = createRef();
     this.uploadInput = createRef();
 
     this.connector = new Connector([
-      "http://127.0.0.1:8000/optimizer/",
-      "httpS://api-wnetrza.azurewebsites.net/optimizer/",
+      "http://127.0.0.1:8000/",
+      "https://api-wnetrza.azurewebsites.net/",
     ]);
   }
 
@@ -100,7 +102,6 @@ class App extends Component {
 
   handleOrderWithOptionsClick = (preferred_spacing) => {
     const offsetHeight = this.menuZone.current.getHeight();
-
     var rectangle_json = this.spawnZone.current
       .getDecoratedComponentInstance()
       .getRectangles(offsetHeight);
@@ -109,12 +110,36 @@ class App extends Component {
       .getWall();
 
     this.connector
-      .optimizeRectangles(rectangle_json, wall_json, preferred_spacing)
-      .then((result) =>
-        this.spawnZone.current
+      .createTask()
+      .then(id => {
+        this.progressWindow.current.toggleModal();
+        this.connector
+        .optimizeRectangles(rectangle_json, wall_json, preferred_spacing, id)
+        .then((result) => {
+          this.spawnZone.current
           .getDecoratedComponentInstance()
-          .setRectangles(result[0], offsetHeight)
+          .setRectangles(result[0], offsetHeight);
+          this.progressWindow.current.toggleModal();
+        }
+        );
+        this.updateOrderProgress(id);
+      }
       );
+  }
+
+  updateOrderProgress = (task_id) => {
+    setTimeout(() => {
+      this.connector.getProgress(task_id)
+        .then((res) => {
+          this.progressWindow.current.setProgress(res);
+          if (res < 100) {
+            this.updateOrderProgress(task_id);
+          }
+          else {
+            this.connector.removeTask(task_id);
+          }
+        });
+    }, 500);
   }
 
   render() {
@@ -144,6 +169,10 @@ class App extends Component {
           <ArrangementMenu
             ref={this.arrangementMenu}
             onOrderWithOptionsClick={this.handleOrderWithOptionsClick}
+          />
+
+          <ProgressWindow
+            ref={this.progressWindow}
           />
 
           <input

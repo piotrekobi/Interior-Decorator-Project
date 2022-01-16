@@ -6,11 +6,13 @@ import matplotlib.path as mpltPath
 from interiors.optimizer.Geometry import Wall
 from interiors.optimizer.Geometry import Point, Rectangle
 from interiors.optimizer.Constants import *
+from interiors.tasks.status import taskStatuses
 
 
 class Optimizer:
-    def __init__(self):
+    def __init__(self, task_id):
         self.counter = 0
+        self.task_id = task_id
 
     def rect2rect(self):
         # Punishment for distances between rectangles
@@ -153,9 +155,11 @@ class Optimizer:
 
     def iter_counter(self, xk=None, convergence=None):
         self.counter += 1
-        if self.counter % 10 == 0:
+        #if self.counter % 10 == 0:
             # Do stuff
-            pass
+        #    pass
+        progress = round((self.counter / MAXITER) * 100)
+        taskStatuses.setProgress(self.task_id, progress)
 
     def optimize(self):
         my_bounds = opt.Bounds(
@@ -261,8 +265,8 @@ def updateJSON(rectangle_json, res):
             i = i + 1
 
 
-def place_rectangles(rectangle_json, wall_json, preferred_spacing, poly_json):
-    opt = Optimizer()
+def place_rectangles(rectangle_json, wall_json, preferred_spacing, poly_json, task_id):
+    opt = Optimizer(task_id)
     opt.parseJSON(rectangle_json, wall_json, preferred_spacing, poly_json)
 
     if len(opt.optimized) == 0:
