@@ -3,6 +3,7 @@ stages:
   - deploy
 
 test-backend:
+  image: python:3.10
   stage: test-backend
   script:
     - cd backend
