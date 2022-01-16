@@ -7,3 +7,4 @@ RUN npm install -g serve
 COPY . /frontend
 EXPOSE 80
 RUN npm run build
+CMD serve -s build -l 80
