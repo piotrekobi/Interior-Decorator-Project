@@ -8,6 +8,7 @@ import RectangleMenu from "./components/RectangleMenu";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Connector from "./Connector";
+import ArrangementMenu from "./components/ArrangementMenu";
 
 class App extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class App extends Component {
     this.spawnZone = createRef();
     this.wallPicker = createRef();
     this.rectangleMenu = createRef();
+    this.arrangementMenu = createRef();
     this.dofileDownload = createRef();
     this.fileDownloadUrl = createRef();
     this.uploadInput = createRef();
@@ -93,6 +95,10 @@ class App extends Component {
   };
 
   handleOrderClick = () => {
+    this.arrangementMenu.current.toggleModal();
+  };
+
+  handleOrderWithOptionsClick = (preferred_spacing) => {
     const offsetHeight = this.menuZone.current.getHeight();
 
     var rectangle_json = this.spawnZone.current
@@ -101,7 +107,6 @@ class App extends Component {
     var wall_json = this.dragZone.current
       .getDecoratedComponentInstance()
       .getWall();
-    var preferred_spacing = 30; // EXAMPLE - TODO
 
     this.connector
       .optimizeRectangles(rectangle_json, wall_json, preferred_spacing)
@@ -110,7 +115,7 @@ class App extends Component {
           .getDecoratedComponentInstance()
           .setRectangles(result[0], offsetHeight)
       );
-  };
+  }
 
   render() {
     return (
@@ -135,6 +140,12 @@ class App extends Component {
             ref={this.rectangleMenu}
             onAddRectangleClick={this.handleAddRectangleClick}
           />
+
+          <ArrangementMenu
+            ref={this.arrangementMenu}
+            onOrderWithOptionsClick={this.handleOrderWithOptionsClick}
+          />
+
           <input
             type="file"
             ref={this.uploadInput}
