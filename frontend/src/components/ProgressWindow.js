@@ -13,9 +13,14 @@ export default class ProgressWindow extends Component {
         }
     }
 
-    toggleModal = () => {
+    openModal = () => {
         this.setProgress(0);
-        this.setState({isModalOpen : !this.state.isModalOpen});
+        this.setState({isModalOpen : true});
+    }
+
+    closeModal = () => {
+        this.setProgress(0);
+        this.setState({isModalOpen : false});
     }
 
     setProgress = (progress) => {
@@ -24,9 +29,17 @@ export default class ProgressWindow extends Component {
 
     render() {
         return(
-            <Modal open={this.state.isModalOpen} onClose={this.toggleModal} classNames={{modal: styles.progressWindowModal,}}>
+            <Modal 
+                open={this.state.isModalOpen} 
+                onClose={() => {}} 
+                classNames={{
+                    modal: styles.progressWindowModal,
+                }}
+                >
                 <p>Twoje zdjęcia są właśnie rozkładane!!!</p>
-                <ProgressBar completed={this.state.progress} />
+                <ProgressBar 
+                    completed={this.state.progress} 
+                />
             </Modal>
         )
     }

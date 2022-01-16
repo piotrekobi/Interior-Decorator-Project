@@ -27,7 +27,7 @@ export default class ArrangementMenu extends Component{
                 <input 
                     type='number' 
                     onChange={pref_space => {this.preferred_spacing = parseInt(pref_space.target.value)}}
-                    //value={this.preferred_spacing}
+                    placeholder={this.preferred_spacing}
                 />
                 <button onClick={this.handleOrderWithOptions} >Rozmieść</button>
             </Modal>

@@ -102,24 +102,24 @@ class App extends Component {
 
   handleOrderWithOptionsClick = (preferred_spacing) => {
     const offsetHeight = this.menuZone.current.getHeight();
-    var rectangle_json = this.spawnZone.current
-      .getDecoratedComponentInstance()
-      .getRectangles(offsetHeight);
-    var wall_json = this.dragZone.current
-      .getDecoratedComponentInstance()
-      .getWall();
+    const rectangle_json = this.spawnZone.current.getDecoratedComponentInstance().getRectangles(offsetHeight);
+    const wall_json = this.dragZone.current.getDecoratedComponentInstance().getWall();
 
+    this.optimizeRectangles(offsetHeight, rectangle_json, wall_json, preferred_spacing);
+  }
+
+  optimizeRectangles = (offsetHeight, rectangle_json, wall_json, preferred_spacing) => {
     this.connector
       .createTask()
       .then(id => {
-        this.progressWindow.current.toggleModal();
+        this.progressWindow.current.openModal();
         this.connector
         .optimizeRectangles(rectangle_json, wall_json, preferred_spacing, id)
         .then((result) => {
           this.spawnZone.current
           .getDecoratedComponentInstance()
           .setRectangles(result[0], offsetHeight);
-          this.progressWindow.current.toggleModal();
+          this.progressWindow.current.closeModal();
         }
         );
         this.updateOrderProgress(id);

@@ -155,9 +155,6 @@ class Optimizer:
 
     def iter_counter(self, xk=None, convergence=None):
         self.counter += 1
-        #if self.counter % 10 == 0:
-            # Do stuff
-        #    pass
         progress = round((self.counter / MAXITER) * 100)
         taskStatuses.setProgress(self.task_id, progress)
 
