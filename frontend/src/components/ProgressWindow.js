@@ -36,7 +36,7 @@ export default class ProgressWindow extends Component {
                     modal: styles.progressWindowModal,
                 }}
                 >
-                <p>Twoje zdjęcia są właśnie rozkładane!!!</p>
+                <p>Trwa rozmieszczanie...</p>
                 <ProgressBar 
                     completed={this.state.progress} 
                 />
