@@ -47,10 +47,10 @@ export default class RectangleMenu extends Component {
       if (!height) height = image.height;
       canvas.width = width;
       canvas.height = height;
-      console.log(canvas.width);
 
       context.drawImage(image, 0, 0, width, height);
       let dataURL = canvas.toDataURL();
+      dataURL = "url(" + dataURL + ")";
       callback(dataURL);
     };
   };

@@ -52,7 +52,7 @@ class SpawnZone extends Component {
           width: width,
           height: height,
           background: color,
-          backgroundImage: "url(" + imageURL + ")",
+          backgroundImage: imageURL,
         }}
       />
     );
@@ -83,7 +83,8 @@ class SpawnZone extends Component {
       var ref = this.addChild(
         rectangle["width"],
         rectangle["height"],
-        rectangle["color"]
+        rectangle["color"],
+        rectangle["imageURL"]
       );
       ref.current.getDecoratedComponentInstance().setState({
         left: rectangle["offset"]["left"],
@@ -114,6 +115,7 @@ class SpawnZone extends Component {
       width: element.props.style.width,
       height: element.props.style.height,
       color: element.props.style.background,
+      imageURL: element.props.style.backgroundImage,
       offset: offset,
     };
   };

@@ -44,8 +44,10 @@ class App extends Component {
     var rectangle_json = this.spawnZone.current
       .getDecoratedComponentInstance()
       .getRectangles(offsetHeight);
-    console.log(rectangle_json);
-
+    var wallJSON = this.dragZone.current
+      .getDecoratedComponentInstance()
+      .getWall();
+    rectangle_json.push(wallJSON);
     var data = JSON.stringify(rectangle_json);
 
     var file = new Blob([data], { type: "application/json" });
@@ -66,15 +68,20 @@ class App extends Component {
     this.uploadInput.current.click();
   };
 
-  loadRectangles = (callback) => {
+  loadProject = (callback) => {
     var fileread = new FileReader();
     const offsetHeight = this.menuZone.current.getHeight();
 
     callback = (content) => {
-      console.log(content);
+      content = JSON.parse(content);
+
+      let renctangleData = content.slice(0, content.length - 1);
+      let wallData = content[content.length - 1];
+
       this.spawnZone.current
         .getDecoratedComponentInstance()
-        .setRectangles(JSON.parse(content), offsetHeight);
+        .setRectangles(renctangleData, offsetHeight);
+      this.dragZone.current.getDecoratedComponentInstance().setWall(wallData);
     };
 
     fileread.onload = function (e) {
@@ -85,8 +92,6 @@ class App extends Component {
   };
 
   handleRectanglesClick = () => {
-    //var rectangle = (<Rectangle id={uuidv4()} style={{ width: '100px', height: '100px', background: 'gray' }}/>)
-    //this.spawnZone.current.getDecoratedComponentInstance().addChild(rectangle);
     this.rectangleMenu.current.toggleModal();
   };
 
@@ -185,7 +190,7 @@ class App extends Component {
             type="file"
             ref={this.uploadInput}
             style={{ display: "none" }}
-            onChange={this.loadRectangles}
+            onChange={this.loadProject}
           />
         </body>
       </DndProvider>
