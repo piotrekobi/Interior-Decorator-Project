@@ -31,6 +31,10 @@ class App extends Component {
     ]);
   }
 
+  componentDidMount() {
+    this.dragZone.current.getDecoratedComponentInstance().offsetHeight = this.menuZone.current.getHeight()
+  }
+
   handleWallSelection = (specs) => {
     this.dragZone.current.getDecoratedComponentInstance().setWall(specs);
   };
@@ -108,6 +112,10 @@ class App extends Component {
     this.optimizeRectangles(offsetHeight, rectangle_json, wall_json, preferred_spacing);
   }
 
+  handleDrawClick = () => {
+    this.dragZone.current.getDecoratedComponentInstance().activateDrawing();
+  }
+
   optimizeRectangles = (offsetHeight, rectangle_json, wall_json, preferred_spacing) => {
     this.connector
       .createTask()
@@ -153,9 +161,10 @@ class App extends Component {
             onOrderClick={this.handleOrderClick}
             onSaveClick={this.handleSaveClick}
             onLoadClick={this.handleLoadClick}
+            onDrawClick={this.handleDrawClick}
           />
           <DragZone ref={this.dragZone} />
-          <SpawnZone ref={this.spawnZone} />
+          <SpawnZone ref={this.spawnZone}/>
 
           <WallPicker
             ref={this.wallPicker}
