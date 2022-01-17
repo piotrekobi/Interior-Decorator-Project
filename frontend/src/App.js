@@ -111,7 +111,8 @@ class App extends Component {
   }
 
   optimizeRectangles = (offsetHeight, rectangle_json, wall_json, preferred_spacing) => {
-    this.connector
+    if (rectangle_json.length > 0) {
+      this.connector
       .createTask()
       .then(id => {
         this.progressWindow.current.openModal();
@@ -131,6 +132,13 @@ class App extends Component {
         this.updateOrderProgress(id);
       }
       );
+    }
+    else {
+      this.progressWindow.current.openModal();
+      this.progressWindow.current.setProgress(100);
+      setTimeout(() => {this.progressWindow.current.closeModal();}, 500);
+    }
+    
   }
 
   updateOrderProgress = (task_id) => {
