@@ -1,11 +1,11 @@
 export default class Connector{
     constructor(urls){
-        this.backendURL = null;
+        this.URL = null;
         urls.forEach(url => {
             fetch(url)
                 .then(() => {
-                    if(this.backendURL == null)
-                        this.backendURL = url;
+                    if(this.URL == null)
+                        this.URL = url;
                 })
                 .catch(() => {})
         });
@@ -13,8 +13,7 @@ export default class Connector{
     }
 
     optimizeRectangles (rectangle_json, wall_json, preferred_spacing, task_id) {
-        console.log(this.backendURL);
-        return fetch(this.backendURL + "optimizer/", {
+        return fetch(this.URL + "optimizer/", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -27,13 +26,13 @@ export default class Connector{
     }
 
     createTask = () => {
-        return fetch(this.backendURL + "createTask/")
+        return fetch(this.URL + "createTask/")
             .then(response => response.json())
             .then(data => {return data;});
     }
 
     getProgress = (task_id) => {
-        return fetch(this.backendURL + "getProgress/", {
+        return fetch(this.URL + "getProgress/", {
             method: 'POST',
             body: JSON.stringify([task_id]),
         })
@@ -42,11 +41,23 @@ export default class Connector{
     }
 
     removeTask = (task_id) => {
-        return fetch(this.backendURL + "removeTask/", {
+        return fetch(this.URL + "removeTask/", {
             method: 'POST',
             body: JSON.stringify([task_id]),
         })
             .then(response => response.json())
             .then(data => {return data;});
+    }
+
+    getWalls = () => {
+        return fetch("./walls.json",
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(json => {return json});
     }
 }

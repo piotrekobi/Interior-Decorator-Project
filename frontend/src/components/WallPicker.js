@@ -2,6 +2,7 @@ import { Component, createRef } from 'react';
 import Modal from 'react-responsive-modal'
 import 'react-responsive-modal/styles.css'
 import cloneDeep from 'lodash.clonedeep'
+import Connector from '../Connector';
 
 
 export default class WallPicker extends Component {
@@ -18,15 +19,10 @@ export default class WallPicker extends Component {
     }
 
     async componentDidMount() {
-        fetch("./walls.json",
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            })
-            .then(res => res.json())
-            .then(json => this.wallsJson = json);
+        var connector = new Connector([])
+        connector.getWalls()
+            .then(wallsJson => this.wallsJson = wallsJson)
+            .then(() => {this.props.onWallSelection(this.wallsJson[0])});
     }
 
     renderWallsGrid = () => {
