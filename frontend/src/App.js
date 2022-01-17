@@ -108,21 +108,22 @@ class App extends Component {
     const offsetHeight = this.menuZone.current.getHeight();
     const rectangle_json = this.spawnZone.current.getDecoratedComponentInstance().getRectangles(offsetHeight);
     const wall_json = this.dragZone.current.getDecoratedComponentInstance().getWall();
+    const fill_zone = this.dragZone.current.getDecoratedComponentInstance().getZone();
 
-    this.optimizeRectangles(offsetHeight, rectangle_json, wall_json, preferred_spacing);
+    this.optimizeRectangles(offsetHeight, rectangle_json, wall_json, preferred_spacing, fill_zone);
   }
 
   handleDrawClick = () => {
     this.dragZone.current.getDecoratedComponentInstance().activateDrawing();
   }
 
-  optimizeRectangles = (offsetHeight, rectangle_json, wall_json, preferred_spacing) => {
+  optimizeRectangles = (offsetHeight, rectangle_json, wall_json, preferred_spacing, fill_zone) => {
     this.connector
       .createTask()
       .then(id => {
         this.progressWindow.current.openModal();
         this.connector
-        .optimizeRectangles(rectangle_json, wall_json, preferred_spacing, id)
+        .optimizeRectangles(rectangle_json, wall_json, preferred_spacing, fill_zone, id)
         .then((result) => {
           this.spawnZone.current
           .getDecoratedComponentInstance()

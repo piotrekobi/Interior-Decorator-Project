@@ -41,7 +41,7 @@ class DragZone extends Component {
         if (this.wallJSON != undefined) {
             this.drawWall(this.wallJSON);
         }
-        if (this.zoneVertices != undefined) {
+        if (this.zoneVertices.length > 0) {
             this.drawZone(this.zoneVertices);
         }
     }
@@ -77,7 +77,7 @@ class DragZone extends Component {
                 if (this.wallJSON != undefined) {
                     this.drawWall(this.wallJSON);
                 }
-                if (this.zoneVertices != undefined) {
+                if (this.zoneVertices.length > 0) {
                     this.drawZone(this.zoneVertices);
                 }
             }
@@ -126,6 +126,10 @@ class DragZone extends Component {
         ctx.moveTo(vertices[0]['x'], vertices[0]['y']);
         ctx.lineTo(vertices[prevKey]['x'], vertices[prevKey]['y']);
         ctx.stroke();
+    }
+
+    getZone = () => {
+        return { vertices: this.zoneVertices };
     }
 
     render() {
