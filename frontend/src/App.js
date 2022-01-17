@@ -46,8 +46,10 @@ class App extends Component {
     var rectangle_json = this.spawnZone.current
       .getDecoratedComponentInstance()
       .getRectangles(offsetHeight);
-    console.log(rectangle_json);
-
+    var wallJSON = this.dragZone.current
+      .getDecoratedComponentInstance()
+      .getWall();
+    rectangle_json.push(wallJSON);
     var data = JSON.stringify(rectangle_json);
 
     var file = new Blob([data], { type: "application/json" });
@@ -68,15 +70,20 @@ class App extends Component {
     this.uploadInput.current.click();
   };
 
-  loadRectangles = (callback) => {
+  loadProject = (callback) => {
     var fileread = new FileReader();
     const offsetHeight = this.menuZone.current.getHeight();
 
     callback = (content) => {
-      console.log(content);
+      content = JSON.parse(content);
+
+      let renctangleData = content.slice(0, content.length - 1);
+      let wallData = content[content.length - 1];
+
       this.spawnZone.current
         .getDecoratedComponentInstance()
-        .setRectangles(JSON.parse(content), offsetHeight);
+        .setRectangles(renctangleData, offsetHeight);
+      this.dragZone.current.getDecoratedComponentInstance().setWall(wallData);
     };
 
     fileread.onload = function (e) {
@@ -87,15 +94,13 @@ class App extends Component {
   };
 
   handleRectanglesClick = () => {
-    //var rectangle = (<Rectangle id={uuidv4()} style={{ width: '100px', height: '100px', background: 'gray' }}/>)
-    //this.spawnZone.current.getDecoratedComponentInstance().addChild(rectangle);
     this.rectangleMenu.current.toggleModal();
   };
 
-  handleAddRectangleClick = (width, height, color) => {
+  handleAddRectangleClick = (width, height, color, imageURL) => {
     this.spawnZone.current
       .getDecoratedComponentInstance()
-      .addChild(width, height, color);
+      .addChild(width, height, color, imageURL);
   };
 
   handleOrderClick = () => {
@@ -104,11 +109,20 @@ class App extends Component {
 
   handleOrderWithOptionsClick = (preferred_spacing) => {
     const offsetHeight = this.menuZone.current.getHeight();
-    const rectangle_json = this.spawnZone.current.getDecoratedComponentInstance().getRectangles(offsetHeight);
-    const wall_json = this.dragZone.current.getDecoratedComponentInstance().getWall();
+    const rectangle_json = this.spawnZone.current
+      .getDecoratedComponentInstance()
+      .getRectangles(offsetHeight);
+    const wall_json = this.dragZone.current
+      .getDecoratedComponentInstance()
+      .getWall();
 
-    this.optimizeRectangles(offsetHeight, rectangle_json, wall_json, preferred_spacing);
-  }
+    this.optimizeRectangles(
+      offsetHeight,
+      rectangle_json,
+      wall_json,
+      preferred_spacing
+    );
+  };
 
   optimizeRectangles = (offsetHeight, rectangle_json, wall_json, preferred_spacing) => {
     if (rectangle_json.length > 0) {
@@ -143,18 +157,16 @@ class App extends Component {
 
   updateOrderProgress = (task_id) => {
     setTimeout(() => {
-      this.connector.getProgress(task_id)
-        .then((res) => {
-          this.progressWindow.current.setProgress(res);
-          if (res < 100) {
-            this.updateOrderProgress(task_id);
-          }
-          else {
-            this.connector.removeTask(task_id);
-          }
-        });
+      this.connector.getProgress(task_id).then((res) => {
+        this.progressWindow.current.setProgress(res);
+        if (res < 100) {
+          this.updateOrderProgress(task_id);
+        } else {
+          this.connector.removeTask(task_id);
+        }
+      });
     }, 500);
-  }
+  };
 
   render() {
     return (
@@ -185,9 +197,7 @@ class App extends Component {
             onOrderWithOptionsClick={this.handleOrderWithOptionsClick}
           />
 
-          <ProgressWindow
-            ref={this.progressWindow}
-          />
+          <ProgressWindow ref={this.progressWindow} />
 
           <IncorrectOrderAlert
             ref={this.incorrectOrderAlert}
@@ -197,7 +207,7 @@ class App extends Component {
             type="file"
             ref={this.uploadInput}
             style={{ display: "none" }}
-            onChange={this.loadRectangles}
+            onChange={this.loadProject}
           />
         </body>
       </DndProvider>
