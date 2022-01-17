@@ -3,6 +3,8 @@ import styles from "./DragZone.module.css"
 import { DropTarget } from 'react-dnd'
 import { Types } from './Types.js'
 
+const CLOSE_DISTANCE = 10;
+
 const dragZoneTarget = {
     drop(props, monitor, component) {
         return {
@@ -12,6 +14,28 @@ const dragZoneTarget = {
     }
 }
 
+function orientation(p, q, r) {
+    let val = (q.y - p.y) * (r.x - q.x) -
+            (q.x - p.x) * (r.y - q.y);
+  
+    if (val == 0) return 0; // collinear
+  
+    return (val > 0)? 1: 2; // clock or counterclock wise
+}
+
+function linesIntersect(a, b, c, d) {
+    // Checks, if lines ab and cd intersect
+    let o1 = orientation(a, b, c);
+    let o2 = orientation(a, b, d);
+    let o3 = orientation(c, d, a);
+    let o4 = orientation(c, d, b);
+  
+    // General case
+    if (o1 != o2 && o3 != o4) {
+        return true;
+    }
+    return false;
+}
 
 function collect(connect, monitor) {
     return {
@@ -55,31 +79,42 @@ class DragZone extends Component {
         this.drawingActive = true;
     }
 
+    intersects = (newPoint) => {
+        if (this.zoneVertices.length <= 2) {
+            return false;
+        }
+        const lastPoint = this.zoneVertices[this.zoneVertices.length - 1];
+        for (let i = 1; i < this.zoneVertices.length-1; i += 1) {
+            if (linesIntersect(this.zoneVertices[i-1], this.zoneVertices[i], lastPoint, newPoint)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     handleCanvasClick = (event) => {
         if (this.drawingActive) {
-            if (this.zoneVertices.length == 0) {
-                const currentCoord = { x: event.clientX,
-                                       y: event.clientY - this.offsetHeight };
-                this.zoneVertices = [currentCoord];
+            const currentCoord = { x: event.clientX,
+                                   y: event.clientY - this.offsetHeight };
+            if (this.zoneVertices.length > 0 &&
+                Math.abs(currentCoord.x - this.zoneVertices[0].x) <= CLOSE_DISTANCE &&
+                Math.abs(currentCoord.y - this.zoneVertices[0].y) <= CLOSE_DISTANCE) {
+                if (!this.intersects(this.zoneVertices[this.zoneVertices.length-1])) {
+                    this.drawingActive = false
+                }
             }
             else {
-                const currentCoord = { x: event.clientX,
-                                       y: event.clientY - this.offsetHeight };
-                const prevCoord = this.zoneVertices[0];
-                let betweenCoord = { x: prevCoord.x, y: currentCoord.y };
-                this.zoneVertices = [...this.zoneVertices, betweenCoord];
-                this.zoneVertices = [...this.zoneVertices, currentCoord];
-                betweenCoord = { x: currentCoord.x, y: prevCoord.y };
-                this.zoneVertices = [...this.zoneVertices, betweenCoord];
-                this.drawingActive = false;
-                // clear canvas & redraw wall and zone
-                this.clearCanvas();
-                if (this.wallJSON != undefined) {
-                    this.drawWall(this.wallJSON);
+                if (!this.intersects(currentCoord)) {
+                    this.zoneVertices = [...this.zoneVertices, currentCoord];
                 }
-                if (this.zoneVertices.length > 0) {
-                    this.drawZone(this.zoneVertices);
-                }
+            }
+            // clear canvas & redraw wall and zone
+            this.clearCanvas();
+            if (this.wallJSON != undefined) {
+                this.drawWall(this.wallJSON);
+            }
+            if (this.zoneVertices.length > 0) {
+                this.drawZone(this.zoneVertices);
             }
         }
     }
@@ -123,8 +158,10 @@ class DragZone extends Component {
             ctx.stroke();
             prevKey = key;
         }
-        ctx.moveTo(vertices[0]['x'], vertices[0]['y']);
-        ctx.lineTo(vertices[prevKey]['x'], vertices[prevKey]['y']);
+        if (!this.drawingActive) {
+            ctx.moveTo(vertices[0]['x'], vertices[0]['y']);
+            ctx.lineTo(vertices[prevKey]['x'], vertices[prevKey]['y']);
+        }
         ctx.stroke();
     }
 
