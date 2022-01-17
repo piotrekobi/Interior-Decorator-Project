@@ -26,19 +26,40 @@ export default class WallPicker extends Component {
     }
 
     renderWallsGrid = () => {
-        return this.wallsJson.map((data, index) => {
+        var items = this.wallsJson.map((data, index) => {
             return(
-                <tr>
                     <th onClick={() => this.handleWallSelection(data)}>
                         <MiniWall specs={data}/>
                     </th>
-                </tr>
-                
             )
-        })
+        });
+
+        if(items.length != 0)
+        {
+            var table = items.reduce((prev, curr, index) => {
+                if(index == 1)
+                {
+                    return [prev, curr];
+                }
+                else if(index%4 == 3)
+                {
+                    return [...prev.slice(0, -3),(
+                        <tr>
+                            {[...prev.slice(-3), curr]}
+                        </tr>
+                    )]
+                }
+                else
+                {
+                    return [...prev, curr];
+                }
+            });     
+            return table
+        };
     }
 
     handleWallSelection = (specs) => {
+        console.log(specs);
         this.props.onWallSelection(specs);
         this.toggleModal();
     }
