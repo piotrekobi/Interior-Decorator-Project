@@ -152,22 +152,10 @@ class Optimizer:
         )
 
     def rect2poly(self):
-        # Punishment for rectangles outside preferred polygon
-        error = 0
-        for rect in self.optimized:
-            vertices = np.array(
-                [
-                    [rect.center.x - i, rect.center.y - j]
-                    for i in [rect.halfwidth, -rect.halfwidth]
-                    for j in [rect.halfheight, -rect.halfheight]
-                ]
-            )
-            inside_count = np.sum(self.poly.contains_points(vertices))
-            error += (4-inside_count)*rect.center.dist(self.polycentroid)
-            # if not self.poly.contains_point((rect.center.x, rect.center.y)):
-            #     error += rect.center.dist(self.polycentroid)
-            # if not self.poly.contains_point((rect.center.x, rect.center.y)):
-            #     error += rect.center.dist(self.polycentroid)
+        # Punishment for rectangle vertices outside preferred polygon
+        vertices = np.array([[rect.center.x -i, rect.center.y - j] for rect in self.optimized for i in [rect.halfwidth, -rect.halfwidth] for j in [rect.halfheight, -rect.halfheight]])
+        inside_count = np.sum(self.poly.contains_points(vertices, radius=self.spacing))
+        error = (4*len(self.optimized)-inside_count)
         return error * self.poly_scale
 
     def obj_func(self, x):
@@ -254,8 +242,7 @@ class Optimizer:
             strategy=STRATEGY,
             mutation=MUTATION,
             callback=self.iter_counter,
-            disp=False,
-            workers=4,
+            workers=WORKERS,
             updating="deferred",
         )
 
