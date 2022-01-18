@@ -65,11 +65,16 @@ class Optimizer:
         self.wall = wall.holes
 
     def parsePoly(self, poly_json):
+        if len(poly_json["vertices"]) == 0:
+            self.hasPoly = False
+            return
+
         self.poly = mpltPath.Path(
             np.array([[i["x"], i["y"]] for i in poly_json["vertices"]])
         )
         self.polycentroid = np.mean(self.poly.vertices, axis=0)
         self.polycentroid = Point(self.polycentroid[0], self.polycentroid[1])
+        self.hasPoly = True
 
     def rect2rect(self):
         # Punishment for distances between rectangles
@@ -162,7 +167,8 @@ class Optimizer:
 
         error += self.rect2rect()
         error += self.rect2wall()
-        error += self.rect2poly()
+        if self.hasPoly:
+            error += self.rect2poly()
 
         return error
 
