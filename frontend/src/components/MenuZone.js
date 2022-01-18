@@ -19,7 +19,9 @@ export default class MenuZone extends Component {
           <li className={styles.button} onClick={this.props.onRectanglesClick}>
             Prostokąty
           </li>
-          <li className={styles.button}>Zakreśl obszar</li>
+          <li className={styles.button} onClick={this.props.onDrawClick}>
+            Zakreśl obszar
+          </li>
           <li className={styles.button} onClick={this.props.onOrderClick}>
             Rozmieść
           </li>

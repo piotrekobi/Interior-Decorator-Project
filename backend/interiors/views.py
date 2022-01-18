@@ -28,27 +28,7 @@ def optimizer(request):
             rectangle_data = ""
             data = json.loads(request.body)
             logger.info(f"Incoming rectangle request:\n\t{data}")
-            poly_json = {
-                "vertices": [
-                    {
-                        "x": 50,
-                        "y": 50
-                    },
-                    {
-                        "x": 300,
-                        "y": 50
-                    },
-                    {
-                        "x": 300,
-                        "y": 500
-                    },
-                    {
-                        "x": 50,
-                        "y": 500
-                    }
-                ]
-            }
-            rectangle_data, is_valid = place_rectangles([data[0]['rectangle_json']], data[0]['wall_json'], data[0]['preferred_spacing'], poly_json, data[0]['task_id'])
+            rectangle_data, is_valid = place_rectangles([data[0]['rectangle_json']], data[0]['wall_json'], data[0]['preferred_spacing'], data[0]['fill_zone'], data[0]['task_id'])
             rectangle_data.append({"is_valid": is_valid})
             rectangle_data = json.dumps(rectangle_data)
             
