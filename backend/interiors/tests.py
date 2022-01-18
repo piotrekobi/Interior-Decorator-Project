@@ -154,8 +154,8 @@ class OptimizerTestCase(SimpleTestCase):
         self.assertEqual(opt.polycentroid.x, 175)
         self.assertEqual(opt.polycentroid.y, 275)
 
-        self.assertEqual(opt.topleft, False)
-        self.assertEqual(opt.topright, True)
+        self.assertEqual(opt.hastopleft, False)
+        self.assertEqual(opt.hastopright, True)
         l1 = opt.toprightparams
         l2 = [0.5625, 1, -500]
         a2b2 = sqrt(l2[0] ** 2 + l2[1] ** 2)

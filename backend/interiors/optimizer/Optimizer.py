@@ -52,11 +52,11 @@ class Optimizer:
     def parseWall(self, wall_json):
         wall = Wall()
         wall.parseJSON(wall_json)
-        self.topleft = wall.topleft
-        if self.topleft:
+        self.hastopleft = wall.topleft
+        if self.hastopleft:
             self.topleftparams = wall.topleftparams
-        self.topright = wall.topright
-        if self.topright:
+        self.hastopright = wall.topright
+        if self.hastopright:
             self.toprightparams = wall.toprightparams
         self.min_y = wall.top
         self.min_x = wall.left
@@ -115,14 +115,14 @@ class Optimizer:
             # Punishment for being too close to diagonal wall boundaries
             dtopleft = (
                 self.spacing
-                if not self.topleft
+                if not self.hastopleft
                 else self.topleftparams[0] * left
                 + self.topleftparams[1] * top
                 + self.topleftparams[2]
             )
             dtopright = (
                 self.spacing
-                if not self.topright
+                if not self.hastopright
                 else self.toprightparams[0] * right
                 + self.toprightparams[1] * top
                 + self.toprightparams[2]
@@ -185,14 +185,14 @@ class Optimizer:
 
             dtopleft = (
                 self.spacing
-                if not self.topleft
+                if not self.hastopleft
                 else self.topleftparams[0] * left
                 + self.topleftparams[1] * top
                 + self.topleftparams[2]
             )
             dtopright = (
                 self.spacing
-                if not self.topright
+                if not self.hastopright
                 else self.toprightparams[0] * right
                 + self.toprightparams[1] * top
                 + self.toprightparams[2]
