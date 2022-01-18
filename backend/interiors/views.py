@@ -36,8 +36,9 @@ def optimizer(request):
             return HttpResponse(rectangle_data)
         else:
             raise NoRectangleData
-    except NoRectangleData:
-        return HttpResponse("No rectangle data exception")
+    except Exception as e:
+        invalid_result = json.dumps([{}, False])
+        return HttpResponse(invalid_result)
 
 @csrf_exempt
 def getProgress(request):

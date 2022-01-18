@@ -134,8 +134,7 @@ class OptimizerTestCase(SimpleTestCase):
             ]
         }
 
-        opt = Optimizer(0)
-        opt.parseJSON(rectangle_json, wall_json, preferred_spacing, poly_json)
+        opt = Optimizer(rectangle_json, wall_json, preferred_spacing, poly_json, 0)
 
         self.assertEqual(len(opt.fixed), 1)
         rect1 = opt.fixed[0]
@@ -155,8 +154,8 @@ class OptimizerTestCase(SimpleTestCase):
         self.assertEqual(opt.polycentroid.x, 175)
         self.assertEqual(opt.polycentroid.y, 275)
 
-        self.assertEqual(opt.topleft, False)
-        self.assertEqual(opt.topright, True)
+        self.assertEqual(opt.hastopleft, False)
+        self.assertEqual(opt.hastopright, True)
         l1 = opt.toprightparams
         l2 = [0.5625, 1, -500]
         a2b2 = sqrt(l2[0] ** 2 + l2[1] ** 2)
@@ -206,7 +205,46 @@ class OptimizerTestCase(SimpleTestCase):
         self.assertEqual(rectangle_json, copy)
 
     def test_iter_counter(self):
-        opt = Optimizer(0)
+        rectangle_json = [
+            [
+                {
+                    "parent": "spawn_zone",
+                    "width": 100,
+                    "height": 100,
+                    "color": "#000000",
+                    "offset": {"left": 0, "top": 0},
+                },
+            ]
+        ]
+        wall_json = {
+            "vertices": [
+                {"x": 50, "y": 50},
+                {"x": 1050, "y": 50},
+                {"x": 1050, "y": 500},
+                {"x": 750, "y": 500},
+                {"x": 750, "y": 200},
+                {"x": 600, "y": 200},
+                {"x": 600, "y": 500},
+                {"x": 50, "y": 500},
+            ],
+            "top": 50,
+            "bottom": 500,
+            "left": 50,
+            "right": 1050,
+            "topleft": [],
+            "topright": [{"x": 800, "y": 50}, {"x": 1050, "y": 300}],
+            "holes": [{"centerx": 675, "centery": 350, "width": 150, "height": 300}],
+        }
+        preferred_spacing = 30
+        poly_json = {
+            "vertices": [
+                {"x": 50, "y": 50},
+                {"x": 300, "y": 50},
+                {"x": 300, "y": 500},
+                {"x": 50, "y": 500},
+            ]
+        }
+        opt = Optimizer(rectangle_json, wall_json, preferred_spacing, poly_json, 0)
         self.assertEqual(opt.counter, 0)
         for i in range(1, 10):
             opt.iter_counter(None, None)
@@ -260,8 +298,7 @@ class OptimizerTestCase(SimpleTestCase):
             ]
         }
 
-        opt = Optimizer(0)
-        opt.parseJSON(rectangle_json, wall_json, preferred_spacing, poly_json)
+        opt = Optimizer(rectangle_json, wall_json, preferred_spacing, poly_json, 0)
 
         x = [350, 150]
         for i, rect in enumerate(opt.optimized):
@@ -329,8 +366,7 @@ class OptimizerTestCase(SimpleTestCase):
             ]
         }
 
-        opt = Optimizer(0)
-        opt.parseJSON(rectangle_json, wall_json, preferred_spacing, poly_json)
+        opt = Optimizer(rectangle_json, wall_json, preferred_spacing, poly_json, 0)
 
         x = [150, 400]
         for i, rect in enumerate(opt.optimized):
@@ -404,8 +440,7 @@ class OptimizerTestCase(SimpleTestCase):
             ]
         }
 
-        opt = Optimizer(0)
-        opt.parseJSON(rectangle_json, wall_json, preferred_spacing, poly_json)
+        opt = Optimizer(rectangle_json, wall_json, preferred_spacing, poly_json, 0)
 
         x = [100, 100]
         for i, rect in enumerate(opt.optimized):
@@ -469,8 +504,7 @@ class OptimizerTestCase(SimpleTestCase):
             ]
         }
 
-        opt = Optimizer(0)
-        opt.parseJSON(rectangle_json, wall_json, preferred_spacing, poly_json)
+        opt = Optimizer(rectangle_json, wall_json, preferred_spacing, poly_json, 0)
 
         x = [350, 150]
         isvalid = opt.isvalid(x)

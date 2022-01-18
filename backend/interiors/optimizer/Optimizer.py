@@ -10,9 +10,71 @@ from interiors.tasks.status import taskStatuses
 
 
 class Optimizer:
-    def __init__(self, task_id):
+    def __init__(
+        self, rectangle_json, wall_json, preferred_spacing, poly_json, task_id
+    ):
         self.counter = 0
         self.task_id = task_id
+        self.parseRectangles(rectangle_json)
+        self.parseWall(wall_json)
+        self.parsePoly(poly_json)
+
+        self.spacing = preferred_spacing
+        width = self.max_x - self.min_x
+        height = self.max_y - self.min_y
+        self.scale = max(width, height) / self.spacing
+        self.poly_scale = self.scale
+        self.overlap_punishment_factor = (
+            len(self.fixed + self.optimized) ** 2 * self.scale
+        )
+
+    def parseRectangles(self, rectangle_json):
+        self.optimized = []
+        self.fixed = []
+
+        for rect_data in rectangle_json[0]:
+            rect = Rectangle(
+                float(rect_data["width"]),
+                float(rect_data["height"]),
+                Point(
+                    float(rect_data["offset"]["left"]),
+                    float(rect_data["offset"]["top"]),
+                ),
+            )
+            rect.center.x += rect.width / 2
+            rect.center.y += rect.height / 2
+
+            if rect_data["parent"] == "spawn_zone":
+                self.optimized.append(rect)
+            else:
+                self.fixed.append(rect)
+
+    def parseWall(self, wall_json):
+        wall = Wall()
+        wall.parseJSON(wall_json)
+        self.hastopleft = wall.topleft
+        if self.hastopleft:
+            self.topleftparams = wall.topleftparams
+        self.hastopright = wall.topright
+        if self.hastopright:
+            self.toprightparams = wall.toprightparams
+        self.min_y = wall.top
+        self.min_x = wall.left
+        self.max_y = wall.bottom
+        self.max_x = wall.right
+        self.wall = wall.holes
+
+    def parsePoly(self, poly_json):
+        if len(poly_json["vertices"]) == 0:
+            self.hasPoly = False
+            return
+
+        self.poly = mpltPath.Path(
+            np.array([[i["x"], i["y"]] for i in poly_json["vertices"]])
+        )
+        self.polycentroid = np.mean(self.poly.vertices, axis=0)
+        self.polycentroid = Point(self.polycentroid[0], self.polycentroid[1])
+        self.hasPoly = True
 
     def rect2rect(self):
         # Punishment for distances between rectangles
@@ -58,14 +120,14 @@ class Optimizer:
             # Punishment for being too close to diagonal wall boundaries
             dtopleft = (
                 self.spacing
-                if not self.topleft
+                if not self.hastopleft
                 else self.topleftparams[0] * left
                 + self.topleftparams[1] * top
                 + self.topleftparams[2]
             )
             dtopright = (
                 self.spacing
-                if not self.topright
+                if not self.hastopright
                 else self.toprightparams[0] * right
                 + self.toprightparams[1] * top
                 + self.toprightparams[2]
@@ -105,7 +167,8 @@ class Optimizer:
 
         error += self.rect2rect()
         error += self.rect2wall()
-        error += self.rect2poly()
+        if self.hasPoly:
+            error += self.rect2poly()
 
         return error
 
@@ -125,24 +188,22 @@ class Optimizer:
             left = rect.center.x - rect.halfwidth
             right = rect.center.x + rect.halfwidth
             top = rect.center.y - rect.halfheight
-            bottom = rect.center.y + rect.halfheight
 
             dtopleft = (
                 self.spacing
-                if not self.topleft
+                if not self.hastopleft
                 else self.topleftparams[0] * left
                 + self.topleftparams[1] * top
                 + self.topleftparams[2]
             )
             dtopright = (
                 self.spacing
-                if not self.topright
+                if not self.hastopright
                 else self.toprightparams[0] * right
                 + self.toprightparams[1] * top
                 + self.toprightparams[2]
             )
-            d = min(dtopleft, dtopright)
-            if d < 0:
+            if dtopleft < 0 or dtopright < 0:
                 return False
 
             # Overlapping rectangular hole
@@ -182,73 +243,12 @@ class Optimizer:
             strategy=STRATEGY,
             mutation=MUTATION,
             callback=self.iter_counter,
-            disp=True,
+            disp=False,
             workers=4,
             updating="deferred",
         )
 
         return res.x
-
-    def parseJSON(self, rectangle_json, wall_json, preferred_spacing, poly_json):
-        # parse rectangles
-        self.optimized, self.fixed = parseRectangles(rectangle_json)
-
-        # parse polygon
-        self.poly = mpltPath.Path(
-            np.array([[i["x"], i["y"]] for i in poly_json["vertices"]])
-        )
-        self.polycentroid = np.mean(self.poly.vertices, axis=0)
-        self.polycentroid = Point(self.polycentroid[0], self.polycentroid[1])
-
-        # parse wall
-        wall = Wall()
-        wall.parseJSON(wall_json)
-        self.topleft = wall.topleft
-        if self.topleft:
-            self.topleftparams = wall.topleftparams
-        self.topright = wall.topright
-        if self.topright:
-            self.toprightparams = wall.toprightparams
-        self.min_y = wall.top
-        self.min_x = wall.left
-        self.max_y = wall.bottom
-        self.max_x = wall.right
-        self.wall = wall.holes
-
-        # set remaining attributes
-        self.spacing = abs(preferred_spacing)
-        width = self.max_x - self.min_x
-        height = self.max_y - self.min_y
-        self.scale = max(width, height) / self.spacing
-        self.poly_scale = self.scale
-        self.overlap_punishment_factor = (
-            len(self.fixed + self.optimized) ** 2 * self.scale
-        )
-
-def parseRectangles(rectangle_json):
-    rectangles = []
-    fixed_rectangles = []
-
-    # parse rectangles
-    for rect_data in rectangle_json[0]:
-        rect = Rectangle(
-            float(rect_data["width"]),
-            float(rect_data["height"]),
-            Point(
-                float(rect_data["offset"]["left"]),
-                float(rect_data["offset"]["top"]),
-            ),
-        )
-        rect.center.x += rect.width / 2
-        rect.center.y += rect.height / 2
-
-        if rect_data["parent"] == "spawn_zone":
-            rectangles.append(rect)
-        else:
-            fixed_rectangles.append(rect)
-
-    return rectangles, fixed_rectangles
-
 
 
 def updateJSON(rectangle_json, res):
@@ -263,11 +263,7 @@ def updateJSON(rectangle_json, res):
 
 
 def place_rectangles(rectangle_json, wall_json, preferred_spacing, poly_json, task_id):
-    opt = Optimizer(task_id)
-    opt.parseJSON(rectangle_json, wall_json, preferred_spacing, poly_json)
-
-    if len(opt.optimized) == 0:
-        return rectangle_json
+    opt = Optimizer(rectangle_json, wall_json, preferred_spacing, poly_json, task_id)
 
     res = opt.optimize()
     is_valid = opt.isvalid(res)

@@ -39,6 +39,7 @@ export default class ProgressWindow extends Component {
                 <p>Trwa rozmieszczanie...</p>
                 <ProgressBar 
                     completed={this.state.progress} 
+                    transitionDuration='0.5s'
                 />
             </Modal>
         )
