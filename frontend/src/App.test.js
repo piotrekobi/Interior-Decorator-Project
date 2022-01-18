@@ -41,7 +41,8 @@ test('Properly removes rectangle', () => {
 test('Properly returns rectangle data', () => {
     let expectedRectangles = [
         {
-          id: undefined,       
+          id: undefined,
+          imageURL: undefined,       
           parent: 'spawn_zone',
           width: 1,
           height: 2,
@@ -50,6 +51,7 @@ test('Properly returns rectangle data', () => {
         },
         {
           id: undefined,
+          imageURL: undefined,
           parent: 'spawn_zone',
           width: 3,
           height: 2,
@@ -58,6 +60,7 @@ test('Properly returns rectangle data', () => {
         },
         {
           id: undefined,
+          imageURL: undefined,
           parent: 'spawn_zone',
           width: 1,
           height: 3,
@@ -79,6 +82,7 @@ test('Properly sets rectangle data', () => {
     let rectangleData = [
         {
           id: undefined,       
+          imageURL: undefined,
           parent: 'spawn_zone',
           width: 1,
           height: 2,
@@ -87,6 +91,7 @@ test('Properly sets rectangle data', () => {
         },
         {
           id: undefined,
+          imageURL: undefined,
           parent: 'spawn_zone',
           width: 3,
           height: 2,
@@ -95,6 +100,7 @@ test('Properly sets rectangle data', () => {
         },
         {
           id: undefined,
+          imageURL: undefined,
           parent: 'spawn_zone',
           width: 1,
           height: 3,
