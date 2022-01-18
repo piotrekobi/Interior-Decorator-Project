@@ -155,8 +155,19 @@ class Optimizer:
         # Punishment for rectangles outside preferred polygon
         error = 0
         for rect in self.optimized:
-            if not self.poly.contains_point((rect.center.x, rect.center.y)):
-                error += rect.center.dist(self.polycentroid)
+            vertices = np.array(
+                [
+                    [rect.center.x - i, rect.center.y - j]
+                    for i in [rect.halfwidth, -rect.halfwidth]
+                    for j in [rect.halfheight, -rect.halfheight]
+                ]
+            )
+            inside_count = np.sum(self.poly.contains_points(vertices))
+            error += (4-inside_count)*rect.center.dist(self.polycentroid)
+            # if not self.poly.contains_point((rect.center.x, rect.center.y)):
+            #     error += rect.center.dist(self.polycentroid)
+            # if not self.poly.contains_point((rect.center.x, rect.center.y)):
+            #     error += rect.center.dist(self.polycentroid)
         return error * self.poly_scale
 
     def obj_func(self, x):
