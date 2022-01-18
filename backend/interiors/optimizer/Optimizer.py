@@ -237,7 +237,7 @@ class Optimizer:
             strategy=STRATEGY,
             mutation=MUTATION,
             callback=self.iter_counter,
-            disp=True,
+            disp=False,
             workers=4,
             updating="deferred",
         )
