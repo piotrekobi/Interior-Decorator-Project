@@ -29,24 +29,7 @@ def optimizer(request):
             data = json.loads(request.body)
             logger.info(f"Incoming rectangle request:\n\t{data}")
             poly_json = {
-                "vertices": [
-                    {
-                        "x": 50,
-                        "y": 50
-                    },
-                    {
-                        "x": 300,
-                        "y": 50
-                    },
-                    {
-                        "x": 300,
-                        "y": 500
-                    },
-                    {
-                        "x": 50,
-                        "y": 500
-                    }
-                ]
+                "vertices": []
             }
             rectangle_data, is_valid = place_rectangles([data[0]['rectangle_json']], data[0]['wall_json'], data[0]['preferred_spacing'], poly_json, data[0]['task_id'])
             rectangle_data.append({"is_valid": is_valid})
@@ -56,8 +39,9 @@ def optimizer(request):
             return HttpResponse(rectangle_data)
         else:
             raise NoRectangleData
-    except NoRectangleData:
-        return HttpResponse("No rectangle data exception")
+    except Exception as e:
+        invalid_result = json.dumps([{}, False])
+        return HttpResponse(invalid_result)
 
 @csrf_exempt
 def getProgress(request):
