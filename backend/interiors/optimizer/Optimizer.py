@@ -431,6 +431,14 @@ class Optimizer:
 
 
 def updateJSON(rectangle_json, res):
+    """Updates object representing rectangles with the result of DE.
+    
+    Parameters:
+        rectangle_json: object
+            Original objet used when initializing Optimizer class.
+        res: np.array(float)
+            Result returned by Optimizer.optimize
+    """
     i = 0
     for rect_data in rectangle_json[0]:
         if rect_data["parent"] == "spawn_zone":
@@ -442,6 +450,21 @@ def updateJSON(rectangle_json, res):
 
 
 def place_rectangles(rectangle_json, wall_json, preferred_spacing, poly_json, task_id):
+    """Calculates the best arrangement of given rectangles by using differential evolution, 
+    and returns updated object representing rectangle placement.
+
+    Parameters:
+        rectangle_json : object
+            Object containing fixed and optimized rectangle information. Should be of the format described in Optimizer.parseRectangles()
+        wall_json: object
+            Object containing wall information. Should be of the format described in Wall.parseJSON.
+        preferred_spacing: float
+            Preferred space between neighbouring rectangles.
+        poly_json: object
+            Object containing preferred polygon information. Should be of the format described Optimizer.parsePoly().
+        task_id: str
+            Unique id identifying given problem.
+    """
     opt = Optimizer(rectangle_json, wall_json, preferred_spacing, poly_json, task_id)
 
     res = opt.optimize()
