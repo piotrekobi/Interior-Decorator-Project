@@ -1,18 +1,85 @@
+"""Defines classes representing data for use in Optimizer module
+
+Classes:
+    Point
+    Rectangle
+    Wall
+"""
+
+
 from math import sqrt
 from itertools import combinations
 
 
 class Point:
+    """Represents a point on a 2d cartesian plane.
+
+        Attributes:
+            x : float
+                first point coordinate
+            y: float
+                second point coordinate
+
+        Methods:
+            dist(other):
+                Calculates and returns a distance to another point
+
+    """
     def __init__(self, x, y):
+        """Constructs a point
+        
+        Parameters:
+            x : float
+                first point coordinate
+            y: float
+                second point coordinate
+        """
         self.x = x
         self.y = y
 
     def dist(self, other):
+        """Calculates and returns a euclidian distance to another point
+
+        Parameters:
+            other: Point
+                the other point
+        """
         return sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
 
 
 class Rectangle:
+    """Represents a rectangle. For better performance data integrity is not checked.
+
+        Attributes:
+            width : float
+                width of the rectangle
+            height: float
+                height of the rectangle
+            halfwidth: float
+                half of width, used to decrease the ammount of divisions when arranging rectangles
+            halfheight: float
+                half of height, used to decrease the ammount of divisions when arranging rectangles
+            center: Point
+                center of the rectangle
+
+        Methods:
+            overlaps(other):
+                Calculates whether it overlaps another rectangle and returns the result.
+            spacebetween(other):
+                Calculates and returns the smallest distance between edges of self and other, in either the x or y direction.
+
+        """
     def __init__(self, width, height, center):
+        """Constructs a rectangle
+        
+        Parameters:
+            width : float
+                width of the rectangle
+            height: float
+                height of the rectangle
+            center: Point
+                center of the rectangle
+        """
         self.halfwidth = width / 2
         self.halfheight = height / 2
         self.width = width
@@ -20,20 +87,74 @@ class Rectangle:
         self.center = center
 
     def overlaps(self, other):
+        """Calculates whether it overlaps another rectangle and returns the result.
+        Return is the same as self.spacebetween(other) < 0"""
         return self.spacebetween(other) < 0
 
     def spacebetween(self, other):
+        """Calculates and returns the smallest distance between edges of self and other, in either the x or y direction.
+        The distance is calculated as euclidian distance between lines going through the edges of rectangles.
+        If self and other overlap, distance returned is negative.
+        
+        Parameters:
+            other : Rectangle
+                the other rectangle
+        """
         d1 = abs(self.center.x - other.center.x) - self.halfwidth - other.halfwidth
         d2 = abs(self.center.y - other.center.y) - self.halfheight - other.halfheight
         return max(d1, d2)
 
 
 class Wall:
+    """Represents a wall.
+
+    Attributes:
+        top : float
+            Minimum y coordinate of the bounding rectangle of the wall. 
+        bottom: float
+            Maximum y coordinate of the bounding rectangle of the wall. 
+        left: float
+            Minimum x coordinate of the bounding rectangle of the wall. 
+        right: float
+            Maximum x coordinate of the bounding rectangle of the wall. 
+        topleft: boolean
+            Whether wall has the topleft segment
+        topright: boolean
+            Whether wall has the topright segment
+        (optional)
+            topleftparams: [float, float, float]
+                If topleft == true, contains a list of parameters [a, b, c] representing a line equation a*x + b*y + c = 0.
+                Represented line goes through the top-left, diagonal segment of the wall.
+            toprightparams: [Point, Point]
+                If topright == true, contains a list of parameters [a, b, c] representing a line equation a*x + b*y + c = 0.
+                Represented line goes through the top-right, diagonal segment of the wall.
+            holes: list(Rectangle)
+                List of rectangular holes in the wall, given as instances of class Rectangle.
+
+    Methods:
+        parseJSON(data):
+            Calculates object attributes based on a JSON object 'data'.
+
+    """
     def __init__(self):
         pass
 
     def parseJSON(self, data):
-        self.top = data["top"]
+        """Calculates object attributes based on a JSON object 'data'.
+
+        Parameters:
+            data: object
+                object representing wall data. Should contain following entries:
+                {
+                    "top": float
+                    "bottom": float
+                    "left": float
+                    "rigth": float
+                    "topleft": [] or [Point p1, Point p2], where p1.x < p2.x and p1.y > p2.y
+                    "topleft": [] or [Point p1, Point p2], where p1.x < p2.x and p1.y < p2.y
+                    "holes": [] or list(Rectangle)
+                }
+        """
         self.bottom = data["bottom"]
         self.left = data["left"]
         self.right = data["right"]
@@ -86,73 +207,3 @@ class Wall:
             self.toprightparams = [a, b, c]
         else:
             self.topright = False
-
-
-
-
-# class Segment:
-#     def __init__(self, point1, point2):
-#         self.point1 = point1
-#         self.point2 = point2
-
-#     def intersects(self, other):
-#         if isinstance(other, Segment):
-#             AB = self
-#             CD = other
-#             AC = Segment(AB.point1, CD.point1)
-#             BC = Segment(AB.point2, CD.point1)
-#             BD = Segment(AB.point2, CD.point2)
-
-#             ACD = AC.crossProduct(CD)
-#             BCD = BC.crossProduct(CD)
-#             ABC = AB.crossProduct(BC)
-#             ABD = AB.crossProduct(BD)
-
-#             return ACD * BCD < 0 and ABC * ABD < 0
-#         else:
-#             raise Exception(f"{other} is not an instance of class Segment.")
-
-#     def crossProduct(self, other):
-#         # Cross product of segments
-#         if isinstance(other, Segment):
-#             v1 = self.point2 - self.point1
-#             v2 = other.point2 - other.point1
-#             return v1.crossProduct(v2)
-#         else:
-#             raise Exception(f"{other} is not an instance of class Segment.")
-
-
-# class Polygon:
-#     def __init__(self, points):
-#         if isinstance(points, list):
-#             for point in points:
-#                 if not isinstance(point, Point):
-#                     raise Exception(f"{points} is not a list of Points.")
-
-#             self.points = points
-
-#         else:
-#             raise Exception(f"{points} is not a list of Points.")
-
-#     def isconvex(self):
-#         previous_dir = 0
-#         current_dir = 0
-#         n = len(self.points)
-#         for i in range(n):
-#             v1 = self.points[(i + 1) % n] - self.points[i % n]
-#             v2 = self.points[(i + 2) % n] - self.points[(i + 1) % n]
-#             current_dir = v1.crossProduct(v2)
-
-#             if current_dir == 0 or current_dir * previous_dir < 0:
-#                 return False
-#             previous_dir = current_dir
-
-#         return True
-
-#     def isintersecting(self):
-#         n = len(self.points)
-#         segments = [Segment(self.points[i], self.points[(i + 1) % n]) for i in range(n)]
-#         for segment1, segment2 in combinations(segments, 2):
-#             if segment1.intersects(segment2):
-#                 return True
-#         return False
