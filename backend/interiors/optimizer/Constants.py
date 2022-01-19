@@ -1,3 +1,5 @@
+"""Contains definitions of constants used as parameters in scipy.scipy.optimize.differential_evolution"""
+
 MAXITER=180
 SEED=1
 POPSIZE=32
