@@ -93,6 +93,20 @@ class Optimizer:
     def __init__(
         self, rectangle_json, wall_json, preferred_spacing, poly_json, task_id
     ):
+        """Constructs an optimizer used for solving an instance of the problem
+        
+        Parameters:
+            rectangle_json : object
+                Object containing fixed and optimized rectangle information. Should be of the format described in parseRectangles()
+            wall_json: object
+                Object containing wall information. Should be of the format described in Wall.parseJSON.
+            preferred_spacing: float
+                Preferred space between neighbouring rectangles.
+            poly_json: object
+                Object containing preferred polygon information. Should be of the format described parsePoly().
+            task_id: str
+                Unique id identifying given problem.
+        """
         self.counter = 0
         self.task_id = task_id
         self.parseRectangles(rectangle_json)
@@ -115,6 +129,30 @@ class Optimizer:
         )
 
     def parseRectangles(self, rectangle_json):
+        """Parses rectangle information from a JSON object.
+        
+        Parameters:
+            rectangle_json : object
+                Object containing fixed and optimized rectangle information. Should be of the following format:
+                [[
+                    rect1,
+                    rect2,
+                    ...,
+                    rectn    
+                ]],
+                Where recti should look like:
+                {
+                    "width": float
+                    "height": float
+                    "offset": {
+                        "x": float
+                        "y": float
+                    }
+                    "parent": "spawn_zone" or "drag_zone"
+                }
+                Offset of the rectangle represents the top-left vertex (smallest x and y coordinates), not the center of the rectangle.
+                Parent string describes whether the rectangle position should be calculated: "drag_zone" rectangles are fixed, while "spawn_zone" rectangles are optimized.
+        """
         self.optimized = []
         self.fixed = []
 
@@ -136,6 +174,12 @@ class Optimizer:
                 self.fixed.append(rect)
 
     def parseWall(self, wall_json):
+        """Parses rectangle information from a JSON object.
+        
+        Parameters:
+            wall_json : object
+                Object containing wall information. Should be of the format described in Wall.parseJSON.
+        """
         wall = Wall()
         wall.parseJSON(wall_json)
         self.hastopleft = wall.topleft
@@ -151,6 +195,21 @@ class Optimizer:
         self.wall = wall.holes
 
     def parsePoly(self, poly_json):
+        """Object containing preferred polygon information. Should be of the following format:
+            {
+                "vertices" : [
+                    v1,
+                    v2,
+                    ...,
+                    vn
+                ]
+            }
+            Where vi should look like:
+                {
+                    "x": float
+                    "y": float
+                }
+        """
         if len(poly_json["vertices"]) == 0:
             self.hasPoly = False
             return
@@ -161,6 +220,12 @@ class Optimizer:
         self.hasPoly = True
 
     def rect2rect(self):
+        """Calculates punishment for distances between rectangles.
+        The punishment consists of the following, calculated for each pair of different rectangles:
+            punishment for rectangles being further away from each other than preferred spacing.
+            punishment for rectangles being closer to each other than preferred spacing.
+            punishment for rectangles overlapping each other.
+        """
         # Punishment for distances between rectangles
         overlap_error = 0
         gap_small_error = 0
@@ -183,6 +248,13 @@ class Optimizer:
         )
 
     def rect2wall(self):
+        """Calculates punishment for distances between rectangles and wall segments/holes.
+        The punishment consists of the following, calculated for each optimized rectangle:
+            punishment for rectangle being closer to wall bounding rectangle than preferred spacing.
+            punishment for rectangle being closer to wall holes than preferred spacing.
+            punishment for rectangle being closer to diagonal wall edges than preferred spacing.
+            punishment for rectangle overlapping wall holes.
+        """
         overlap_error = 0
         gap_small_error = 0
         for rect in self.optimized:
@@ -236,6 +308,8 @@ class Optimizer:
         )
 
     def rect2poly(self):
+        """Calculates punishment for rectangle vertices outside preferred polygon.
+        Punishment is scaled for each vertex, based on the area of the polygon to which it belongs."""
         # Punishment for rectangle vertices outside preferred polygon
         vertices = np.array(
             [
@@ -249,6 +323,13 @@ class Optimizer:
         return error
 
     def obj_func(self, x):
+        """Minimized objective function.
+        
+        Parameters:
+            x: np.array(float) of size 2*len(optimized)
+                Position of the optimized rectangles in evaluated solution, given as an array of coordinates.
+                The coordinates are given alternately, i.e. x = [x0, y0, x1, y1, ..., xn, yn]
+        """
         error = 0
 
         for i, rect in enumerate(self.optimized):
@@ -262,6 +343,13 @@ class Optimizer:
         return error
 
     def isvalid(self, x):
+        """Checks whether given solution is valid (i.e. rectangles don't overlap each other or are outside the wall)
+        
+        Parameters:
+            x: np.array(float) of size 2*len(optimized)
+                Position of the optimized rectangles in evaluated solution, given as an array of coordinates.
+                The coordinates are given alternately, i.e. x = [x0, y0, x1, y1, ..., xn, yn]
+        """
         for i, rect in enumerate(self.optimized):
             rect.center = Point(x[2 * i], x[2 * i + 1])
 
@@ -304,11 +392,13 @@ class Optimizer:
         return True
 
     def iter_counter(self, xk=None, convergence=None):
+        """Increases counter attribute by one"""
         self.counter += 1
         progress = round((self.counter / MAXITER) * 100)
         taskStatuses.setProgress(self.task_id, progress)
 
     def optimize(self):
+        """Finds best solution of the initialized problem by means of DE."""
         my_bounds = opt.Bounds(
             [
                 b
