@@ -1,3 +1,5 @@
+"""Contains optimizer packaged unit tests"""
+
 from django.test import SimpleTestCase
 from copy import deepcopy
 from interiors.optimizer.Geometry import *
