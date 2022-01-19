@@ -158,6 +158,7 @@ class Wall:
         self.bottom = data["bottom"]
         self.left = data["left"]
         self.right = data["right"]
+        self.top = data["top"]
 
         self.topleft = [Point(i["x"], i["y"]) for i in data["topleft"]]
         self.topright = [Point(i["x"], i["y"]) for i in data["topright"]]
