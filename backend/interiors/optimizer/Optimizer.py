@@ -19,11 +19,15 @@ class Optimizer:
         self.parseWall(wall_json)
         self.parsePoly(poly_json)
 
+        self.areas = np.array([rect.width*rect.height for rect in self.optimized for i in range(4)])
+        self.minArea = np.min(self.areas)
+
         self.spacing = preferred_spacing
         width = self.max_x - self.min_x
         height = self.max_y - self.min_y
         self.scale = max(width, height) / self.spacing
-        self.poly_scale = self.scale
+        self.poly_scale = self.scale / self.minArea
+        self.areaerror = self.poly_scale * self.areas
         self.overlap_punishment_factor = (
             len(self.fixed + self.optimized) ** 2 * self.scale
         )
@@ -72,8 +76,6 @@ class Optimizer:
         self.poly = mpltPath.Path(
             np.array([[i["x"], i["y"]] for i in poly_json["vertices"]])
         )
-        self.polycentroid = np.mean(self.poly.vertices, axis=0)
-        self.polycentroid = Point(self.polycentroid[0], self.polycentroid[1])
         self.hasPoly = True
 
     def rect2rect(self):
@@ -154,9 +156,8 @@ class Optimizer:
     def rect2poly(self):
         # Punishment for rectangle vertices outside preferred polygon
         vertices = np.array([[rect.center.x -i, rect.center.y - j] for rect in self.optimized for i in [rect.halfwidth, -rect.halfwidth] for j in [rect.halfheight, -rect.halfheight]])
-        inside_count = np.sum(self.poly.contains_points(vertices, radius=self.spacing))
-        error = (4*len(self.optimized)-inside_count)
-        return error * self.poly_scale
+        error = np.sum(self.areaerror[~self.poly.contains_points(vertices)])
+        return error
 
     def obj_func(self, x):
         error = 0
@@ -242,6 +243,7 @@ class Optimizer:
             strategy=STRATEGY,
             mutation=MUTATION,
             callback=self.iter_counter,
+            tol = TOL,
             workers=WORKERS,
             updating="deferred",
         )
