@@ -1,3 +1,14 @@
+"""Calculates the best arrangement of given rectangles by using differential evolution.
+
+Classes:
+    Optimizer
+
+Functions:
+    place_rectangles(object, object, float, object, str) -> np.array
+    updateJSON(in-out object, np.array)
+"""
+
+
 from itertools import combinations
 from math import sqrt
 import numpy as np
@@ -10,6 +21,75 @@ from interiors.tasks.status import taskStatuses
 
 
 class Optimizer:
+    """Contains data representing the whole arrangement problem, and calculates a good solution by means of differential evolution (DE).
+
+    Attributes:
+        counter : int
+            Number of completed DE iterations (starts at 0).
+        task_id: str
+            Task id used when reporting progress.
+
+        fixed: list(Rectangle)
+            List of rectangles whose position is fixed (i.e. not changed by the optimizer)
+        optimized: list(Rectangle)
+            List of rectangle whose position is solved for.
+
+        min_x, min_y, max_x, max_y: float
+            Respectively the minimum and maximum x and y coordinates of the wall bounding rectangle.
+        width: float
+            Width of the bounding rectangle of the wall
+        height: float
+            Height of the bounding rectangle of the wall
+        wall: list(Rectangle)
+            List of rectangular holes in the wall.
+        hastopleft, hastopright: boolean
+            Whether wall contains diagonal segments
+        topleftparams, toprightparams: [float, float, float]
+            Corresponding attributes of the given wall, as in Wall class.
+
+        poly: matplotlib.path.Path
+            Preferred polygon represented as a matplotlib Path.
+        hasPoly: boolean
+            Whether preferred polygon in given.
+
+        areas: np.array(float)
+            Contains areas of optimized rectangles. For ease of use in the algorithm each area is repeated 4 times (size(areas) = 4*size(optimized))
+        minArea: float
+            Smallest area in `areas`
+
+        spacing: float
+            Preferred space between neighbouring rectangles.
+        scale: float
+            Scaling factor of punishment for space too small between rectangles.
+        poly_scale: float
+            Scaling factor of punishment for rectangle vertices outside preferred polygon.
+        overlap_punishment_factor: float
+            Scaling factor of punishment for overlapping rectangles.
+
+
+    Methods:
+        parseRectangles(rectange_json):
+            Calculates attributes based on json object.
+        parseWall(rectange_json):
+            Calculates attributes based on json object.
+        parsePoly(rectange_json):
+            Calculates attributes based on json object.
+        rect2rect():
+            Calculates punishment for distances between rectangles.
+        rect2wall():
+            Calculates punishment for distances between rectangles and wall segments/holes.
+        rect2poly():
+            Calculates punishment for rectangle vertices outside preferred polygon.
+        obj_func(x):
+            Minimized objective function.
+        isvalid(x):
+            Checks whether given solution is valid (i.e. rectangles don't overlap each other or are outside the wall)
+        iter_counter():
+            Increases counter attribute by one
+        optimize():
+            Finds best solution of the given problem by means of DE.
+    """
+
     def __init__(
         self, rectangle_json, wall_json, preferred_spacing, poly_json, task_id
     ):
@@ -19,7 +99,9 @@ class Optimizer:
         self.parseWall(wall_json)
         self.parsePoly(poly_json)
 
-        self.areas = np.array([rect.width*rect.height for rect in self.optimized for i in range(4)])
+        self.areas = np.array(
+            [rect.width * rect.height for rect in self.optimized for i in range(4)]
+        )
         self.minArea = np.min(self.areas)
 
         self.spacing = preferred_spacing
@@ -155,7 +237,14 @@ class Optimizer:
 
     def rect2poly(self):
         # Punishment for rectangle vertices outside preferred polygon
-        vertices = np.array([[rect.center.x -i, rect.center.y - j] for rect in self.optimized for i in [rect.halfwidth, -rect.halfwidth] for j in [rect.halfheight, -rect.halfheight]])
+        vertices = np.array(
+            [
+                [rect.center.x - i, rect.center.y - j]
+                for rect in self.optimized
+                for i in [rect.halfwidth, -rect.halfwidth]
+                for j in [rect.halfheight, -rect.halfheight]
+            ]
+        )
         error = np.sum(self.areaerror[~self.poly.contains_points(vertices)])
         return error
 
@@ -243,7 +332,7 @@ class Optimizer:
             strategy=STRATEGY,
             mutation=MUTATION,
             callback=self.iter_counter,
-            tol = TOL,
+            tol=TOL,
             workers=WORKERS,
             updating="deferred",
         )
