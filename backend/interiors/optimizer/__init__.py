@@ -1,2 +1,6 @@
-# Autor: Miłosz Kasak
-# Implementacja algorytmu mutacyjnego, który ma za zadanie rozmieszczać prostokąty na ścianie.
+"""Arrange rectangles on polygonal walls
+
+Modules:
+    Geometry
+    Optimizer
+"""
