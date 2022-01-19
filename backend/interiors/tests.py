@@ -151,8 +151,6 @@ class OptimizerTestCase(SimpleTestCase):
         vertices = np.array([[50, 50], [300, 50], [300, 500], [50, 500]])
 
         self.assertTrue(np.all(opt.poly.vertices == vertices))
-        self.assertEqual(opt.polycentroid.x, 175)
-        self.assertEqual(opt.polycentroid.y, 275)
 
         self.assertEqual(opt.hastopleft, False)
         self.assertEqual(opt.hastopright, True)
@@ -171,7 +169,7 @@ class OptimizerTestCase(SimpleTestCase):
         self.assertEqual(opt.max_x, 1050)
 
         self.assertEqual(opt.scale, 1000 / 30)
-        self.assertEqual(opt.poly_scale, opt.scale)
+        self.assertEqual(opt.poly_scale, opt.scale/(100*100))
         self.assertEqual(opt.overlap_punishment_factor, opt.scale * 4)
 
     def test_update(self):
@@ -442,7 +440,7 @@ class OptimizerTestCase(SimpleTestCase):
 
         opt = Optimizer(rectangle_json, wall_json, preferred_spacing, poly_json, 0)
 
-        x = [100, 100]
+        x = [150, 150]
         for i, rect in enumerate(opt.optimized):
             rect.center = Point(x[2 * i], x[2 * i + 1])
 
@@ -454,7 +452,7 @@ class OptimizerTestCase(SimpleTestCase):
             rect.center = Point(x[2 * i], x[2 * i + 1])
 
         error = opt.rect2poly()
-        self.assertEqual(error, 4 * opt.poly_scale)
+        self.assertEqual(error, 4 * 100*100*opt.poly_scale)
 
     def test_isvalid(self):
         rectangle_json = [
