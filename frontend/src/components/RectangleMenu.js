@@ -9,6 +9,7 @@ export default class RectangleMenu extends Component {
     this.widthBox = createRef();
     this.heightBox = createRef();
     this.colorBox = createRef();
+    this.uploadButton = createRef();
     this.imageUploadInput = createRef();
     this.state = {
       isModalOpen: false,
@@ -19,7 +20,7 @@ export default class RectangleMenu extends Component {
     this.setState({ isModalOpen: !this.state.isModalOpen });
   };
 
-  sendRectangleData = (callback) => {
+  sendRectangleData = (callback, callback2) => {
     let width = parseInt(this.widthBox.current.value);
     let height = parseInt(this.heightBox.current.value);
     let color = this.colorBox.current.value;
@@ -55,23 +56,30 @@ export default class RectangleMenu extends Component {
     };
   };
 
+  inputChange = () => {
+    if (this.imageUploadInput.current.files[0])
+      this.uploadButton.current.innerHTML = "Zmień / Usuń zdjęcie";
+    else this.uploadButton.current.innerHTML = "Prześlij zdjęcie";
+  };
+
   render() {
     return (
       <Modal open={this.state.isModalOpen} onClose={this.toggleModal}>
         <table className={styles.table}>
           <tr>
             <th>
-              Width:
+              <label className={styles.widthLabel}>Szerokość:</label>
+
               <input ref={this.widthBox} className={styles.textBox}></input>
             </th>
             <th>
-              Height:
+              <label className={styles.heightLabel}>Wysokość:</label>
               <input ref={this.heightBox} className={styles.textBox}></input>
             </th>
           </tr>
           <tr>
             <th>
-              Color:
+              Kolor:
               <input
                 ref={this.colorBox}
                 className={styles.colorPicker}
@@ -81,21 +89,23 @@ export default class RectangleMenu extends Component {
             <th>
               <div
                 className={styles.uploadButton}
+                ref={this.uploadButton}
                 onClick={() => {
                   this.imageUploadInput.current.click();
                 }}
               >
-                Upload image
+                Prześlij zdjęcie
               </div>
             </th>
           </tr>
         </table>
         <div className={styles.addButton} onClick={this.sendRectangleData}>
-          Add rectangle
+          Dodaj prostokąt
         </div>
         <input
           type="file"
           accept="image/*"
+          onChange={this.inputChange}
           ref={this.imageUploadInput}
           style={{ display: "none" }}
         />
