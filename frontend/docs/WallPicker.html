@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: MenuZone</title>
+    <title>JSDoc: Class: WallPicker</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: MenuZone</h1>
+    <h1 class="page-title">Class: WallPicker</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>MenuZone<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>WallPicker<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Component representing the application menu</div>
+            <div class="class-description">Component representing wall picking submenu.</div>
         
     
 </header>
@@ -45,7 +45,7 @@
     
 
     
-    <h4 class="name" id="MenuZone"><span class="type-signature"></span>new MenuZone<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="WallPicker"><span class="type-signature"></span>new WallPicker<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -93,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_MenuZone.js.html">components/MenuZone.js</a>, <a href="components_MenuZone.js.html#line7">line 7</a>
+        <a href="components_WallPicker.js.html">components/WallPicker.js</a>, <a href="components_WallPicker.js.html#line11">line 11</a>
     </li></ul></dd>
     
 
@@ -143,13 +143,13 @@
 
         
             
-<h4 class="name" id="getHeight"><span class="type-signature"></span>getHeight<span class="type-signature"></span></h4>
+<h4 class="name" id="handleWallSelection"><span class="type-signature"></span>handleWallSelection<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    Return height in pixels of the menu zone.
+    Handles mini-wall click event.
 </div>
 
 
@@ -187,7 +187,131 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_MenuZone.js.html">components/MenuZone.js</a>, <a href="components_MenuZone.js.html#line17">line 17</a>
+        <a href="components_WallPicker.js.html">components/WallPicker.js</a>, <a href="components_WallPicker.js.html#line77">line 77</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="renderWallsGrid"><span class="type-signature"></span>renderWallsGrid<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Renders mini walls grid to enable user to pick one of them
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_WallPicker.js.html">components/WallPicker.js</a>, <a href="components_WallPicker.js.html#line41">line 41</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="toggleModal"><span class="type-signature"></span>toggleModal<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Makes a component invisible (when visible) and vice versa.
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_WallPicker.js.html">components/WallPicker.js</a>, <a href="components_WallPicker.js.html#line23">line 23</a>
     </li></ul></dd>
     
 
@@ -208,6 +332,94 @@
 
     
         <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="componentDidMount"><span class="type-signature">(async) </span>componentDidMount<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Loads walls collection from the frontend static server.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_WallPicker.js.html">components/WallPicker.js</a>, <a href="components_WallPicker.js.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         
             
@@ -267,7 +479,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_MenuZone.js.html">components/MenuZone.js</a>, <a href="components_MenuZone.js.html#line25">line 25</a>
+        <a href="components_WallPicker.js.html">components/WallPicker.js</a>, <a href="components_WallPicker.js.html#line87">line 87</a>
     </li></ul></dd>
     
 

@@ -3,7 +3,11 @@ import Modal from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
 import styles from "./RectangleMenu.module.css";
 
-export default class RectangleMenu extends Component {
+/**
+ * Component representing menu with setting rectangles options like
+ * setting height. width, color or background image.
+ */
+class RectangleMenu extends Component {
   constructor(props) {
     super(props);
     this.widthBox = createRef();
@@ -15,10 +19,14 @@ export default class RectangleMenu extends Component {
     };
   }
 
+  /**
+    * Makes a component invisible (when visible) and vice versa.
+    */
   toggleModal = () => {
     this.setState({ isModalOpen: !this.state.isModalOpen });
   };
 
+  /** */
   sendRectangleData = (callback) => {
     let width = parseInt(this.widthBox.current.value);
     let height = parseInt(this.heightBox.current.value);
@@ -55,6 +63,10 @@ export default class RectangleMenu extends Component {
     };
   };
 
+  /**
+    * Renders HTML component code.
+    * @returns {HTML}
+    */
   render() {
     return (
       <Modal open={this.state.isModalOpen} onClose={this.toggleModal}>
@@ -103,3 +115,5 @@ export default class RectangleMenu extends Component {
     );
   }
 }
+
+export default RectangleMenu;
