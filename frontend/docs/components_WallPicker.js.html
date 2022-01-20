@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/WallPicker.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/WallPicker.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Component, createRef } from 'react';
+import Modal from 'react-responsive-modal'
+import 'react-responsive-modal/styles.css'
+import cloneDeep from 'lodash.clonedeep'
+
+
+/**
+ * Component representing wall picking submenu.
+ */
+class WallPicker extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            isModalOpen : false,
+        }
+        this.wallsJson = [];
+    }
+
+    /**
+     * Makes a component invisible (when visible) and vice versa.
+     */
+    toggleModal = () => {
+        this.setState({isModalOpen : !this.state.isModalOpen});
+    }
+
+    /**
+     * Loads walls collection from the frontend static server
+     * and sets the dafault wall.
+     */
+    async componentDidMount() {
+        this.props.loadWallsCollection()
+            .then(wallsJson => this.wallsJson = wallsJson)
+            .then(() => {this.props.onWallSelection(this.wallsJson[0])});
+    }
+
+    /**
+     * Renders mini walls grid to enable user to pick one of them
+     * @returns {HTML}
+     */
+    renderWallsGrid = () => {
+        var items = this.wallsJson.map((data, index) => {
+            return(
+                    &lt;th onClick={() => this.handleWallSelection(data)}>
+                        &lt;MiniWall specs={data}/>
+                    &lt;/th>
+            )
+        });
+
+        if(items.length !== 0)
+        {
+            var table = items.reduce((prev, curr, index) => {
+                if(index === 1)
+                {
+                    return [prev, curr];
+                }
+                else if(index%4 === 3)
+                {
+                    return [...prev.slice(0, -3),(
+                        &lt;tr>
+                            {[...prev.slice(-3), curr]}
+                        &lt;/tr>
+                    )]
+                }
+                else
+                {
+                    return [...prev, curr];
+                }
+            });     
+            return table
+        };
+    }
+
+    /**
+     * Handles mini-wall click event.
+     */
+    handleWallSelection = (specs) => {
+        this.props.onWallSelection(specs);
+        this.toggleModal();
+    }
+
+    /**
+     * Renders HTML component code.
+     * @returns {HTML}
+     */
+    render() {
+        return(
+            &lt;Modal open={this.state.isModalOpen} onClose={this.toggleModal}>
+                &lt;table>
+                    &lt;tbody>
+                        {this.renderWallsGrid()}
+                    &lt;/tbody>
+                &lt;/table>
+            &lt;/Modal>
+        )
+    }
+}
+
+export default WallPicker;
+
+/**
+ * Component representing mini-wall on the wall picking submenu grid.
+ */
+class MiniWall extends Component{
+    constructor(params){
+        super(params);
+        this.specs = params.specs;
+        this.canvas = createRef();
+    }
+
+    /**
+     * Draws mini-wall after component is mounted.
+     */
+    componentDidMount = () => {
+        var miniCtx = this.canvas.current.getContext("2d");
+        var points = cloneDeep(this.specs.vertices)
+
+        var prev_key = null;
+        miniCtx.beginPath();
+        miniCtx.lineWidth = 2;
+        for (var key in points){
+            points[key]['x'] = points[key]['x'] / 5;
+            points[key]['y'] = points[key]['y'] / 5;
+
+            miniCtx.moveTo(points[key]['x'], points[key]['y']);
+            if (prev_key != null){
+                miniCtx.lineTo(points[prev_key]['x'], points[prev_key]['y']);
+            }
+            miniCtx.stroke();
+            prev_key = key;
+        }
+        miniCtx.moveTo(points[0]['x'], points[0]['y']);
+        miniCtx.lineTo(points[prev_key]['x'], points[prev_key]['y']);
+        miniCtx.stroke();
+    }
+
+    /**
+     * Renders HTML component code.
+     * @returns {HTML}
+     */
+    render() {
+        return(
+            &lt;canvas ref={this.canvas}>&lt;/canvas>
+        )
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ArrangementMenu.html">ArrangementMenu</a></li><li><a href="Connector.html">Connector</a></li><li><a href="DragZone.html">DragZone</a></li><li><a href="IncorrectOrderAlert.html">IncorrectOrderAlert</a></li><li><a href="MenuZone.html">MenuZone</a></li><li><a href="MiniWall.html">MiniWall</a></li><li><a href="ProgressWindow.html">ProgressWindow</a></li><li><a href="Rectangle.html">Rectangle</a></li><li><a href="RectangleMenu.html">RectangleMenu</a></li><li><a href="SpawnZone.html">SpawnZone</a></li><li><a href="WallPicker.html">WallPicker</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Jan 20 2022 18:45:00 GMT+0100 (czas środkowoeuropejski standardowy)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

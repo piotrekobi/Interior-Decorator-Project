@@ -4,7 +4,10 @@ import 'react-responsive-modal/styles.css'
 import ProgressBar from "@ramonak/react-progress-bar";
 import styles from "./ProgressWindow.module.css"
 
-export default class ProgressWindow extends Component {
+/**
+ * Component showing the information about optimizing progress status
+ */
+class ProgressWindow extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -13,20 +16,34 @@ export default class ProgressWindow extends Component {
         }
     }
 
+    /**
+     * Makes the component visible.
+     */
     openModal = () => {
         this.setProgress(0);
         this.setState({isModalOpen : true});
     }
 
+    /**
+     * Makes the component invisible.
+     */
     closeModal = () => {
         this.setProgress(0);
         this.setState({isModalOpen : false});
     }
 
+    /**
+     * Sets information about the progress status on the progress bar.
+     * @param {number} progress 
+     */
     setProgress = (progress) => {
         this.setState({progress : progress});
     }
 
+    /**
+     * Renders HTML component code.
+     * @returns {HTML}
+     */
     render() {
         return(
             <Modal 
@@ -45,3 +62,5 @@ export default class ProgressWindow extends Component {
         )
     }
 }
+
+export default ProgressWindow;

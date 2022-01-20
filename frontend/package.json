@@ -26,7 +26,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "jsdoc": "jsdoc ./src/ ./src/components -d docs"
   },
   "eslintConfig": {
     "extends": [
@@ -47,6 +48,8 @@
     ]
   },
   "devDependencies": {
-    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6"
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
+    "jsdoc": "^3.6.7",
+    "react-doc-generator": "^1.2.5"
   }
 }

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/DragZone.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/DragZone.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Component, createRef } from "react";
+import styles from "./DragZone.module.css"
+import { DropTarget } from 'react-dnd'
+import { Types } from './Types.js'
+
+const CLOSE_DISTANCE = 10;
+
+const dragZoneTarget = {
+    drop(props, monitor, component) {
+        return {
+            position: monitor.getSourceClientOffset(),
+            parentString: "drag_zone"
+        };
+    }
+}
+
+function orientation(p, q, r) {
+    let val = (q.y - p.y) * (r.x - q.x) -
+            (q.x - p.x) * (r.y - q.y);
+  
+    if (val === 0) return 0; // collinear
+  
+    return (val > 0)? 1: 2; // clock or counterclock wise
+}
+
+function linesIntersect(a, b, c, d) {
+    // Checks, if lines ab and cd intersect
+    let o1 = orientation(a, b, c);
+    let o2 = orientation(a, b, d);
+    let o3 = orientation(c, d, a);
+    let o4 = orientation(c, d, b);
+  
+    // General case
+    if (o1 !== o2 &amp;&amp; o3 !== o4) {
+        return true;
+    }
+    return false;
+}
+
+function collect(connect, monitor) {
+    return {
+        connectDropTarget: connect.dropTarget(),
+    }
+}
+
+/**
+ * Component representing the application workspace
+ */
+class DragZone extends Component {
+    constructor(props) {
+        super(props);
+        this.mainCanvas = createRef();
+        this.divRef = createRef();
+    }
+
+    /**
+     * Executes after component is mounted.
+     */
+    componentDidMount() {
+        this.zoneVertices = [];
+        this.drawingActive = false;
+        this.mainCanvas.current.width = this.divRef.current.clientWidth;
+        this.mainCanvas.current.height = this.divRef.current.clientHeight;
+        this.mainCanvas.current.style.position = "absolute";
+    }
+
+    /**
+     * Allows to set wall from the outside.
+     * @param {*} wallJSON 
+     */
+    setWall = (wallJSON) => {
+        this.wallJSON = wallJSON;
+        // clear canvas &amp; redraw wall and zone
+        this.clearCanvas();
+        if (this.wallJSON !== undefined) {
+            this.drawWall(this.wallJSON);
+        }
+        if (this.zoneVertices.length > 0) {
+            this.drawZone(this.zoneVertices);
+        }
+    }
+
+    /**
+     * Returns actually set wall.
+     * @returns {JSON}
+     */
+    getWall = () => {
+        return this.wallJSON;
+    }
+
+    /**
+     * Enables drawing the zone, where rectangles are expected to be placed first.
+     */
+    activateDrawing = () => {
+        this.zoneVertices = [];
+        this.drawingActive = true;
+    }
+
+    /**
+     * Intersects a given point.
+     * @param {*} newPoint 
+     * @returns {bool}
+     */
+    intersects = (newPoint) => {
+        if (this.zoneVertices.length &lt;= 2) {
+            return false;
+        }
+        const lastPoint = this.zoneVertices[this.zoneVertices.length - 1];
+        for (let i = 1; i &lt; this.zoneVertices.length-1; i += 1) {
+            if (linesIntersect(this.zoneVertices[i-1], this.zoneVertices[i], lastPoint, newPoint)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Handles canvas click event during drawing the zone,
+     * where rectangles are expected to be placed first.
+     * @param {*} event 
+     */
+    handleCanvasClick = (event) => {
+        if (this.drawingActive) {
+            const currentCoord = { x: event.clientX,
+                                   y: event.clientY - this.offsetHeight };
+            if (this.zoneVertices.length > 0 &amp;&amp;
+                Math.abs(currentCoord.x - this.zoneVertices[0].x) &lt;= CLOSE_DISTANCE &amp;&amp;
+                Math.abs(currentCoord.y - this.zoneVertices[0].y) &lt;= CLOSE_DISTANCE) {
+                if (!this.intersects(this.zoneVertices[this.zoneVertices.length-1])) {
+                    this.drawingActive = false
+                }
+            }
+            else {
+                if (!this.intersects(currentCoord)) {
+                    this.zoneVertices = [...this.zoneVertices, currentCoord];
+                }
+            }
+            // clear canvas &amp; redraw wall and zone
+            this.clearCanvas();
+            if (this.wallJSON !== undefined) {
+                this.drawWall(this.wallJSON);
+            }
+            if (this.zoneVertices.length > 0) {
+                this.drawZone(this.zoneVertices);
+            }
+        }
+    }
+
+    /**
+     * Clears canvas.
+     */
+    clearCanvas = () => {
+        var ctx = this.mainCanvas.current.getContext("2d");
+        ctx.clearRect(0, 0, this.mainCanvas.current.width, this.mainCanvas.current.height);
+    }
+
+    /**
+     * Draws wall from the given information.
+     * @param {*} specs 
+     */
+    drawWall = (specs) => {
+        var vertices = specs.vertices;
+        var ctx = this.mainCanvas.current.getContext("2d");
+        ctx.strokeStyle = '#000000';
+        ctx.beginPath();
+
+        var prevKey;
+        for (var key in vertices) {
+            ctx.moveTo(vertices[key]['x'], vertices[key]['y']);
+            if (prevKey != null) {
+                ctx.lineTo(vertices[prevKey]['x'], vertices[prevKey]['y']);
+            }
+            ctx.stroke();
+            prevKey = key;
+        }
+        ctx.moveTo(vertices[0]['x'], vertices[0]['y']);
+        ctx.lineTo(vertices[prevKey]['x'], vertices[prevKey]['y']);
+        ctx.stroke();
+    }
+
+    /**
+     * Draws the zone, where rectangles are expected to be placed first.
+     * @param {*} vertices 
+     */
+    drawZone = (vertices) => {
+        var ctx = this.mainCanvas.current.getContext("2d");
+        ctx.strokeStyle = '#ff0000';
+        ctx.beginPath();
+
+        var prevKey;
+        for (var key in vertices) {
+            ctx.moveTo(vertices[key]['x'], vertices[key]['y']);
+            if (prevKey != null) {
+                ctx.lineTo(vertices[prevKey]['x'], vertices[prevKey]['y']);
+            }
+            ctx.stroke();
+            prevKey = key;
+        }
+        if (!this.drawingActive) {
+            ctx.moveTo(vertices[0]['x'], vertices[0]['y']);
+            ctx.lineTo(vertices[prevKey]['x'], vertices[prevKey]['y']);
+        }
+        ctx.stroke();
+    }
+
+    /**
+     * Returns the zone, where rectangles are expected to be placed first.
+     * @returns {*}
+     */
+    getZone = () => {
+        return { vertices: this.zoneVertices };
+    }
+
+    /**
+     * Renders HTML component code.
+     * @returns {HTML}
+     */
+    render() {
+        return this.props.connectDropTarget(
+            &lt;div className={styles.dragZone} ref={this.divRef}>
+                &lt;canvas ref={this.mainCanvas} onClick={this.handleCanvasClick}>&lt;/canvas>
+            &lt;/div>
+        )
+    }
+}
+
+export default DropTarget(
+    Types.RECTANGLE,
+    dragZoneTarget,
+    collect
+)(DragZone)</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ArrangementMenu.html">ArrangementMenu</a></li><li><a href="Connector.html">Connector</a></li><li><a href="DragZone.html">DragZone</a></li><li><a href="IncorrectOrderAlert.html">IncorrectOrderAlert</a></li><li><a href="MenuZone.html">MenuZone</a></li><li><a href="MiniWall.html">MiniWall</a></li><li><a href="ProgressWindow.html">ProgressWindow</a></li><li><a href="Rectangle.html">Rectangle</a></li><li><a href="RectangleMenu.html">RectangleMenu</a></li><li><a href="SpawnZone.html">SpawnZone</a></li><li><a href="WallPicker.html">WallPicker</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Jan 20 2022 18:45:00 GMT+0100 (czas środkowoeuropejski standardowy)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

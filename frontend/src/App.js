@@ -12,6 +12,9 @@ import ArrangementMenu from "./components/ArrangementMenu";
 import ProgressWindow from "./components/ProgressWindow";
 import IncorrectOrderAlert from "./components/IncorrectOrderAlert";
 
+/**
+ * The main class.
+ */
 class App extends Component {
   constructor(props) {
     super(props);
@@ -33,18 +36,31 @@ class App extends Component {
     ]);
   }
 
+  /**
+   * Executes after app is mounted.
+   */
   componentDidMount() {
     this.dragZone.current.getDecoratedComponentInstance().offsetHeight = this.menuZone.current.getHeight()
   }
 
+  /**
+   * Handles wall selection event.
+   * @param {*} specs 
+   */
   handleWallSelection = (specs) => {
     this.dragZone.current.getDecoratedComponentInstance().setWall(specs);
   };
 
+  /**
+   * Handles wall button click event.
+   */
   handleWallsClick = () => {
     this.wallPicker.current.toggleModal();
   };
 
+  /**
+   * Handles "save project" button click event.
+   */
   handleSaveClick = () => {
     const offsetHeight = this.menuZone.current.getHeight();
     var rectangle_json = this.spawnZone.current
@@ -69,11 +85,18 @@ class App extends Component {
     }, 0);
   };
 
+  /**
+   * Handles "load project" button click event.
+   */
   handleLoadClick = () => {
     this.uploadInput.current.value = null;
     this.uploadInput.current.click();
   };
 
+  /**
+   * Loads project from file.
+   * @param {*} callback 
+   */
   loadProject = (callback) => {
     var fileread = new FileReader();
     const offsetHeight = this.menuZone.current.getHeight();
@@ -97,20 +120,32 @@ class App extends Component {
     fileread.readAsText(this.uploadInput.current.files[0]);
   };
 
+  /**
+   * Handles "Rectangles" button click event.
+   */
   handleRectanglesClick = () => {
     this.rectangleMenu.current.toggleModal();
   };
 
+  /**
+   * Handles add rectangle click event.
+   */
   handleAddRectangleClick = (width, height, color, imageURL) => {
     this.spawnZone.current
       .getDecoratedComponentInstance()
       .addChild(width, height, color, imageURL);
   };
 
+  /**
+   * Handles "Order" button click event.
+   */
   handleOrderClick = () => {
     this.arrangementMenu.current.toggleModal();
   };
 
+  /**
+   * Handles order with given distance between rectangles click event.
+   */
   handleOrderWithOptionsClick = (preferred_spacing) => {
     const offsetHeight = this.menuZone.current.getHeight();
     const rectangle_json = this.spawnZone.current.getDecoratedComponentInstance().getRectangles(offsetHeight);
@@ -120,10 +155,22 @@ class App extends Component {
     this.optimizeRectangles(offsetHeight, rectangle_json, wall_json, preferred_spacing, fill_zone);
   }
 
+  /**
+   * Handles "draw area" button click event.
+   */
   handleDrawClick = () => {
     this.dragZone.current.getDecoratedComponentInstance().activateDrawing();
   }
 
+  /**
+   * Sends information about project to backend API so as to optimize.
+   * Receives optimized data.
+   * @param {*} offsetHeight 
+   * @param {*} rectangle_json 
+   * @param {*} wall_json 
+   * @param {*} preferred_spacing 
+   * @param {*} fill_zone 
+   */
   optimizeRectangles = (offsetHeight, rectangle_json, wall_json, preferred_spacing, fill_zone) => {
     if (rectangle_json.length > 0) {
       this.connector
@@ -152,6 +199,10 @@ class App extends Component {
     
   }
 
+  /**
+   * Handles update order progress event.
+   * @param {*} task_id 
+   */
   updateOrderProgress = (task_id) => {
     setTimeout(() => {
       this.connector.getProgress(task_id).then((res) => {
@@ -165,6 +216,18 @@ class App extends Component {
     }, 500);
   };
 
+  /**
+   * Loads walls collection from the frontend static server
+   */
+  loadWallsCollection = async () => {
+    return this.connector.getWalls()
+      .then(wallsJson => {return wallsJson});
+  }
+
+  /**
+   * Renders app.
+   * @returns {HTML}
+   */
   render() {
     return (
       <DndProvider backend={HTML5Backend}>
@@ -184,6 +247,7 @@ class App extends Component {
           <WallPicker
             ref={this.wallPicker}
             onWallSelection={this.handleWallSelection}
+            loadWallsCollection={this.loadWallsCollection}
           />
           <RectangleMenu
             ref={this.rectangleMenu}

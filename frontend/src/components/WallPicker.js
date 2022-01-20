@@ -2,10 +2,12 @@ import { Component, createRef } from 'react';
 import Modal from 'react-responsive-modal'
 import 'react-responsive-modal/styles.css'
 import cloneDeep from 'lodash.clonedeep'
-import Connector from '../Connector';
 
 
-export default class WallPicker extends Component {
+/**
+ * Component representing wall picking submenu.
+ */
+class WallPicker extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -14,17 +16,27 @@ export default class WallPicker extends Component {
         this.wallsJson = [];
     }
 
+    /**
+     * Makes a component invisible (when visible) and vice versa.
+     */
     toggleModal = () => {
         this.setState({isModalOpen : !this.state.isModalOpen});
     }
 
+    /**
+     * Loads walls collection from the frontend static server
+     * and sets the dafault wall.
+     */
     async componentDidMount() {
-        var connector = new Connector([])
-        connector.getWalls()
+        this.props.loadWallsCollection()
             .then(wallsJson => this.wallsJson = wallsJson)
             .then(() => {this.props.onWallSelection(this.wallsJson[0])});
     }
 
+    /**
+     * Renders mini walls grid to enable user to pick one of them
+     * @returns {HTML}
+     */
     renderWallsGrid = () => {
         var items = this.wallsJson.map((data, index) => {
             return(
@@ -34,14 +46,14 @@ export default class WallPicker extends Component {
             )
         });
 
-        if(items.length != 0)
+        if(items.length !== 0)
         {
             var table = items.reduce((prev, curr, index) => {
-                if(index == 1)
+                if(index === 1)
                 {
                     return [prev, curr];
                 }
-                else if(index%4 == 3)
+                else if(index%4 === 3)
                 {
                     return [...prev.slice(0, -3),(
                         <tr>
@@ -58,12 +70,18 @@ export default class WallPicker extends Component {
         };
     }
 
+    /**
+     * Handles mini-wall click event.
+     */
     handleWallSelection = (specs) => {
-        console.log(specs);
         this.props.onWallSelection(specs);
         this.toggleModal();
     }
 
+    /**
+     * Renders HTML component code.
+     * @returns {HTML}
+     */
     render() {
         return(
             <Modal open={this.state.isModalOpen} onClose={this.toggleModal}>
@@ -77,6 +95,11 @@ export default class WallPicker extends Component {
     }
 }
 
+export default WallPicker;
+
+/**
+ * Component representing mini-wall on the wall picking submenu grid.
+ */
 class MiniWall extends Component{
     constructor(params){
         super(params);
@@ -84,6 +107,9 @@ class MiniWall extends Component{
         this.canvas = createRef();
     }
 
+    /**
+     * Draws mini-wall after component is mounted.
+     */
     componentDidMount = () => {
         var miniCtx = this.canvas.current.getContext("2d");
         var points = cloneDeep(this.specs.vertices)
@@ -107,6 +133,10 @@ class MiniWall extends Component{
         miniCtx.stroke();
     }
 
+    /**
+     * Renders HTML component code.
+     * @returns {HTML}
+     */
     render() {
         return(
             <canvas ref={this.canvas}></canvas>

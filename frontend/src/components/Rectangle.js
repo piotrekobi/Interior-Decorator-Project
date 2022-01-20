@@ -34,6 +34,9 @@ function collect(connect, monitor) {
   };
 }
 
+/**
+ * Component representing rectangle.
+ */
 class Rectangle extends Component {
   constructor(props) {
     super(props);
@@ -47,6 +50,9 @@ class Rectangle extends Component {
     };
   }
 
+  /**
+   * Executes after component is mounted.
+   */
   componentDidMount() {
     this.margin = {
       left: window
@@ -60,11 +66,15 @@ class Rectangle extends Component {
     };
   }
 
+  /**
+    * Renders HTML component code.
+    * @returns {HTML}
+    */
   render() {
     if (
-      typeof this.state.left != "undefined" &&
-      typeof this.state.top != "undefined" &&
-      this.state.parentString != "spawn_zone"
+      typeof this.state.left !== "undefined" &&
+      typeof this.state.top !== "undefined" &&
+      this.state.parentString !== "spawn_zone"
     ) {
       return this.props.connectDragSource(
         <div

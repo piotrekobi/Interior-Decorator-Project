@@ -1,0 +1,544 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>interiors.optimizer package &#8212; Interiors backend 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="interiors-optimizer-package">
+<h1>interiors.optimizer package<a class="headerlink" href="#interiors-optimizer-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-interiors.optimizer.Constants">
+<span id="interiors-optimizer-constants-module"></span><h2>interiors.optimizer.Constants module<a class="headerlink" href="#module-interiors.optimizer.Constants" title="Permalink to this headline">¶</a></h2>
+<p>Contains definitions of constants used as parameters in scipy.scipy.optimize.differential_evolution</p>
+</section>
+<section id="module-interiors.optimizer.Geometry">
+<span id="interiors-optimizer-geometry-module"></span><h2>interiors.optimizer.Geometry module<a class="headerlink" href="#module-interiors.optimizer.Geometry" title="Permalink to this headline">¶</a></h2>
+<p>Defines classes representing data for use in Optimizer module</p>
+<dl class="simple">
+<dt>Classes:</dt><dd><p>Point
+Rectangle
+Wall</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="interiors.optimizer.Geometry.Point">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">interiors.optimizer.Geometry.</span></span><span class="sig-name descname"><span class="pre">Point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Geometry.Point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a point on a 2d cartesian plane.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>x<span class="classifier">float</span></dt><dd><p>first point coordinate</p>
+</dd>
+<dt>y: float</dt><dd><p>second point coordinate</p>
+</dd>
+</dl>
+</dd>
+<dt>Methods:</dt><dd><dl class="simple">
+<dt>dist(other):</dt><dd><p>Calculates and returns a distance to another point</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.optimizer.Geometry.Point.dist">
+<span class="sig-name descname"><span class="pre">dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Geometry.Point.dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates and returns a euclidian distance to another point</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><dl class="simple">
+<dt>other: Point</dt><dd><p>the other point</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="interiors.optimizer.Geometry.Rectangle">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">interiors.optimizer.Geometry.</span></span><span class="sig-name descname"><span class="pre">Rectangle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Geometry.Rectangle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a rectangle. For better performance data integrity is not checked.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>width<span class="classifier">float</span></dt><dd><p>width of the rectangle</p>
+</dd>
+<dt>height: float</dt><dd><p>height of the rectangle</p>
+</dd>
+<dt>halfwidth: float</dt><dd><p>half of width, used to decrease the ammount of divisions when arranging rectangles</p>
+</dd>
+<dt>halfheight: float</dt><dd><p>half of height, used to decrease the ammount of divisions when arranging rectangles</p>
+</dd>
+<dt>center: Point</dt><dd><p>center of the rectangle</p>
+</dd>
+</dl>
+</dd>
+<dt>Methods:</dt><dd><dl class="simple">
+<dt>overlaps(other):</dt><dd><p>Calculates whether it overlaps another rectangle and returns the result.</p>
+</dd>
+<dt>spacebetween(other):</dt><dd><p>Calculates and returns the smallest distance between edges of self and other, in either the x or y direction.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.optimizer.Geometry.Rectangle.overlaps">
+<span class="sig-name descname"><span class="pre">overlaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Geometry.Rectangle.overlaps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates whether it overlaps another rectangle and returns the result.
+Return is the same as self.spacebetween(other) &lt; 0</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.optimizer.Geometry.Rectangle.spacebetween">
+<span class="sig-name descname"><span class="pre">spacebetween</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Geometry.Rectangle.spacebetween" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates and returns the smallest distance between edges of self and other, in either the x or y direction.
+The distance is calculated as euclidian distance between lines going through the edges of rectangles.
+If self and other overlap, distance returned is negative.</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><dl class="simple">
+<dt>other<span class="classifier">Rectangle</span></dt><dd><p>the other rectangle</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="interiors.optimizer.Geometry.Wall">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">interiors.optimizer.Geometry.</span></span><span class="sig-name descname"><span class="pre">Wall</span></span><a class="headerlink" href="#interiors.optimizer.Geometry.Wall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a wall.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>top<span class="classifier">float</span></dt><dd><p>Minimum y coordinate of the bounding rectangle of the wall.</p>
+</dd>
+<dt>bottom: float</dt><dd><p>Maximum y coordinate of the bounding rectangle of the wall.</p>
+</dd>
+<dt>left: float</dt><dd><p>Minimum x coordinate of the bounding rectangle of the wall.</p>
+</dd>
+<dt>right: float</dt><dd><p>Maximum x coordinate of the bounding rectangle of the wall.</p>
+</dd>
+<dt>topleft: boolean</dt><dd><p>Whether wall has the topleft segment</p>
+</dd>
+<dt>topright: boolean</dt><dd><p>Whether wall has the topright segment</p>
+</dd>
+<dt>(optional)</dt><dd><dl class="simple">
+<dt>topleftparams: [float, float, float]</dt><dd><p>If topleft == true, contains a list of parameters [a, b, c] representing a line equation a*x + b*y + c = 0.
+Represented line goes through the top-left, diagonal segment of the wall.</p>
+</dd>
+<dt>toprightparams: [Point, Point]</dt><dd><p>If topright == true, contains a list of parameters [a, b, c] representing a line equation a*x + b*y + c = 0.
+Represented line goes through the top-right, diagonal segment of the wall.</p>
+</dd>
+<dt>holes: list(Rectangle)</dt><dd><p>List of rectangular holes in the wall, given as instances of class Rectangle.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Methods:</dt><dd><dl class="simple">
+<dt>parseJSON(data):</dt><dd><p>Calculates object attributes based on a JSON object ‘data’.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.optimizer.Geometry.Wall.parseJSON">
+<span class="sig-name descname"><span class="pre">parseJSON</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Geometry.Wall.parseJSON" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates object attributes based on a JSON object ‘data’.</p>
+<dl>
+<dt>Parameters:</dt><dd><dl>
+<dt>data: object</dt><dd><p>object representing wall data. Should contain following entries:
+{</p>
+<blockquote>
+<div><p>“top”: float
+“bottom”: float
+“left”: float
+“rigth”: float
+“topleft”: [] or [Point p1, Point p2], where p1.x &lt; p2.x and p1.y &gt; p2.y
+“topleft”: [] or [Point p1, Point p2], where p1.x &lt; p2.x and p1.y &lt; p2.y
+“holes”: [] or list(Rectangle)</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-interiors.optimizer.Optimizer">
+<span id="interiors-optimizer-optimizer-module"></span><h2>interiors.optimizer.Optimizer module<a class="headerlink" href="#module-interiors.optimizer.Optimizer" title="Permalink to this headline">¶</a></h2>
+<p>Calculates the best arrangement of given rectangles by using differential evolution.</p>
+<dl class="simple">
+<dt>Classes:</dt><dd><p>Optimizer</p>
+</dd>
+<dt>Functions:</dt><dd><p>place_rectangles(object, object, float, object, str) -&gt; np.array
+updateJSON(in-out object, np.array)</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="interiors.optimizer.Optimizer.Optimizer">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">interiors.optimizer.Optimizer.</span></span><span class="sig-name descname"><span class="pre">Optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rectangle_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wall_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preferred_spacing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Optimizer.Optimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Contains data representing the whole arrangement problem, and calculates a good solution by means of differential evolution (DE).</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>counter<span class="classifier">int</span></dt><dd><p>Number of completed DE iterations (starts at 0).</p>
+</dd>
+<dt>task_id: str</dt><dd><p>Task id used when reporting progress.</p>
+</dd>
+<dt>fixed: list(Rectangle)</dt><dd><p>List of rectangles whose position is fixed (i.e. not changed by the optimizer)</p>
+</dd>
+<dt>optimized: list(Rectangle)</dt><dd><p>List of rectangle whose position is solved for.</p>
+</dd>
+<dt>min_x, min_y, max_x, max_y: float</dt><dd><p>Respectively the minimum and maximum x and y coordinates of the wall bounding rectangle.</p>
+</dd>
+<dt>width: float</dt><dd><p>Width of the bounding rectangle of the wall</p>
+</dd>
+<dt>height: float</dt><dd><p>Height of the bounding rectangle of the wall</p>
+</dd>
+<dt>wall: list(Rectangle)</dt><dd><p>List of rectangular holes in the wall.</p>
+</dd>
+<dt>hastopleft, hastopright: boolean</dt><dd><p>Whether wall contains diagonal segments</p>
+</dd>
+<dt>topleftparams, toprightparams: [float, float, float]</dt><dd><p>Corresponding attributes of the given wall, as in Wall class.</p>
+</dd>
+<dt>poly: matplotlib.path.Path</dt><dd><p>Preferred polygon represented as a matplotlib Path.</p>
+</dd>
+<dt>hasPoly: boolean</dt><dd><p>Whether preferred polygon in given.</p>
+</dd>
+<dt>areas: np.array(float)</dt><dd><p>Contains areas of optimized rectangles. For ease of use in the algorithm each area is repeated 4 times (size(areas) = 4*size(optimized))</p>
+</dd>
+<dt>minArea: float</dt><dd><p>Smallest area in <cite>areas</cite></p>
+</dd>
+<dt>spacing: float</dt><dd><p>Preferred space between neighbouring rectangles.</p>
+</dd>
+<dt>scale: float</dt><dd><p>Scaling factor of punishment for space too small between rectangles.</p>
+</dd>
+<dt>poly_scale: float</dt><dd><p>Scaling factor of punishment for rectangle vertices outside preferred polygon.</p>
+</dd>
+<dt>overlap_punishment_factor: float</dt><dd><p>Scaling factor of punishment for overlapping rectangles.</p>
+</dd>
+</dl>
+</dd>
+<dt>Methods:</dt><dd><dl class="simple">
+<dt>parseRectangles(rectange_json):</dt><dd><p>Calculates attributes based on json object.</p>
+</dd>
+<dt>parseWall(rectange_json):</dt><dd><p>Calculates attributes based on json object.</p>
+</dd>
+<dt>parsePoly(rectange_json):</dt><dd><p>Calculates attributes based on json object.</p>
+</dd>
+<dt>rect2rect():</dt><dd><p>Calculates punishment for distances between rectangles.</p>
+</dd>
+<dt>rect2wall():</dt><dd><p>Calculates punishment for distances between rectangles and wall segments/holes.</p>
+</dd>
+<dt>rect2poly():</dt><dd><p>Calculates punishment for rectangle vertices outside preferred polygon.</p>
+</dd>
+<dt>obj_func(x):</dt><dd><p>Minimized objective function.</p>
+</dd>
+<dt>isvalid(x):</dt><dd><p>Checks whether given solution is valid (i.e. rectangles don’t overlap each other or are outside the wall)</p>
+</dd>
+<dt>iter_counter():</dt><dd><p>Increases counter attribute by one</p>
+</dd>
+<dt>optimize():</dt><dd><p>Finds best solution of the given problem by means of DE.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.optimizer.Optimizer.Optimizer.isvalid">
+<span class="sig-name descname"><span class="pre">isvalid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Optimizer.Optimizer.isvalid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether given solution is valid (i.e. rectangles don’t overlap each other or are outside the wall)</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><dl class="simple">
+<dt>x: np.array(float) of size 2*len(optimized)</dt><dd><p>Position of the optimized rectangles in evaluated solution, given as an array of coordinates.
+The coordinates are given alternately, i.e. x = [x0, y0, x1, y1, …, xn, yn]</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.optimizer.Optimizer.Optimizer.iter_counter">
+<span class="sig-name descname"><span class="pre">iter_counter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convergence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Optimizer.Optimizer.iter_counter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Increases counter attribute by one</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.optimizer.Optimizer.Optimizer.obj_func">
+<span class="sig-name descname"><span class="pre">obj_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Optimizer.Optimizer.obj_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimized objective function.</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><dl class="simple">
+<dt>x: np.array(float) of size 2*len(optimized)</dt><dd><p>Position of the optimized rectangles in evaluated solution, given as an array of coordinates.
+The coordinates are given alternately, i.e. x = [x0, y0, x1, y1, …, xn, yn]</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.optimizer.Optimizer.Optimizer.optimize">
+<span class="sig-name descname"><span class="pre">optimize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Optimizer.Optimizer.optimize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds best solution of the initialized problem by means of DE.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.optimizer.Optimizer.Optimizer.parsePoly">
+<span class="sig-name descname"><span class="pre">parsePoly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poly_json</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Optimizer.Optimizer.parsePoly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object containing preferred polygon information. Should be of the following format:
+{</p>
+<blockquote>
+<div><dl class="simple">
+<dt>“vertices”<span class="classifier">[</span></dt><dd><p>v1,
+v2,
+…,
+vn</p>
+</dd>
+</dl>
+<p>]</p>
+</div></blockquote>
+<p>}
+Where vi should look like:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>{</dt><dd><p>“x”: float
+“y”: float</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.optimizer.Optimizer.Optimizer.parseRectangles">
+<span class="sig-name descname"><span class="pre">parseRectangles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rectangle_json</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Optimizer.Optimizer.parseRectangles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses rectangle information from a JSON object.</p>
+<dl>
+<dt>Parameters:</dt><dd><dl>
+<dt>rectangle_json<span class="classifier">object</span></dt><dd><p>Object containing fixed and optimized rectangle information. Should be of the following format:
+[[</p>
+<blockquote>
+<div><p>rect1,
+rect2,
+…,
+rectn</p>
+</div></blockquote>
+<p>]],
+Where recti should look like:
+{</p>
+<blockquote>
+<div><p>“width”: float
+“height”: float
+“offset”: {</p>
+<blockquote>
+<div><p>“x”: float
+“y”: float</p>
+</div></blockquote>
+<p>}
+“parent”: “spawn_zone” or “drag_zone”</p>
+</div></blockquote>
+<p>}
+Offset of the rectangle represents the top-left vertex (smallest x and y coordinates), not the center of the rectangle.
+Parent string describes whether the rectangle position should be calculated: “drag_zone” rectangles are fixed, while “spawn_zone” rectangles are optimized.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.optimizer.Optimizer.Optimizer.parseWall">
+<span class="sig-name descname"><span class="pre">parseWall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wall_json</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Optimizer.Optimizer.parseWall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses rectangle information from a JSON object.</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><dl class="simple">
+<dt>wall_json<span class="classifier">object</span></dt><dd><p>Object containing wall information. Should be of the format described in Wall.parseJSON.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.optimizer.Optimizer.Optimizer.rect2poly">
+<span class="sig-name descname"><span class="pre">rect2poly</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Optimizer.Optimizer.rect2poly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates punishment for rectangle vertices outside preferred polygon.
+Punishment is scaled for each vertex, based on the area of the polygon to which it belongs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.optimizer.Optimizer.Optimizer.rect2rect">
+<span class="sig-name descname"><span class="pre">rect2rect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Optimizer.Optimizer.rect2rect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates punishment for distances between rectangles.
+The punishment consists of the following, calculated for each pair of different rectangles:</p>
+<blockquote>
+<div><p>punishment for rectangles being further away from each other than preferred spacing.
+punishment for rectangles being closer to each other than preferred spacing.
+punishment for rectangles overlapping each other.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.optimizer.Optimizer.Optimizer.rect2wall">
+<span class="sig-name descname"><span class="pre">rect2wall</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Optimizer.Optimizer.rect2wall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates punishment for distances between rectangles and wall segments/holes.
+The punishment consists of the following, calculated for each optimized rectangle:</p>
+<blockquote>
+<div><p>punishment for rectangle being closer to wall bounding rectangle than preferred spacing.
+punishment for rectangle being closer to wall holes than preferred spacing.
+punishment for rectangle being closer to diagonal wall edges than preferred spacing.
+punishment for rectangle overlapping wall holes.</p>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interiors.optimizer.Optimizer.place_rectangles">
+<span class="sig-prename descclassname"><span class="pre">interiors.optimizer.Optimizer.</span></span><span class="sig-name descname"><span class="pre">place_rectangles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rectangle_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wall_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preferred_spacing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Optimizer.place_rectangles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the best arrangement of given rectangles by using differential evolution, 
+and returns updated object representing rectangle placement.</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><dl class="simple">
+<dt>rectangle_json<span class="classifier">object</span></dt><dd><p>Object containing fixed and optimized rectangle information. Should be of the format described in Optimizer.parseRectangles()</p>
+</dd>
+<dt>wall_json: object</dt><dd><p>Object containing wall information. Should be of the format described in Wall.parseJSON.</p>
+</dd>
+<dt>preferred_spacing: float</dt><dd><p>Preferred space between neighbouring rectangles.</p>
+</dd>
+<dt>poly_json: object</dt><dd><p>Object containing preferred polygon information. Should be of the format described Optimizer.parsePoly().</p>
+</dd>
+<dt>task_id: str</dt><dd><p>Unique id identifying given problem.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interiors.optimizer.Optimizer.updateJSON">
+<span class="sig-prename descclassname"><span class="pre">interiors.optimizer.Optimizer.</span></span><span class="sig-name descname"><span class="pre">updateJSON</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rectangle_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.optimizer.Optimizer.updateJSON" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates object representing rectangles with the result of DE.</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><dl class="simple">
+<dt>rectangle_json: object</dt><dd><p>Original objet used when initializing Optimizer class.</p>
+</dd>
+<dt>res: np.array(float)</dt><dd><p>Result returned by Optimizer.optimize</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-interiors.optimizer">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-interiors.optimizer" title="Permalink to this headline">¶</a></h2>
+<p>Arrange rectangles on polygonal walls</p>
+<dl class="simple">
+<dt>Modules:</dt><dd><p>Geometry
+Optimizer</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Interiors backend</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Piotr Paturej, Kamil Szydłowski, Miłosz Kasak, Jakub Polak.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/interiors.optimizer.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

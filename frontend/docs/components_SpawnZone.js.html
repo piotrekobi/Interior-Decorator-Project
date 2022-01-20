@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/SpawnZone.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/SpawnZone.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Component, createRef } from "react";
+import styles from "./SpawnZone.module.css";
+import { DropTarget } from "react-dnd";
+import { Types } from "./Types.js";
+import Rectangle from "./Rectangle";
+import { v4 as uuidv4 } from "uuid";
+
+const spawnZoneTarget = {
+  drop(props, monitor, component) {
+    var dropPos = monitor.getSourceClientOffset();
+    var pointerPos = monitor.getClientOffset();
+    var componentPos = component.spawnZoneDiv.current.getBoundingClientRect();
+    if (pointerPos.y &lt; componentPos.y) {
+      // Rectangle was dropped on another rectangle in drag_zone, but is handled inside spawn_zone,
+      // because the target rectangle is a child of spawn_zone
+      return {
+        position: dropPos,
+        parentString: "drag_zone",
+      };
+    } else {
+      return {
+        position: dropPos,
+        parentString: "spawn_zone",
+      };
+    }
+  },
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+  };
+}
+
+/**
+ * Component representing storage box for rectangles.
+ */
+class SpawnZone extends Component {
+  constructor(props) {
+    super(props);
+    this.spawnZoneDiv = createRef();
+    this.state = {
+      children: [],
+    };
+  }
+
+  /**
+   * Adds rectangle to spawn zone.
+   * @param {number} width 
+   * @param {number} height 
+   * @param {*} color 
+   * @param {*} imageURL 
+   * @returns {*}
+   */
+  addChild = (width, height, color, imageURL) => {
+    var ref = createRef();
+    var child = (
+      &lt;Rectangle
+        id={uuidv4()}
+        ref={ref}
+        style={{
+          width: width,
+          height: height,
+          background: color,
+          backgroundImage: imageURL,
+        }}
+      />
+    );
+    this.setState({ children: this.state.children.concat([child]) });
+    return ref;
+  };
+
+  /**
+   * Removes rectangle from spawn zone.
+   * @param {number} id 
+   */
+  removeChildByID = (id) => {
+    this.setState({
+      ...this.state,
+      children: this.state.children.filter((child) => {
+        return child.props.id !== id;
+      }),
+    });
+  };
+
+  /**
+   * Returns rectangles list.
+   * @param {number} offsetHeight 
+   * @returns {Array}
+   */
+  getRectangles = (offsetHeight) => {
+    var rectangles = this.state.children;
+    var rectlist = rectangles.map((rectangle) =>
+      this.objectifyRectangle(rectangle, offsetHeight)
+    );
+    return rectlist;
+  };
+
+  /**
+   * Sets rectangles on the canvas.
+   * @param {*} data 
+   * @param {*} offsetHeight 
+   */
+  setRectangles = (data, offsetHeight) => {
+    this.setState({ children: [] });
+    data.forEach((rectangle) => {
+      var ref = this.addChild(
+        rectangle["width"],
+        rectangle["height"],
+        rectangle["color"],
+        rectangle["imageURL"]
+      );
+      ref.current.getDecoratedComponentInstance().setState({
+        left: rectangle["offset"]["left"],
+        top: rectangle["offset"]["top"] + offsetHeight,
+        parentString: rectangle["parent"],
+      });
+    });
+  };
+
+  /**
+   * Objectify rectangle to send it.
+   * @param {*} element 
+   * @param {number} offsetHeight 
+   * @returns {*}
+   */
+  objectifyRectangle = (element, offsetHeight) => {
+    var element_x =
+      element.ref.current.getDecoratedComponentInstance().state.left || 0;
+    var element_y =
+      element.ref.current.getDecoratedComponentInstance().state.top || 0;
+
+    //var element_margin_x = $(element).outerWidth(true) - parseFloat(element.style.width);
+    //var element_margin_y = $(element).outerHeight(true) - parseFloat(element.style.height);
+
+    let offset = {
+      left: element_x /*+ element_margin_x*/,
+      top: element_y - offsetHeight /*+ element_margin_y*/,
+    };
+
+    return {
+      id: element.id,
+      parent:
+        element.ref.current.getDecoratedComponentInstance().state.parentString,
+      width: element.props.style.width,
+      height: element.props.style.height,
+      color: element.props.style.background,
+      imageURL: element.props.style.backgroundImage,
+      offset: offset,
+    };
+  };
+
+  /**
+    * Renders HTML component code.
+    * @returns {HTML}
+    */
+  render() {
+    return this.props.connectDropTarget(
+      &lt;div ref={this.spawnZoneDiv} className={styles.spawnZone}>
+        {this.state.children}
+      &lt;/div>
+    );
+  }
+}
+
+export default DropTarget(Types.RECTANGLE, spawnZoneTarget, collect)(SpawnZone);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ArrangementMenu.html">ArrangementMenu</a></li><li><a href="Connector.html">Connector</a></li><li><a href="DragZone.html">DragZone</a></li><li><a href="IncorrectOrderAlert.html">IncorrectOrderAlert</a></li><li><a href="MenuZone.html">MenuZone</a></li><li><a href="MiniWall.html">MiniWall</a></li><li><a href="ProgressWindow.html">ProgressWindow</a></li><li><a href="Rectangle.html">Rectangle</a></li><li><a href="RectangleMenu.html">RectangleMenu</a></li><li><a href="SpawnZone.html">SpawnZone</a></li><li><a href="WallPicker.html">WallPicker</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Jan 20 2022 18:45:00 GMT+0100 (czas środkowoeuropejski standardowy)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

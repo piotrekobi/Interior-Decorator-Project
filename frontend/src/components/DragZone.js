@@ -18,7 +18,7 @@ function orientation(p, q, r) {
     let val = (q.y - p.y) * (r.x - q.x) -
             (q.x - p.x) * (r.y - q.y);
   
-    if (val == 0) return 0; // collinear
+    if (val === 0) return 0; // collinear
   
     return (val > 0)? 1: 2; // clock or counterclock wise
 }
@@ -31,7 +31,7 @@ function linesIntersect(a, b, c, d) {
     let o4 = orientation(c, d, b);
   
     // General case
-    if (o1 != o2 && o3 != o4) {
+    if (o1 !== o2 && o3 !== o4) {
         return true;
     }
     return false;
@@ -43,6 +43,9 @@ function collect(connect, monitor) {
     }
 }
 
+/**
+ * Component representing the application workspace
+ */
 class DragZone extends Component {
     constructor(props) {
         super(props);
@@ -50,6 +53,9 @@ class DragZone extends Component {
         this.divRef = createRef();
     }
 
+    /**
+     * Executes after component is mounted.
+     */
     componentDidMount() {
         this.zoneVertices = [];
         this.drawingActive = false;
@@ -58,11 +64,15 @@ class DragZone extends Component {
         this.mainCanvas.current.style.position = "absolute";
     }
 
+    /**
+     * Allows to set wall from the outside.
+     * @param {*} wallJSON 
+     */
     setWall = (wallJSON) => {
         this.wallJSON = wallJSON;
         // clear canvas & redraw wall and zone
         this.clearCanvas();
-        if (this.wallJSON != undefined) {
+        if (this.wallJSON !== undefined) {
             this.drawWall(this.wallJSON);
         }
         if (this.zoneVertices.length > 0) {
@@ -70,15 +80,27 @@ class DragZone extends Component {
         }
     }
 
+    /**
+     * Returns actually set wall.
+     * @returns {JSON}
+     */
     getWall = () => {
         return this.wallJSON;
     }
 
+    /**
+     * Enables drawing the zone, where rectangles are expected to be placed first.
+     */
     activateDrawing = () => {
         this.zoneVertices = [];
         this.drawingActive = true;
     }
 
+    /**
+     * Intersects a given point.
+     * @param {*} newPoint 
+     * @returns {bool}
+     */
     intersects = (newPoint) => {
         if (this.zoneVertices.length <= 2) {
             return false;
@@ -92,6 +114,11 @@ class DragZone extends Component {
         return false;
     }
 
+    /**
+     * Handles canvas click event during drawing the zone,
+     * where rectangles are expected to be placed first.
+     * @param {*} event 
+     */
     handleCanvasClick = (event) => {
         if (this.drawingActive) {
             const currentCoord = { x: event.clientX,
@@ -110,7 +137,7 @@ class DragZone extends Component {
             }
             // clear canvas & redraw wall and zone
             this.clearCanvas();
-            if (this.wallJSON != undefined) {
+            if (this.wallJSON !== undefined) {
                 this.drawWall(this.wallJSON);
             }
             if (this.zoneVertices.length > 0) {
@@ -119,11 +146,18 @@ class DragZone extends Component {
         }
     }
 
+    /**
+     * Clears canvas.
+     */
     clearCanvas = () => {
         var ctx = this.mainCanvas.current.getContext("2d");
         ctx.clearRect(0, 0, this.mainCanvas.current.width, this.mainCanvas.current.height);
     }
 
+    /**
+     * Draws wall from the given information.
+     * @param {*} specs 
+     */
     drawWall = (specs) => {
         var vertices = specs.vertices;
         var ctx = this.mainCanvas.current.getContext("2d");
@@ -144,6 +178,10 @@ class DragZone extends Component {
         ctx.stroke();
     }
 
+    /**
+     * Draws the zone, where rectangles are expected to be placed first.
+     * @param {*} vertices 
+     */
     drawZone = (vertices) => {
         var ctx = this.mainCanvas.current.getContext("2d");
         ctx.strokeStyle = '#ff0000';
@@ -165,10 +203,18 @@ class DragZone extends Component {
         ctx.stroke();
     }
 
+    /**
+     * Returns the zone, where rectangles are expected to be placed first.
+     * @returns {*}
+     */
     getZone = () => {
         return { vertices: this.zoneVertices };
     }
 
+    /**
+     * Renders HTML component code.
+     * @returns {HTML}
+     */
     render() {
         return this.props.connectDropTarget(
             <div className={styles.dragZone} ref={this.divRef}>

@@ -4,7 +4,6 @@ import { DropTarget } from "react-dnd";
 import { Types } from "./Types.js";
 import Rectangle from "./Rectangle";
 import { v4 as uuidv4 } from "uuid";
-import jQuery from "jquery";
 
 const spawnZoneTarget = {
   drop(props, monitor, component) {
@@ -33,6 +32,9 @@ function collect(connect, monitor) {
   };
 }
 
+/**
+ * Component representing storage box for rectangles.
+ */
 class SpawnZone extends Component {
   constructor(props) {
     super(props);
@@ -42,6 +44,14 @@ class SpawnZone extends Component {
     };
   }
 
+  /**
+   * Adds rectangle to spawn zone.
+   * @param {number} width 
+   * @param {number} height 
+   * @param {*} color 
+   * @param {*} imageURL 
+   * @returns {*}
+   */
   addChild = (width, height, color, imageURL) => {
     var ref = createRef();
     var child = (
@@ -60,6 +70,10 @@ class SpawnZone extends Component {
     return ref;
   };
 
+  /**
+   * Removes rectangle from spawn zone.
+   * @param {number} id 
+   */
   removeChildByID = (id) => {
     this.setState({
       ...this.state,
@@ -69,6 +83,11 @@ class SpawnZone extends Component {
     });
   };
 
+  /**
+   * Returns rectangles list.
+   * @param {number} offsetHeight 
+   * @returns {Array}
+   */
   getRectangles = (offsetHeight) => {
     var rectangles = this.state.children;
     var rectlist = rectangles.map((rectangle) =>
@@ -77,6 +96,11 @@ class SpawnZone extends Component {
     return rectlist;
   };
 
+  /**
+   * Sets rectangles on the canvas.
+   * @param {*} data 
+   * @param {*} offsetHeight 
+   */
   setRectangles = (data, offsetHeight) => {
     this.setState({ children: [] });
     data.forEach((rectangle) => {
@@ -94,6 +118,12 @@ class SpawnZone extends Component {
     });
   };
 
+  /**
+   * Objectify rectangle to send it.
+   * @param {*} element 
+   * @param {number} offsetHeight 
+   * @returns {*}
+   */
   objectifyRectangle = (element, offsetHeight) => {
     var element_x =
       element.ref.current.getDecoratedComponentInstance().state.left || 0;
@@ -120,6 +150,10 @@ class SpawnZone extends Component {
     };
   };
 
+  /**
+    * Renders HTML component code.
+    * @returns {HTML}
+    */
   render() {
     return this.props.connectDropTarget(
       <div ref={this.spawnZoneDiv} className={styles.spawnZone}>
