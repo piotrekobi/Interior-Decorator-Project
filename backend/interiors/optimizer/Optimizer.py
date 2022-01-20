@@ -322,7 +322,7 @@ class Optimizer:
                 for j in [rect.halfheight, -rect.halfheight]
             ]
         )
-        l1_distances = np.mean(np.abs(vertices - self.polycentroid), axis=1)
+        l1_distances = np.mean(np.abs(vertices - self.polycentroid), axis=1)/self.scale + 1
         inside = self.poly.contains_points(vertices)
         error = np.dot(self.areaerror[~inside], l1_distances[~inside])
         return error

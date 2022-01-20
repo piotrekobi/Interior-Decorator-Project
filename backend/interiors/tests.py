@@ -454,7 +454,7 @@ class OptimizerTestCase(SimpleTestCase):
             rect.center = Point(x[2 * i], x[2 * i + 1])
 
         error = opt.rect2poly()
-        self.assertEqual(error, 100*100*opt.poly_scale*(275+375+50+50))
+        self.assertAlmostEqual(error, 100*100*opt.poly_scale*((275+375+50+50)/opt.scale + 4))
 
     def test_isvalid(self):
         rectangle_json = [
