@@ -39,8 +39,8 @@ class RectangleMenu extends Component {
 
     if (imageFile) reader.readAsDataURL(imageFile);
     else {
-      width = parseInt(this.widthBox.current.placeholder);
-      height = parseInt(this.heightBox.current.placeholder);
+      if (!width) width = parseInt(this.widthBox.current.placeholder);
+      if (!height) height = parseInt(this.heightBox.current.placeholder);
       this.props.onAddRectangleClick(width, height, color);
     }
 
