@@ -217,6 +217,14 @@ class App extends Component {
   };
 
   /**
+   * Loads walls collection from the frontend static server
+   */
+  loadWallsCollection = async () => {
+    return this.connector.getWalls()
+      .then(wallsJson => {return wallsJson});
+  }
+
+  /**
    * Renders app.
    * @returns {HTML}
    */
@@ -239,6 +247,7 @@ class App extends Component {
           <WallPicker
             ref={this.wallPicker}
             onWallSelection={this.handleWallSelection}
+            loadWallsCollection={this.loadWallsCollection}
           />
           <RectangleMenu
             ref={this.rectangleMenu}
