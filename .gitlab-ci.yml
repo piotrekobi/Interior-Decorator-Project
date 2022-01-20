@@ -11,7 +11,7 @@ test-frontend:
     - npm test
 
 test-backend:
-  image: python:latest
+  image: python:3
   stage: test
   script:
     - cd backend
