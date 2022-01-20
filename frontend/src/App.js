@@ -40,12 +40,13 @@ class App extends Component {
    * Executes after app is mounted.
    */
   componentDidMount() {
-    this.dragZone.current.getDecoratedComponentInstance().offsetHeight = this.menuZone.current.getHeight()
+    this.dragZone.current.getDecoratedComponentInstance().offsetHeight =
+      this.menuZone.current.getHeight();
   }
 
   /**
    * Handles wall selection event.
-   * @param {*} specs 
+   * @param {*} specs
    */
   handleWallSelection = (specs) => {
     this.dragZone.current.getDecoratedComponentInstance().setWall(specs);
@@ -95,7 +96,7 @@ class App extends Component {
 
   /**
    * Loads project from file.
-   * @param {*} callback 
+   * @param {*} callback
    */
   loadProject = (callback) => {
     var fileread = new FileReader();
@@ -148,60 +149,83 @@ class App extends Component {
    */
   handleOrderWithOptionsClick = (preferred_spacing) => {
     const offsetHeight = this.menuZone.current.getHeight();
-    const rectangle_json = this.spawnZone.current.getDecoratedComponentInstance().getRectangles(offsetHeight);
-    const wall_json = this.dragZone.current.getDecoratedComponentInstance().getWall();
-    const fill_zone = this.dragZone.current.getDecoratedComponentInstance().getZone();
+    const rectangle_json = this.spawnZone.current
+      .getDecoratedComponentInstance()
+      .getRectangles(offsetHeight);
+    const wall_json = this.dragZone.current
+      .getDecoratedComponentInstance()
+      .getWall();
+    const fill_zone = this.dragZone.current
+      .getDecoratedComponentInstance()
+      .getZone();
 
-    this.optimizeRectangles(offsetHeight, rectangle_json, wall_json, preferred_spacing, fill_zone);
-  }
+    this.optimizeRectangles(
+      offsetHeight,
+      rectangle_json,
+      wall_json,
+      preferred_spacing,
+      fill_zone
+    );
+  };
 
   /**
    * Handles "draw area" button click event.
    */
   handleDrawClick = () => {
     this.dragZone.current.getDecoratedComponentInstance().activateDrawing();
-  }
+  };
 
   /**
    * Sends information about project to backend API so as to optimize.
    * Receives optimized data.
-   * @param {*} offsetHeight 
-   * @param {*} rectangle_json 
-   * @param {*} wall_json 
-   * @param {*} preferred_spacing 
-   * @param {*} fill_zone 
+   * @param {*} offsetHeight
+   * @param {*} rectangle_json
+   * @param {*} wall_json
+   * @param {*} preferred_spacing
+   * @param {*} fill_zone
    */
-  optimizeRectangles = (offsetHeight, rectangle_json, wall_json, preferred_spacing, fill_zone) => {
+  optimizeRectangles = (
+    offsetHeight,
+    rectangle_json,
+    wall_json,
+    preferred_spacing,
+    fill_zone
+  ) => {
     if (rectangle_json.length > 0) {
-      this.connector
-        .createTask()
-        .then(id => {
-          this.progressWindow.current.openModal();
-          this.connector
-          .optimizeRectangles(rectangle_json, wall_json, preferred_spacing, fill_zone, id)
+      this.connector.createTask().then((id) => {
+        this.progressWindow.current.openModal();
+        this.connector
+          .optimizeRectangles(
+            rectangle_json,
+            wall_json,
+            preferred_spacing,
+            fill_zone,
+            id
+          )
           .then((result) => {
             this.progressWindow.current.closeModal();
-            if (result[1]['is_valid']) {
-              this.spawnZone.current.getDecoratedComponentInstance().setRectangles(result[0], offsetHeight);
-            }
-            else {
+            if (result[1]["is_valid"]) {
+              this.spawnZone.current
+                .getDecoratedComponentInstance()
+                .setRectangles(result[0], offsetHeight);
+            } else {
               this.incorrectOrderAlert.current.toggleModal(result);
             }
           });
-          this.updateOrderProgress(id);
-        });
-      }
-    else {
+        this.updateOrderProgress(id);
+      });
+    } else {
       this.progressWindow.current.openModal();
       this.progressWindow.current.setProgress(100);
-      setTimeout(() => {this.progressWindow.current.closeModal();}, 500);
+      setTimeout(() => {
+        this.progressWindow.current.closeModal();
+      }, 500);
     }
-    
-  }
+  };
 
   /**
    * Handles update order progress event.
-   * @param {*} task_id 
+   * @param {*} task_id
    */
   updateOrderProgress = (task_id) => {
     setTimeout(() => {
@@ -220,9 +244,10 @@ class App extends Component {
    * Loads walls collection from the frontend static server
    */
   loadWallsCollection = async () => {
-    return this.connector.getWalls()
-      .then(wallsJson => {return wallsJson});
-  }
+    return this.connector.getWalls().then((wallsJson) => {
+      return wallsJson;
+    });
+  };
 
   /**
    * Renders app.
@@ -242,7 +267,7 @@ class App extends Component {
             onDrawClick={this.handleDrawClick}
           />
           <DragZone ref={this.dragZone} />
-          <SpawnZone ref={this.spawnZone}/>
+          <SpawnZone ref={this.spawnZone} />
 
           <WallPicker
             ref={this.wallPicker}
@@ -261,12 +286,11 @@ class App extends Component {
 
           <ProgressWindow ref={this.progressWindow} />
 
-          <IncorrectOrderAlert
-            ref={this.incorrectOrderAlert}
-          />
+          <IncorrectOrderAlert ref={this.incorrectOrderAlert} />
 
           <input
             type="file"
+            accept="application/JSON"
             ref={this.uploadInput}
             style={{ display: "none" }}
             onChange={this.loadProject}
