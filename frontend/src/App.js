@@ -70,7 +70,11 @@ class App extends Component {
     var wallJSON = this.dragZone.current
       .getDecoratedComponentInstance()
       .getWall();
+    var zoneJSON = this.dragZone.current
+      .getDecoratedComponentInstance()
+      .getZone();
     rectangle_json.push(wallJSON);
+    rectangle_json.push(zoneJSON);
     var data = JSON.stringify(rectangle_json);
 
     var file = new Blob([data], { type: "application/json" });
@@ -105,13 +109,18 @@ class App extends Component {
     callback = (content) => {
       content = JSON.parse(content);
 
-      let renctangleData = content.slice(0, content.length - 1);
-      let wallData = content[content.length - 1];
-
+      let renctangleData = content.slice(0, content.length - 2);
+      let wallData = content[content.length - 2];
+      let zoneData = content[content.length - 1];
       this.spawnZone.current
         .getDecoratedComponentInstance()
         .setRectangles(renctangleData, offsetHeight);
       this.dragZone.current.getDecoratedComponentInstance().setWall(wallData);
+      this.dragZone.current.getDecoratedComponentInstance().zoneVertices =
+        zoneData["vertices"];
+      this.dragZone.current
+        .getDecoratedComponentInstance()
+        .drawZone(zoneData["vertices"]);
     };
 
     fileread.onload = function (e) {
