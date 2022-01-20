@@ -74,7 +74,6 @@ class WallPicker extends Component {
      * Handles mini-wall click event.
      */
     handleWallSelection = (specs) => {
-        console.log(specs);
         this.props.onWallSelection(specs);
         this.toggleModal();
     }
