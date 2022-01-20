@@ -28,7 +28,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "generate-docs": "react-doc-generator src -o ./docs/DOCUMENTATION.md",
-    "jsdoc": "jsdoc ./src/ -d docs"
+    "jsdoc": "jsdoc ./src/ ./src/components -d docs"
   },
   "eslintConfig": {
     "extends": [

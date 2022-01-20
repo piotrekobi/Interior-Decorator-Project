@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: App</title>
+    <title>JSDoc: Class: DragZone</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: App</h1>
+    <h1 class="page-title">Class: DragZone</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>App<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>DragZone<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">The main class.</div>
+            <div class="class-description">Component representing the application workspace</div>
         
     
 </header>
@@ -45,7 +45,7 @@
     
 
     
-    <h4 class="name" id="App"><span class="type-signature"></span>new App<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="DragZone"><span class="type-signature"></span>new DragZone<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -93,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="App.js.html">App.js</a>, <a href="App.js.html#line18">line 18</a>
+        <a href="components_DragZone.js.html">components/DragZone.js</a>, <a href="components_DragZone.js.html#line49">line 49</a>
     </li></ul></dd>
     
 
@@ -143,13 +143,13 @@
 
         
             
-<h4 class="name" id="handleAddRectangleClick"><span class="type-signature"></span>handleAddRectangleClick<span class="type-signature"></span></h4>
+<h4 class="name" id="activateDrawing"><span class="type-signature"></span>activateDrawing<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    Handles add rectangle click event.
+    Enables drawing the zone, where rectangles are expected to be placed first.
 </div>
 
 
@@ -187,7 +187,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="App.js.html">App.js</a>, <a href="App.js.html#line133">line 133</a>
+        <a href="components_DragZone.js.html">components/DragZone.js</a>, <a href="components_DragZone.js.html#line94">line 94</a>
     </li></ul></dd>
     
 
@@ -205,13 +205,13 @@
 
         
             
-<h4 class="name" id="handleDrawClick"><span class="type-signature"></span>handleDrawClick<span class="type-signature"></span></h4>
+<h4 class="name" id="clearCanvas"><span class="type-signature"></span>clearCanvas<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    Handles "draw area" button click event.
+    Clears canvas.
 </div>
 
 
@@ -249,7 +249,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="App.js.html">App.js</a>, <a href="App.js.html#line161">line 161</a>
+        <a href="components_DragZone.js.html">components/DragZone.js</a>, <a href="components_DragZone.js.html#line152">line 152</a>
     </li></ul></dd>
     
 
@@ -267,13 +267,13 @@
 
         
             
-<h4 class="name" id="handleLoadClick"><span class="type-signature"></span>handleLoadClick<span class="type-signature"></span></h4>
+<h4 class="name" id="drawWall"><span class="type-signature"></span>drawWall<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    Handles "load project" button click event.
+    Draws wall from the given information.
 </div>
 
 
@@ -311,7 +311,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="App.js.html">App.js</a>, <a href="App.js.html#line91">line 91</a>
+        <a href="components_DragZone.js.html">components/DragZone.js</a>, <a href="components_DragZone.js.html#line161">line 161</a>
     </li></ul></dd>
     
 
@@ -329,13 +329,13 @@
 
         
             
-<h4 class="name" id="handleOrderClick"><span class="type-signature"></span>handleOrderClick<span class="type-signature"></span></h4>
+<h4 class="name" id="drawZone"><span class="type-signature"></span>drawZone<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    Handles "Order" button click event.
+    Draws the zone, where rectangles are expected to be placed first.
 </div>
 
 
@@ -373,7 +373,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="App.js.html">App.js</a>, <a href="App.js.html#line142">line 142</a>
+        <a href="components_DragZone.js.html">components/DragZone.js</a>, <a href="components_DragZone.js.html#line185">line 185</a>
     </li></ul></dd>
     
 
@@ -391,13 +391,13 @@
 
         
             
-<h4 class="name" id="handleOrderWithOptionsClick"><span class="type-signature"></span>handleOrderWithOptionsClick<span class="type-signature"></span></h4>
+<h4 class="name" id="getWall"><span class="type-signature"></span>getWall<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    Handles order with given distance between rectangles click event.
+    Returns actually set wall.
 </div>
 
 
@@ -435,7 +435,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="App.js.html">App.js</a>, <a href="App.js.html#line149">line 149</a>
+        <a href="components_DragZone.js.html">components/DragZone.js</a>, <a href="components_DragZone.js.html#line87">line 87</a>
     </li></ul></dd>
     
 
@@ -453,13 +453,13 @@
 
         
             
-<h4 class="name" id="handleRectanglesClick"><span class="type-signature"></span>handleRectanglesClick<span class="type-signature"></span></h4>
+<h4 class="name" id="getZone"><span class="type-signature"></span>getZone<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    Handles "Rectangles" button click event.
+    Returns the zone, where rectangles are expected to be placed first.
 </div>
 
 
@@ -497,7 +497,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="App.js.html">App.js</a>, <a href="App.js.html#line126">line 126</a>
+        <a href="components_DragZone.js.html">components/DragZone.js</a>, <a href="components_DragZone.js.html#line210">line 210</a>
     </li></ul></dd>
     
 
@@ -515,13 +515,13 @@
 
         
             
-<h4 class="name" id="handleSaveClick"><span class="type-signature"></span>handleSaveClick<span class="type-signature"></span></h4>
+<h4 class="name" id="handleCanvasClick"><span class="type-signature"></span>handleCanvasClick<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    Handles "save project" button click event.
+    Handles canvas click event during drawing the zone,where rectangles are expected to be placed first.
 </div>
 
 
@@ -559,7 +559,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="App.js.html">App.js</a>, <a href="App.js.html#line64">line 64</a>
+        <a href="components_DragZone.js.html">components/DragZone.js</a>, <a href="components_DragZone.js.html#line122">line 122</a>
     </li></ul></dd>
     
 
@@ -577,13 +577,13 @@
 
         
             
-<h4 class="name" id="handleWallsClick"><span class="type-signature"></span>handleWallsClick<span class="type-signature"></span></h4>
+<h4 class="name" id="intersects"><span class="type-signature"></span>intersects<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    Handles wall button click event.
+    Intersects a given point.
 </div>
 
 
@@ -621,7 +621,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="App.js.html">App.js</a>, <a href="App.js.html#line57">line 57</a>
+        <a href="components_DragZone.js.html">components/DragZone.js</a>, <a href="components_DragZone.js.html#line104">line 104</a>
     </li></ul></dd>
     
 
@@ -639,13 +639,13 @@
 
         
             
-<h4 class="name" id="handleWallSelection"><span class="type-signature"></span>handleWallSelection<span class="type-signature"></span></h4>
+<h4 class="name" id="setWall"><span class="type-signature"></span>setWall<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    Handles wall selection event.
+    Allows to set wall from the outside.
 </div>
 
 
@@ -683,193 +683,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="App.js.html">App.js</a>, <a href="App.js.html#line50">line 50</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="loadProject"><span class="type-signature"></span>loadProject<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Loads project from file.
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="App.js.html">App.js</a>, <a href="App.js.html#line100">line 100</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="optimizeRectangles"><span class="type-signature"></span>optimizeRectangles<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Sends information about project to backend API so as to optimize.Receives optimized data.
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="App.js.html">App.js</a>, <a href="App.js.html#line174">line 174</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="updateOrderProgress"><span class="type-signature"></span>updateOrderProgress<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Handles update order progress event.
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="App.js.html">App.js</a>, <a href="App.js.html#line206">line 206</a>
+        <a href="components_DragZone.js.html">components/DragZone.js</a>, <a href="components_DragZone.js.html#line71">line 71</a>
     </li></ul></dd>
     
 
@@ -905,7 +719,7 @@
 
 
 <div class="description">
-    Executes after app is mounted.
+    Executes after component is mounted.
 </div>
 
 
@@ -949,7 +763,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="App.js.html">App.js</a>, <a href="App.js.html#line42">line 42</a>
+        <a href="components_DragZone.js.html">components/DragZone.js</a>, <a href="components_DragZone.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -993,7 +807,7 @@
 
 
 <div class="description">
-    Renders app.
+    Renders HTML component code.
 </div>
 
 
@@ -1037,7 +851,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="App.js.html">App.js</a>, <a href="App.js.html#line223">line 223</a>
+        <a href="components_DragZone.js.html">components/DragZone.js</a>, <a href="components_DragZone.js.html#line218">line 218</a>
     </li></ul></dd>
     
 

@@ -2,7 +2,10 @@ import { Component } from "react";
 import Modal from 'react-responsive-modal'
 import 'react-responsive-modal/styles.css'
 
-export default class ArrangementMenu extends Component{
+/**
+ * Component for setting preferred spacing bertween rectangles.
+ */
+class ArrangementMenu extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -11,15 +14,25 @@ export default class ArrangementMenu extends Component{
         this.preferred_spacing = 30;
     }
 
+    /**
+     * Makes a component invisible (when visible) and vice versa.
+     */
     toggleModal = () => {
         this.setState({isModalOpen : !this.state.isModalOpen});
     }
 
+    /**
+     * Handles order button click event.
+     */
     handleOrderWithOptions = () => {
         this.toggleModal();
         this.props.onOrderWithOptionsClick(this.preferred_spacing);
     }
 
+    /**
+     * Renders HTML component code.
+     * @returns {HTML}
+     */
     render() {
         return(
             <Modal open={this.state.isModalOpen} onClose={this.toggleModal}>
@@ -34,3 +47,5 @@ export default class ArrangementMenu extends Component{
         )
     }
 }
+
+export default ArrangementMenu;

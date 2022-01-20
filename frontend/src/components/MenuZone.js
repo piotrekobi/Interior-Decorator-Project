@@ -1,14 +1,27 @@
 import { Component, createRef } from "react";
 import styles from "./MenuZone.module.css";
 
-export default class MenuZone extends Component {
+/**
+ * Component representing the application menu
+ */
+class MenuZone extends Component {
   constructor(props) {
     super(props);
     this.divRef = createRef();
   }
+
+  /**
+   * Return height in pixels of the menu zone.
+   * @returns {number}
+   */
   getHeight = () => {
     return this.divRef.current.offsetHeight;
   };
+
+  /**
+    * Renders HTML component code.
+    * @returns {HTML}
+    */
   render() {
     return (
       <div className={styles.menu} ref={this.divRef}>
@@ -36,3 +49,5 @@ export default class MenuZone extends Component {
     );
   }
 }
+
+export default MenuZone;
