@@ -1,6 +1,6 @@
 backend/backend/__pycache__/*
 backend/interiors/__pycache__/*
-backend/interiors/migrations/__pycache__/*
+backend/interiors/migrations/*
 backend/interiors/optimizer/__pycache__/*
 backend/interiors/tasks/__pycache__/*
 backend/debug.log
