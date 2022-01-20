@@ -49,8 +49,10 @@ class Optimizer:
 
         poly: matplotlib.path.Path
             Preferred polygon represented as a matplotlib Path.
+        centroid:
+            Algeraic mean of polygon vertices.
         hasPoly: boolean
-            Whether preferred polygon in given.
+            Whether preferred polygon was given.
 
         areas: np.array(float)
             Contains areas of optimized rectangles. For ease of use in the algorithm each area is repeated 4 times (size(areas) = 4*size(optimized))
@@ -94,7 +96,7 @@ class Optimizer:
         self, rectangle_json, wall_json, preferred_spacing, poly_json, task_id
     ):
         """Constructs an optimizer used for solving an instance of the problem
-        
+
         Parameters:
             rectangle_json : object
                 Object containing fixed and optimized rectangle information. Should be of the format described in parseRectangles()
@@ -130,7 +132,7 @@ class Optimizer:
 
     def parseRectangles(self, rectangle_json):
         """Parses rectangle information from a JSON object.
-        
+
         Parameters:
             rectangle_json : object
                 Object containing fixed and optimized rectangle information. Should be of the following format:
@@ -138,7 +140,7 @@ class Optimizer:
                     rect1,
                     rect2,
                     ...,
-                    rectn    
+                    rectn
                 ]],
                 Where recti should look like:
                 {
@@ -175,7 +177,7 @@ class Optimizer:
 
     def parseWall(self, wall_json):
         """Parses rectangle information from a JSON object.
-        
+
         Parameters:
             wall_json : object
                 Object containing wall information. Should be of the format described in Wall.parseJSON.
@@ -196,19 +198,19 @@ class Optimizer:
 
     def parsePoly(self, poly_json):
         """Object containing preferred polygon information. Should be of the following format:
+        {
+            "vertices" : [
+                v1,
+                v2,
+                ...,
+                vn
+            ]
+        }
+        Where vi should look like:
             {
-                "vertices" : [
-                    v1,
-                    v2,
-                    ...,
-                    vn
-                ]
+                "x": float
+                "y": float
             }
-            Where vi should look like:
-                {
-                    "x": float
-                    "y": float
-                }
         """
         if len(poly_json["vertices"]) == 0:
             self.hasPoly = False
@@ -217,6 +219,7 @@ class Optimizer:
         self.poly = mpltPath.Path(
             np.array([[i["x"], i["y"]] for i in poly_json["vertices"]])
         )
+        self.polycentroid = np.mean(self.poly.vertices, axis=0)
         self.hasPoly = True
 
     def rect2rect(self):
@@ -319,12 +322,14 @@ class Optimizer:
                 for j in [rect.halfheight, -rect.halfheight]
             ]
         )
-        error = np.sum(self.areaerror[~self.poly.contains_points(vertices)])
+        l1_distances = np.mean(np.abs(vertices - self.polycentroid), axis=1)
+        inside = self.poly.contains_points(vertices)
+        error = np.dot(self.areaerror[~inside], l1_distances[~inside])
         return error
 
     def obj_func(self, x):
         """Minimized objective function.
-        
+
         Parameters:
             x: np.array(float) of size 2*len(optimized)
                 Position of the optimized rectangles in evaluated solution, given as an array of coordinates.
@@ -344,7 +349,7 @@ class Optimizer:
 
     def isvalid(self, x):
         """Checks whether given solution is valid (i.e. rectangles don't overlap each other or are outside the wall)
-        
+
         Parameters:
             x: np.array(float) of size 2*len(optimized)
                 Position of the optimized rectangles in evaluated solution, given as an array of coordinates.
@@ -432,7 +437,7 @@ class Optimizer:
 
 def updateJSON(rectangle_json, res):
     """Updates object representing rectangles with the result of DE.
-    
+
     Parameters:
         rectangle_json: object
             Original objet used when initializing Optimizer class.
@@ -450,7 +455,7 @@ def updateJSON(rectangle_json, res):
 
 
 def place_rectangles(rectangle_json, wall_json, preferred_spacing, poly_json, task_id):
-    """Calculates the best arrangement of given rectangles by using differential evolution, 
+    """Calculates the best arrangement of given rectangles by using differential evolution,
     and returns updated object representing rectangle placement.
 
     Parameters:
