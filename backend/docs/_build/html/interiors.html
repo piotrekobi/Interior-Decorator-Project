@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>interiors package &#8212; Interiors backend 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="interiors-package">
+<h1>interiors package<a class="headerlink" href="#interiors-package" title="Permalink to this headline">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="interiors.migrations.html">interiors.migrations package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="interiors.migrations.html#module-interiors.migrations">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="interiors.optimizer.html">interiors.optimizer package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="interiors.optimizer.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interiors.optimizer.html#module-interiors.optimizer.Constants">interiors.optimizer.Constants module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interiors.optimizer.html#module-interiors.optimizer.Geometry">interiors.optimizer.Geometry module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interiors.optimizer.html#module-interiors.optimizer.Optimizer">interiors.optimizer.Optimizer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interiors.optimizer.html#module-interiors.optimizer">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-interiors.admin">
+<span id="interiors-admin-module"></span><h2>interiors.admin module<a class="headerlink" href="#module-interiors.admin" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-interiors.apps">
+<span id="interiors-apps-module"></span><h2>interiors.apps module<a class="headerlink" href="#module-interiors.apps" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="interiors.apps.InteriorsConfig">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">interiors.apps.</span></span><span class="sig-name descname"><span class="pre">InteriorsConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_module</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.apps.InteriorsConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.apps.config.AppConfig</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interiors.apps.InteriorsConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'interiors'</span></em><a class="headerlink" href="#interiors.apps.InteriorsConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-interiors.models">
+<span id="interiors-models-module"></span><h2>interiors.models module<a class="headerlink" href="#module-interiors.models" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-interiors.tests">
+<span id="interiors-tests-module"></span><h2>interiors.tests module<a class="headerlink" href="#module-interiors.tests" title="Permalink to this headline">¶</a></h2>
+<p>Contains optimizer packaged unit tests</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="interiors.tests.GeometryTestCase">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">interiors.tests.</span></span><span class="sig-name descname"><span class="pre">GeometryTestCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.tests.GeometryTestCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.test.testcases.SimpleTestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.tests.GeometryTestCase.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interiors.tests.GeometryTestCase.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.tests.GeometryTestCase.test_point">
+<span class="sig-name descname"><span class="pre">test_point</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interiors.tests.GeometryTestCase.test_point" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.tests.GeometryTestCase.test_rectangle">
+<span class="sig-name descname"><span class="pre">test_rectangle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interiors.tests.GeometryTestCase.test_rectangle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.tests.GeometryTestCase.test_wall">
+<span class="sig-name descname"><span class="pre">test_wall</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interiors.tests.GeometryTestCase.test_wall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="interiors.tests.OptimizerTestCase">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">interiors.tests.</span></span><span class="sig-name descname"><span class="pre">OptimizerTestCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.tests.OptimizerTestCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.test.testcases.SimpleTestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.tests.OptimizerTestCase.test_isvalid">
+<span class="sig-name descname"><span class="pre">test_isvalid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interiors.tests.OptimizerTestCase.test_isvalid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.tests.OptimizerTestCase.test_iter_counter">
+<span class="sig-name descname"><span class="pre">test_iter_counter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interiors.tests.OptimizerTestCase.test_iter_counter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.tests.OptimizerTestCase.test_parser">
+<span class="sig-name descname"><span class="pre">test_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interiors.tests.OptimizerTestCase.test_parser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.tests.OptimizerTestCase.test_place_rectangles">
+<span class="sig-name descname"><span class="pre">test_place_rectangles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interiors.tests.OptimizerTestCase.test_place_rectangles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.tests.OptimizerTestCase.test_rect2poly">
+<span class="sig-name descname"><span class="pre">test_rect2poly</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interiors.tests.OptimizerTestCase.test_rect2poly" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.tests.OptimizerTestCase.test_rect2rect">
+<span class="sig-name descname"><span class="pre">test_rect2rect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interiors.tests.OptimizerTestCase.test_rect2rect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.tests.OptimizerTestCase.test_rect2wall">
+<span class="sig-name descname"><span class="pre">test_rect2wall</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interiors.tests.OptimizerTestCase.test_rect2wall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interiors.tests.OptimizerTestCase.test_update">
+<span class="sig-name descname"><span class="pre">test_update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interiors.tests.OptimizerTestCase.test_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-interiors.urls">
+<span id="interiors-urls-module"></span><h2>interiors.urls module<a class="headerlink" href="#module-interiors.urls" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-interiors.views">
+<span id="interiors-views-module"></span><h2>interiors.views module<a class="headerlink" href="#module-interiors.views" title="Permalink to this headline">¶</a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="interiors.views.NoRectangleData">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">interiors.views.</span></span><span class="sig-name descname"><span class="pre">NoRectangleData</span></span><a class="headerlink" href="#interiors.views.NoRectangleData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interiors.views.createTask">
+<span class="sig-prename descclassname"><span class="pre">interiors.views.</span></span><span class="sig-name descname"><span class="pre">createTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.views.createTask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interiors.views.getProgress">
+<span class="sig-prename descclassname"><span class="pre">interiors.views.</span></span><span class="sig-name descname"><span class="pre">getProgress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.views.getProgress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interiors.views.index">
+<span class="sig-prename descclassname"><span class="pre">interiors.views.</span></span><span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.views.index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interiors.views.optimizer">
+<span class="sig-prename descclassname"><span class="pre">interiors.views.</span></span><span class="sig-name descname"><span class="pre">optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.views.optimizer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interiors.views.removeTask">
+<span class="sig-prename descclassname"><span class="pre">interiors.views.</span></span><span class="sig-name descname"><span class="pre">removeTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.views.removeTask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-interiors">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-interiors" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Interiors backend</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Piotr Paturej, Kamil Szydłowski, Miłosz Kasak, Jakub Polak.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/interiors.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

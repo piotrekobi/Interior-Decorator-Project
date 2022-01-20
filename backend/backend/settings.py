@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'interiors',
     'corsheaders',
+    'django.contrib.admindocs',
 ]
 
 MIDDLEWARE = [
