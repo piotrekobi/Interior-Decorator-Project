@@ -5,6 +5,7 @@ backend/interiors/optimizer/__pycache__/*
 backend/interiors/tasks/__pycache__/*
 backend/debug.log
 backend/requests.log
+backend/__pycache__/*
 ./frontend/node_modules/*
 ./frontend/build/*
 db.sqlite3
