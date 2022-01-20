@@ -30,16 +30,11 @@ Additional requirements:
 
 * Python 3.9
 
-  * Django 3.2.9
-
-  * Whitenoise 5.3.0
-
+  * Django
 * CSS
-
 * JavaScript
 
-  * InteractJS 1.10.11
-
+  * React
 * Azure App Service
 * Azure Container Registry
 
@@ -85,6 +80,6 @@ It contains:
 
 * requirements specification
 * specification of use cases
-* definition od architecture
+* definition of architecture
 * analytical and design specification
 * user's and administrator's manuals.
