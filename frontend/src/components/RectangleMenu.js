@@ -56,8 +56,12 @@ class RectangleMenu extends Component {
       let canvas = document.createElement("canvas");
       let context = canvas.getContext("2d");
 
-      if (!width) width = image.width;
-      if (!height) height = image.height;
+      if (!width) {
+        width = image.width;
+      }
+      if (!height) {
+        height = image.height;
+      }
       canvas.width = width;
       canvas.height = height;
 
@@ -68,10 +72,29 @@ class RectangleMenu extends Component {
     };
   };
 
-  inputChange = () => {
-    if (this.imageUploadInput.current.files[0])
+  inputChange = (callback) => {
+    let imageFile = this.imageUploadInput.current.files[0];
+    callback = (width, height) => {
+      this.widthBox.current.placeholder = width;
+      this.heightBox.current.placeholder = height;
+    };
+    if (imageFile) {
       this.uploadButton.current.innerHTML = "Zmień / Usuń zdjęcie";
-    else this.uploadButton.current.innerHTML = "Prześlij zdjęcie";
+      let reader = new FileReader();
+      let image = new Image();
+      reader.readAsDataURL(imageFile);
+
+      reader.onloadend = function () {
+        image.src = reader.result;
+      };
+
+      image.onload = function () {
+        callback(image.width, image.height);
+      };
+    } else {
+      this.uploadButton.current.innerHTML = "Prześlij zdjęcie";
+      callback(100, 100);
+    }
   };
 
   /**
