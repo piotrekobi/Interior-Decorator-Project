@@ -74,6 +74,7 @@
 </section>
 <section id="module-interiors.models">
 <span id="interiors-models-module"></span><h2>interiors.models module<a class="headerlink" href="#module-interiors.models" title="Permalink to this headline">¶</a></h2>
+<p>Here in the future one may put the definition of database ORM models.</p>
 </section>
 <section id="module-interiors.tests">
 <span id="interiors-tests-module"></span><h2>interiors.tests module<a class="headerlink" href="#module-interiors.tests" title="Permalink to this headline">¶</a></h2>
@@ -154,43 +155,52 @@
 </section>
 <section id="module-interiors.urls">
 <span id="interiors-urls-module"></span><h2>interiors.urls module<a class="headerlink" href="#module-interiors.urls" title="Permalink to this headline">¶</a></h2>
+<p>Maps URLs to API functions.</p>
 </section>
 <section id="module-interiors.views">
 <span id="interiors-views-module"></span><h2>interiors.views module<a class="headerlink" href="#module-interiors.views" title="Permalink to this headline">¶</a></h2>
+<p>Contains API</p>
 <dl class="py exception">
 <dt class="sig sig-object py" id="interiors.views.NoRectangleData">
 <em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">interiors.views.</span></span><span class="sig-name descname"><span class="pre">NoRectangleData</span></span><a class="headerlink" href="#interiors.views.NoRectangleData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception about missing rectangle data in the frontend request.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="interiors.views.createTask">
 <span class="sig-prename descclassname"><span class="pre">interiors.views.</span></span><span class="sig-name descname"><span class="pre">createTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.views.createTask" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Creates a new task using tasks framework in order to informe about the task status</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="interiors.views.getProgress">
 <span class="sig-prename descclassname"><span class="pre">interiors.views.</span></span><span class="sig-name descname"><span class="pre">getProgress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.views.getProgress" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns progress about the given task to frontend.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="interiors.views.index">
 <span class="sig-prename descclassname"><span class="pre">interiors.views.</span></span><span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.views.index" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The main view.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="interiors.views.optimizer">
 <span class="sig-prename descclassname"><span class="pre">interiors.views.</span></span><span class="sig-name descname"><span class="pre">optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.views.optimizer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Receives data about rectangles, walls and selected area from the frontend, optimize and return optimized data.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="interiors.views.removeTask">
 <span class="sig-prename descclassname"><span class="pre">interiors.views.</span></span><span class="sig-name descname"><span class="pre">removeTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interiors.views.removeTask" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Removes task from tasks framework after optimalization is complete.</p>
+</dd></dl>
 
 </section>
 <section id="module-interiors">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-interiors" title="Permalink to this headline">¶</a></h2>
+<p>Application containing the optimization algorithm and API for the frontend.</p>
 </section>
 </section>
 
