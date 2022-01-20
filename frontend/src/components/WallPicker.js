@@ -46,14 +46,14 @@ class WallPicker extends Component {
             )
         });
 
-        if(items.length != 0)
+        if(items.length !== 0)
         {
             var table = items.reduce((prev, curr, index) => {
-                if(index == 1)
+                if(index === 1)
                 {
                     return [prev, curr];
                 }
-                else if(index%4 == 3)
+                else if(index%4 === 3)
                 {
                     return [...prev.slice(0, -3),(
                         <tr>

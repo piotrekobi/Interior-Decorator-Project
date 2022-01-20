@@ -18,7 +18,7 @@ function orientation(p, q, r) {
     let val = (q.y - p.y) * (r.x - q.x) -
             (q.x - p.x) * (r.y - q.y);
   
-    if (val == 0) return 0; // collinear
+    if (val === 0) return 0; // collinear
   
     return (val > 0)? 1: 2; // clock or counterclock wise
 }
@@ -31,7 +31,7 @@ function linesIntersect(a, b, c, d) {
     let o4 = orientation(c, d, b);
   
     // General case
-    if (o1 != o2 && o3 != o4) {
+    if (o1 !== o2 && o3 !== o4) {
         return true;
     }
     return false;
@@ -72,7 +72,7 @@ class DragZone extends Component {
         this.wallJSON = wallJSON;
         // clear canvas & redraw wall and zone
         this.clearCanvas();
-        if (this.wallJSON != undefined) {
+        if (this.wallJSON !== undefined) {
             this.drawWall(this.wallJSON);
         }
         if (this.zoneVertices.length > 0) {
@@ -137,7 +137,7 @@ class DragZone extends Component {
             }
             // clear canvas & redraw wall and zone
             this.clearCanvas();
-            if (this.wallJSON != undefined) {
+            if (this.wallJSON !== undefined) {
                 this.drawWall(this.wallJSON);
             }
             if (this.zoneVertices.length > 0) {

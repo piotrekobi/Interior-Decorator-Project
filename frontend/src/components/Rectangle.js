@@ -72,9 +72,9 @@ class Rectangle extends Component {
     */
   render() {
     if (
-      typeof this.state.left != "undefined" &&
-      typeof this.state.top != "undefined" &&
-      this.state.parentString != "spawn_zone"
+      typeof this.state.left !== "undefined" &&
+      typeof this.state.top !== "undefined" &&
+      this.state.parentString !== "spawn_zone"
     ) {
       return this.props.connectDragSource(
         <div

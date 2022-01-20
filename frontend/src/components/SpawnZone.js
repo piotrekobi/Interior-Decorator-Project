@@ -4,7 +4,6 @@ import { DropTarget } from "react-dnd";
 import { Types } from "./Types.js";
 import Rectangle from "./Rectangle";
 import { v4 as uuidv4 } from "uuid";
-import jQuery from "jquery";
 
 const spawnZoneTarget = {
   drop(props, monitor, component) {
