@@ -21,8 +21,8 @@ class RectangleMenu extends Component {
   }
 
   /**
-    * Makes a component invisible (when visible) and vice versa.
-    */
+   * Makes a component invisible (when visible) and vice versa.
+   */
   toggleModal = () => {
     this.setState({ isModalOpen: !this.state.isModalOpen });
   };
@@ -38,7 +38,11 @@ class RectangleMenu extends Component {
     let reader = new FileReader();
 
     if (imageFile) reader.readAsDataURL(imageFile);
-    else this.props.onAddRectangleClick(width, height, color);
+    else {
+      width = parseInt(this.widthBox.current.placeholder);
+      height = parseInt(this.heightBox.current.placeholder);
+      this.props.onAddRectangleClick(width, height, color);
+    }
 
     callback = (imageURL) => {
       this.props.onAddRectangleClick(width, height, color, imageURL);
@@ -71,9 +75,9 @@ class RectangleMenu extends Component {
   };
 
   /**
-    * Renders HTML component code.
-    * @returns {HTML}
-    */
+   * Renders HTML component code.
+   * @returns {HTML}
+   */
   render() {
     return (
       <Modal open={this.state.isModalOpen} onClose={this.toggleModal}>
@@ -82,11 +86,19 @@ class RectangleMenu extends Component {
             <th>
               <label className={styles.widthLabel}>Szerokość:</label>
 
-              <input ref={this.widthBox} className={styles.textBox}></input>
+              <input
+                ref={this.widthBox}
+                className={styles.textBox}
+                placeholder={100}
+              ></input>
             </th>
             <th>
               <label className={styles.heightLabel}>Wysokość:</label>
-              <input ref={this.heightBox} className={styles.textBox}></input>
+              <input
+                ref={this.heightBox}
+                className={styles.textBox}
+                placeholder={100}
+              ></input>
             </th>
           </tr>
           <tr>
