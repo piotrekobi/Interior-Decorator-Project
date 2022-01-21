@@ -1,9 +1,29 @@
+// Copyright (c) 2022, Piotr Paturej, MiÅ‚osz Kasak, Kamil SzydÅ‚owski, Jakub Polak
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 # Sphinx inventory version 2
 # Project: Interiors backend
 # Version: 
 # The remainder of this file is compressed using zlib.
-xÚµ˜Ír›0Çï~
-uÚ«5M¹¦3v¦‰§I'G¢FHIÄqO}¾^Ÿ¤FØ€åK+þ?Vì®wC’à)’»ë\¤ôm¼?›œ½÷Öå´\ÔvÆPžéI¢B±i‚­Îè(åª‹o¬ÃÏc’æ”OWI©g‰ð×úöFð'š9HÂˆÖèêqZŒ9ÉÁˆ1Šn
-§(9Í1Tð!ï÷™ˆ5›>!ÍéoPÊf|Û%Ð†p££Ð¾€ÈÁ¨]T^	;Þââ8N©.yÖö,Ò³€? ±Ë—1ˆã_ƒÃâ#Õ÷ÑO¬%I`fÀ#Á	cqæïHX¥áÛýÝíyîÝEýPîÂÜÙSð0Õ¯„Ñ4Ò´Û`ûØ:…{<>]l~­Ÿ
-ž\€\]Å'—gl%ØîBèæ{ÓzAýÍÅE+ëö'y‘e)ÑîÏ…ÐÛˆ"™‘kÕÙCwÂ]J?\È”˜&¸Mg¢_†ru9v$˜ùq›îMìÍ}yéW¨[¸‘œ(°tÛ½u`WgÀ30+%2:"TAn“õ%ÜÕg¸ÚL¯-KU“ìÝÑ0ººËÝ4~Ê	Œ§8óZÖ¥àù(Õ®ÜÎÇ	?ƒ¤&,Ì\éžÞ»r¼Œ˜L;];LE–	,,«#`OeÂY¼#éo/Ê¡ó<Ÿ˜ÆÃz]ˆ1ñå•Âv¦
-ßŠ¦¦úLqxK@öògÀYOð©ÅEØÁÜ;¨=ÈÓÄ”§ð6]Öù¥?MºÏI§µ9á$ƒÎ®xSoK*sN|¯§…mZ­'¤MzŠ-¯:M§úÙß¢/V¸È€ûErF6Àœ¤¶zÍWw¹Ø?Vq[O<KllFF ¦ÇS¿êßŸ¿YI‘7eoæ]«ßÕáµWµzb•¯Á>PpÐBáR»ß÷ µ[¢`g¨Çôuc·¯!P¯Î¬8ÕiÉ[^]#Pö_`+ånYxÑwÖü¦ziÇ¿ÊÔ9.‹å~µ³AŒwß¢¨ä¹+ô6¯¹÷ã+7ãÿÌÌ
+xÚµï¿½ï¿½rï¿½0ï¿½ï¿½~
+uÚ«5Mï¿½ï¿½ï¿½3ï¿½vï¿½ï¿½ï¿½I'Gï¿½ï¿½FHIï¿½qO}ï¿½ï¿½^ï¿½ï¿½FØ€ï¿½K+ï¿½?Vï¿½wCï¿½ï¿½)ï¿½ï¿½ï¿½\ï¿½ï¿½mï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½vï¿½Pï¿½ï¿½Iï¿½Bï¿½iï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½cï¿½ï¿½OWIï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Fï¿½'ï¿½9HÂˆï¿½ï¿½ï¿½qZï¿½9ï¿½ï¿½ï¿½1ï¿½n
+ï¿½(9ï¿½1Tï¿½!ï¿½ï¿½ï¿½ï¿½5ï¿½>!ï¿½ï¿½oPï¿½f|ï¿½%Ð†pï¿½ï¿½Ð¾ï¿½ï¿½ï¿½ï¿½]T^	;ï¿½ï¿½ï¿½8Nï¿½.yï¿½ï¿½,Ò³ï¿½? ï¿½Ë—1ï¿½ï¿½_ï¿½ï¿½ï¿½#ï¿½ï¿½ï¿½Oï¿½%I`fï¿½#ï¿½	cqï¿½ï¿½HXï¿½ï¿½ï¿½ï¿½ï¿½ï¿½yï¿½ï¿½Eï¿½Pï¿½ï¿½ï¿½ï¿½Sï¿½0Õ¯ï¿½ï¿½4Ò´ï¿½`ï¿½ï¿½:ï¿½{<>]l~ï¿½ï¿½
+ï¿½\ï¿½\]ï¿½'ï¿½gl%ï¿½ï¿½Bï¿½ï¿½{ï¿½zAï¿½ï¿½ï¿½E+ï¿½ï¿½'yï¿½e)ï¿½ï¿½Ï…ï¿½Ûˆ"ï¿½ï¿½ï¿½kï¿½ï¿½Cwï¿½]J?ï¿½\È”ï¿½&ï¿½Mgï¿½_ï¿½ru9v$ï¿½ï¿½qï¿½ï¿½Mï¿½ï¿½ï¿½}yï¿½Wï¿½[ï¿½ï¿½ï¿½(ï¿½tÛ½u`Wgï¿½30+%2:"TAnï¿½ï¿½%ï¿½ï¿½gï¿½ï¿½Lï¿½-KUï¿½ï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½ï¿½ï¿½4~Ê	ï¿½ï¿½8ï¿½ZÖ¥ï¿½ï¿½(Õ®ï¿½ï¿½ï¿½	?ï¿½ï¿½&,ï¿½\ï¿½Þ»rï¿½ï¿½ï¿½L;];LEï¿½	,,ï¿½#`Oeï¿½Yï¿½#ï¿½o/Ê¡ï¿½<ï¿½ï¿½ï¿½ï¿½z]ï¿½1ï¿½ï¿½ï¿½vï¿½
+ßŠï¿½ï¿½ï¿½LqxK@ï¿½ï¿½gï¿½YOï¿½ï¿½Eï¿½ï¿½ï¿½;ï¿½=ï¿½ï¿½Ä”ï¿½ï¿½6]ï¿½ï¿½ï¿½?Mï¿½ï¿½Iï¿½ï¿½9ï¿½$ï¿½Î®xSoK*sN|ï¿½ï¿½ï¿½mZï¿½'ï¿½Mzï¿½ï¿½-ï¿½:Mï¿½ï¿½ï¿½ß¢/Vï¿½È€ï¿½ErF6ï¿½ï¿½ï¿½ï¿½zï¿½Wwï¿½ï¿½?Vq[O<KllFFï¿½ï¿½ï¿½Sï¿½ï¿½ßŸï¿½YIï¿½7eoï¿½]ï¿½ï¿½ï¿½ï¿½Wï¿½zbï¿½ï¿½ï¿½>Ppï¿½Bï¿½Rï¿½ï¿½ï¿½ ï¿½[ï¿½`gï¿½ï¿½ï¿½ucï¿½ï¿½ï¿½!Pï¿½Î¬8ï¿½iï¿½[^]#Pï¿½_`+ï¿½nYxï¿½wï¿½ï¿½ï¿½ziÇ¿ï¿½ï¿½9.ï¿½ï¿½~ï¿½ï¿½Aï¿½wß¢ï¿½ï¿½ï¿½+ï¿½6ï¿½ï¿½ï¿½ï¿½+7ï¿½ï¿½ï¿½ï¿½

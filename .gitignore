@@ -25,3 +25,4 @@ wnetrza/__pycache__/urls.cpython-39.pyc
 wnetrza/__pycache__/wsgi.cpython-39.pyc
 frontend/package-lock.json
 frontend/package-lock.json
+.vscode
